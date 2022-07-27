@@ -6,13 +6,13 @@
 #    By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 11:23:28 by ytouate           #+#    #+#              #
-#    Updated: 2022/07/22 12:22:18 by ytouate          ###   ########.fr        #
+#    Updated: 2022/07/27 11:31:48 by ytouate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror 
+# CFLAGS = -Wall -Wextra -Werror 
 FILES = \
 	./cub.c		\
 	./debug.c	\
