@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/22 12:23:22 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/23 21:47:07 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,6 @@ int	main(int ac, char **av)
 {
 	(void)av;
 	(void)ac;
+	if (ac < 2)
+		exit(ft_error(1, "Not Enough Arguments\n"));
 }

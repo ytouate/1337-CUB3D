@@ -1,5 +1,8 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/ytouate/Desktop/Cub3D'
-make: Nothing to be done for `all'.
+gcc -Wall -Wextra -Werror    -c -o cub.o cub.c
+gcc -Wall -Wextra -Werror    -c -o debug.o debug.c
+cd Libft && make && make bonus && cd ..
+gcc -Wall -Wextra -Werror  ./Libft/libft.a -lmlx -framework OpenGL -framework AppKit ./cub.o ./debug.o -o cub3D
 make: Leaving directory `/Users/ytouate/Desktop/Cub3D'
  
