@@ -6,16 +6,19 @@
 #    By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 11:23:28 by ytouate           #+#    #+#              #
-#    Updated: 2022/07/27 11:31:48 by ytouate          ###   ########.fr        #
+#    Updated: 2022/07/28 13:52:18 by ytouate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
-CC = gcc
+CC = gcc -fsanitize=address -g
 # CFLAGS = -Wall -Wextra -Werror 
 FILES = \
 	./cub.c		\
 	./debug.c	\
+	./get_next_line/get_next_line_utils.c	\
+	./get_next_line/get_next_line.c			\
+	./map_parse.c
 
 O_FILES = $(FILES:.c=.o)
 
@@ -27,6 +30,7 @@ $(NAME): $(O_FILES)
 
 clean:
 	rm -f cub3D
+	rm -f O_FILES
 	cd Libft && make clean && cd ..
 
 libft:

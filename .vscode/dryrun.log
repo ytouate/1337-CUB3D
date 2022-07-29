@@ -1,8 +1,12 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/ytouate/Desktop/Cub3D'
-gcc    -c -o cub.o cub.c
+gcc -fsanitize=address -g    -c -o cub.o cub.c
  
+gcc -fsanitize=address -g    -c -o debug.o debug.c
+gcc -fsanitize=address -g    -c -o get_next_line/get_next_line_utils.o get_next_line/get_next_line_utils.c
+gcc -fsanitize=address -g    -c -o get_next_line/get_next_line.o get_next_line/get_next_line.c
+gcc -fsanitize=address -g    -c -o map_parse.o map_parse.c
 cd Libft && make && make bonus && cd ..
-gcc  ./Libft/libft.a -lmlx -framework OpenGL -framework AppKit ./cub.o ./debug.o -o cub3D
+gcc -fsanitize=address -g  ./Libft/libft.a -lmlx -framework OpenGL -framework AppKit ./cub.o ./debug.o ./get_next_line/get_next_line_utils.o ./get_next_line/get_next_line.o ./map_parse.o -o cub3D
 make: Leaving directory `/Users/ytouate/Desktop/Cub3D'
  

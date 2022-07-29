@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.c                                            :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 11:37:43 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/27 12:43:36 by ytouate          ###   ########.fr       */
+/*   Created: 2021/12/03 17:58:56 by ytouate           #+#    #+#             */
+/*   Updated: 2022/07/28 14:17:35 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	ft_error(int exit_code, char *fatal)
-{
-	ft_putstr_fd("Error\n", STDERR_FILENO);
-	ft_putstr_fd(fatal, STDERR_FILENO);
-	exit(exit_code);
-}
+#include "../Libft/libft.h"
+#define BUFFER_SIZE 1
+# include<stdio.h> 
+# include <fcntl.h> 
+# include <stdlib.h>
+# include <unistd.h>
+# include <limits.h>
+
+char		*ft_strjoin_gnl(char *s1, char const *s2);
+int			ft_strchr_gnl(const char *s, int c);
+char		*get_next_line(int fd);
+#endif

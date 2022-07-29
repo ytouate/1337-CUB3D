@@ -8,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This program built for i386-apple-darwin11.3.0
  
 
-# Make data base, printed on Wed Jul 27 11:31:49 2022
+# Make data base, printed on Fri Jul 29 09:41:40 2022
 
 # Variables
 
@@ -20,7 +20,6 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
- 
 # automatic
 @F = $(notdir $@)
 # makefile
@@ -34,9 +33,10 @@ _ = /usr/bin/make
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # environment
+ 
 VSCODE_CWD = /
 # environment
-Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.JmduEnCVnl/Render
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.oRvFlwMM0J/Render
 # environment
 PATH = /Users/ytouate/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
 # environment
@@ -46,7 +46,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.mdrHwh15lg/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.4VSY0gMpPK/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -84,7 +84,7 @@ HOMEBREW_CACHE = /tmp/ytouate/Homebrew/Caches
 # environment
 SHLVL = 1
 # makefile (from `Makefile', line 14)
-CC = gcc
+CC = gcc -fsanitize=address -g
 # default
 MAKE_VERSION := 3.81
 # environment
@@ -141,18 +141,18 @@ SECURITYSESSIONID = 186a8
 SUFFIXES := 
 # default
 .INCLUDE_DIRS = /usr/local/include
-# makefile (from `Makefile', line 20)
+# makefile (from `Makefile', line 23)
 O_FILES = $(FILES:.c=.o)
 # environment
 MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 66513
+VSCODE_PID = 8697
 # makefile (from `Makefile', line 16)
-FILES = ./cub.c ./debug.c 
+FILES = ./cub.c ./debug.c ./get_next_line/get_next_line_utils.c ./get_next_line/get_next_line.c ./map_parse.c
 # variable set hash-table stats:
-# Load=69/1024=7%, Rehash=0, Collisions=1/104=1%
+# Load=69/1024=7%, Rehash=0, Collisions=1/97=1%
 
 # Pattern-specific Variable Values
 
@@ -160,9 +160,9 @@ FILES = ./cub.c ./debug.c
 
 # Directories
 
-# . (device 16777227, inode 5793514): 17 files, no impossibilities.
+# . (device 16777227, inode 5793514): 22 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 22 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -175,44 +175,36 @@ all: cub3D
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has been updated.
-#  Needs to be updated (-q is set).
+#  Successfully updated.
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/7=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-cub3D: cub.o debug.o
+cub3D: cub.o debug.o get_next_line/get_next_line_utils.o get_next_line/get_next_line.o map_parse.o
 #  Implicit rule search has not been done.
-#  Implicit/static pattern stem: `'
-#  File does not exist.
+#  Last modified 2022-07-28 15:11:21
 #  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := cub3D
-# automatic
-# % := 
-# automatic
-# * := 
-# automatic
-# + := cub.o debug.o
-# automatic
-# | := 
-# automatic
-# < := cub.o
-# automatic
-# ^ := cub.o debug.o
-# automatic
-# ? := cub.o debug.o
+#  Successfully updated.
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/15=7%
-#  commands to execute (from `Makefile', line 25):
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 28):
 	cd Libft && make && make bonus && cd ..
 	$(CC) $(CFLAGS) ./Libft/libft.a -lmlx -framework OpenGL -framework AppKit $(O_FILES) -o $(NAME)
 	
+
+# Not a target:
+get_next_line/get_next_line_utils.o:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-28 14:17:36
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 libft:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 33):
+#  commands to execute (from `Makefile', line 37):
 	cd Libft && make && cd ..
 	
 
@@ -225,7 +217,7 @@ libft:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-27 11:31:48
+#  Last modified 2022-07-28 13:52:18
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -234,7 +226,25 @@ Makefile:
 # Not a target:
 debug.o:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-23 21:47:18
+#  Last modified 2022-07-27 12:43:38
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+get_next_line/get_next_line.o:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-28 14:17:36
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+map_parse.o:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-28 15:04:28
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -249,7 +259,7 @@ debug.o:
 # Not a target:
 cub.o:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-23 21:47:18
+#  Last modified 2022-07-28 15:11:21
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -259,13 +269,14 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 29):
+#  commands to execute (from `Makefile', line 32):
 	rm -f cub3D
+	rm -f O_FILES
 	cd Libft && make clean && cd ..
 	
 
 # files hash-table stats:
-# Load=9/1024=1%, Rehash=0, Collisions=0/26=0%
+# Load=12/1024=1%, Rehash=0, Collisions=0/31=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -277,6 +288,6 @@ clean:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Jul 27 11:31:49 2022
+# Finished Make data base on Fri Jul 29 09:41:40 2022
 
  
