@@ -1,20 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.c                                            :+:      :+:    :+:   */
+/*   map_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 11:37:43 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/30 10:49:22 by ytouate          ###   ########.fr       */
+/*   Created: 2022/07/30 10:09:24 by ytouate           #+#    #+#             */
+/*   Updated: 2022/07/30 11:01:50 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
 
-int	ft_error(int exit_code, char *fatal)
+int		check_map_borders(t_map_data map_data)
 {
-	ft_putstr_fd("Error\n", STDERR_FILENO);
-	ft_putstr_fd(fatal, STDERR_FILENO);
-	exit(exit_code);
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (map_data.map[i])
+	{
+		j = 0;
+		if (map_data.map[i][j] != '1')
+			ft_error(1, "Map must be surrounded by walls\n");
+		while (map_data.map[i][j])
+		{
+			j++;
+		}
+		i++;
+	}
+	return (0);
 }

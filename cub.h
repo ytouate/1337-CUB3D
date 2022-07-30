@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/29 10:08:57 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/29 10:30:16 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ t_map_data	parse_map(char *map_name);
 int	ft_error(int exit_code, char *fatal);
 int count_map_lines(char *map_name);
 char **convert_file_to_grid(char *file_name, int file_size);
-void	get_texture_path(char *l, t_map_data *map_data);
+bool	get_texture_path(char *l, t_map_data *map_data);
 void check_map_texture(t_map_data map_data);
 #endif
