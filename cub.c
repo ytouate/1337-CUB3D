@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/30 11:02:38 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/30 11:07:00 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,12 @@ void	free_grid(char **grid)
 	free(grid);
 }
 
+void print_grid(char **s){
+	int i = 0;
+	while (s[i])
+		printf("%s\n", s[i++]);
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx_data	data;
@@ -126,15 +132,10 @@ int	main(int ac, char **av)
 	i = 0;
 	while (temp_grid[start])
 		map_data.map[i++] = ft_strdup(temp_grid[start++]);
-
 	map_data.map[i] = temp_grid[start];
-	i = 0;
+	map_data.map_lines = i;
+	check_map_borders(map_data);
 	free_grid(temp_grid);
-	while (map_data.map[i])
-	{
-		printf("%s", map_data.map[i]);
-		i++;
-	}
 	check_map_texture(map_data);
 	data.window = mlx_new_window(data.mlx_ptr, data.window_x_size, data.window_y_size, "Cub3D");
 	mlx_hook(data.window, 17, 0, ft_close, &data); 

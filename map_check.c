@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 10:09:24 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/30 11:01:50 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/30 11:08:14 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int		check_map_borders(t_map_data map_data)
 	while (map_data.map[i])
 	{
 		j = 0;
-		if (map_data.map[i][j] != '1')
+		char *temp = ft_strtrim(map_data.map[i], "\t ");
+		if (temp[j] != '1')
 			ft_error(1, "Map must be surrounded by walls\n");
 		while (map_data.map[i][j])
 		{
