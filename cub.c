@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/30 11:07:00 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/31 15:54:13 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 	return (0);
 }
 
-// closes the window when the red button is clicked;
+// closes the window when the red button is clicked
 int		ft_close(t_mlx_data *data)
 {
 	mlx_destroy_window(data->mlx_ptr, data->window);
@@ -61,7 +61,8 @@ void	map_data_consructor(t_map_data *map_data)
 	ft_memset(map_data->floor_color, -1, 3 * sizeof(int));
 }
 
-bool is_valid_line(char *line)
+// returns true if the line send to it contain some content
+bool	is_valid_line(char *line)
 {
 	int i;
 	i = 0;
@@ -74,8 +75,11 @@ bool is_valid_line(char *line)
 	return (false);
 }
 
-void skip_empty_lines(char **grid, int *n)
+// skips the gap between the map rgb/texture and the map content
+void	skip_empty_lines(char **grid, int *n, int map_len)
 {
+	if (*n == map_len)
+		ft_error(1, "The map should be at the bottom of the file\n");
 	while (grid[*n])
 	{
 		if (is_valid_line(grid[*n]))
@@ -84,6 +88,7 @@ void skip_empty_lines(char **grid, int *n)
 	}
 }
 
+// frees the 2d grid passed to it
 void	free_grid(char **grid)
 {
 	int i;
@@ -92,6 +97,7 @@ void	free_grid(char **grid)
 		free(grid[i++]);
 	free(grid);
 }
+
 
 void print_grid(char **s){
 	int i = 0;
@@ -114,7 +120,7 @@ int	main(int ac, char **av)
 		ft_error(1, "the file extention is not .cub\n");
 	map_data.map_lines = count_map_lines(av[1]);
 	temp_grid = convert_file_to_grid(av[1], map_data.map_lines);
-	int flag;
+	int	flag;
 	int	i;
 	for (i = 0; temp_grid[i]; i++)
 	{
@@ -123,8 +129,10 @@ int	main(int ac, char **av)
 		if (flag == 6)
 			break;
 	}
+	if (flag != 6)
+		ft_error(1, "the map requirments are not fullfilled\n");
 	int start = i + 1;
-	skip_empty_lines(temp_grid, &start);
+	skip_empty_lines(temp_grid, &start, map_data.map_lines);
 	int	end = map_data.map_lines - start;
 	map_data.map = malloc(sizeof(char *) * end + 2);
 	if (!map_data.map)
