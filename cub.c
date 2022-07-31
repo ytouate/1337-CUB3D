@@ -108,6 +108,8 @@ int	main(int ac, char **av)
 		ft_error(1, "the file extention is not .cub\n");
 	map_data.map_lines = count_map_lines(av[1]);
 	temp_grid = convert_file_to_grid(av[1], map_data.map_lines);
+	for (int i;i < 21;i++)
+		printf("%s\n",temp_grid[i]);
 	int flag;
 	int	i;
 	for (i = 0; temp_grid[i]; i++)
