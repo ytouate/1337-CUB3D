@@ -27,6 +27,7 @@ $(NAME): $(O_FILES)
 
 clean:
 	rm -f cub3D
+	rm -rf *.o
 	cd Libft && make clean && cd ..
 
 libft:
