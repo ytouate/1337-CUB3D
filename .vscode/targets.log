@@ -6,8 +6,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `cub.o', needed by `cub3D'.  Stop.
 
-# Make data base, printed on Sun Jul 31 15:36:17 2022
+
+# Make data base, printed on Sun Jul 31 19:38:39 2022
 
 # Variables
 
@@ -29,14 +32,16 @@ SHELL = /bin/sh
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
+# makefile (from `Makefile', line 15)
+CFLAGS = -Wall -Wextra -Werror 
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # environment
 VSCODE_CWD = /
 # environment
-Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.ir0hRZQHxP/Render
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.4Gf6vFBaan/Render
 # environment
-PATH = /Users/ytouate/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+PATH = /Users/ytouate/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
@@ -44,7 +49,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.0PtmXzDJ2W/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.bUvKqK38m9/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -114,7 +119,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = com.microsoft.VSCode.1232
+XPC_SERVICE_NAME = com.microsoft.VSCode.1252
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -142,11 +147,11 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 2478
+VSCODE_PID = 6526
 # makefile (from `Makefile', line 16)
 FILES = ./cub.c ./debug.c ./get_next_line/get_next_line_utils.c ./get_next_line/get_next_line.c ./map_parse.c ./map_check.c
 # variable set hash-table stats:
-# Load=67/1024=7%, Rehash=0, Collisions=1/95=1%
+# Load=68/1024=7%, Rehash=0, Collisions=1/96=1%
 
 # Pattern-specific Variable Values
 
@@ -154,9 +159,9 @@ FILES = ./cub.c ./debug.c ./get_next_line/get_next_line_utils.c ./get_next_line/
 
 # Directories
 
-# . (device 16777227, inode 5793514): 24 files, no impossibilities.
+# . (device 16777227, inode 5793514): 20 files, no impossibilities.
 
-# 24 files, no impossibilities in 1 directories.
+# 20 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -168,16 +173,14 @@ all: cub3D
 #  Command-line target.
 #  Implicit rule search has been done.
 #  File does not exist.
-#  File has been updated.
-#  Successfully updated.
+#  File has not been updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 cub3D: cub.o debug.o get_next_line/get_next_line_utils.o get_next_line/get_next_line.o map_parse.o map_check.o
 #  Implicit rule search has not been done.
-#  Last modified 2022-07-30 11:08:16
-#  File has been updated.
-#  Successfully updated.
+#  File does not exist.
+#  File has not been updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 #  commands to execute (from `Makefile', line 29):
@@ -187,12 +190,9 @@ cub3D: cub.o debug.o get_next_line/get_next_line_utils.o get_next_line/get_next_
 
 # Not a target:
 get_next_line/get_next_line_utils.o:
-#  Implicit rule search has been done.
-#  Last modified 2022-07-28 14:17:36
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 libft:
 #  Implicit rule search has not been done.
@@ -211,7 +211,7 @@ libft:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-30 10:09:57
+#  Last modified 2022-07-31 19:38:21
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -219,30 +219,21 @@ Makefile:
 
 # Not a target:
 debug.o:
-#  Implicit rule search has been done.
-#  Last modified 2022-07-30 11:01:31
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 get_next_line/get_next_line.o:
-#  Implicit rule search has been done.
-#  Last modified 2022-07-28 14:17:36
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 map_parse.o:
-#  Implicit rule search has been done.
-#  Last modified 2022-07-30 11:05:49
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 .DEFAULT:
@@ -253,9 +244,8 @@ map_parse.o:
 # Not a target:
 cub.o:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-30 11:07:16
-#  File has been updated.
-#  Successfully updated.
+#  File does not exist.
+#  File has not been updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
@@ -265,18 +255,15 @@ clean:
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 33):
 	rm -f cub3D
-	rm -f O_FILES
+	rm -f *.o
 	cd Libft && make clean && cd ..
 	
 
 # Not a target:
 map_check.o:
-#  Implicit rule search has been done.
-#  Last modified 2022-07-30 11:08:15
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # files hash-table stats:
 # Load=13/1024=1%, Rehash=0, Collisions=0/33=0%
@@ -291,6 +278,6 @@ map_check.o:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sun Jul 31 15:36:17 2022
+# Finished Make data base on Sun Jul 31 19:38:39 2022
 
  

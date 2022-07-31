@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/31 15:54:13 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/31 19:52:49 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,13 @@ int		check_file_extention(char *file)
 // initialize the map_data for good practices
 void	map_data_consructor(t_map_data *map_data)
 {
-	int	i = 0;
 	map_data->north_texture = NULL;
 	map_data->west_textrure = NULL;
 	map_data->south_texture = NULL;
 	map_data->east_texture = NULL;
 	map_data->map_lines = -1;
-	ft_memset(map_data->ceilling_color, -1, 3 * sizeof(int));
-	ft_memset(map_data->floor_color, -1, 3 * sizeof(int));
+	ft_memset(map_data->ceilling_color, 0, 3 * sizeof(int));
+	ft_memset(map_data->floor_color, 0, 3 * sizeof(int));
 }
 
 // returns true if the line send to it contain some content
@@ -105,11 +104,32 @@ void print_grid(char **s){
 		printf("%s\n", s[i++]);
 }
 
+void show_map_data(t_map_data map_data)
+{
+	printf("======================the map======================\n");
+	print_grid(map_data.map);
+	printf("the textures\n");
+	printf("%s\n", map_data.north_texture);
+	printf("%s\n", map_data.south_texture);
+	printf("%s\n", map_data.west_textrure);
+	printf("%s\n", map_data.east_texture);
+	printf("the floor colors\n");
+	for (int i = 0; i < 3; i++)
+		printf("%d\t", map_data.floor_color[i]);
+	printf("\n");
+	printf("the ceiling colors\n");
+	for (int i = 0; i < 3; i++)
+		printf("%d\t", map_data.ceilling_color[i]);
+	printf("\n");
+	
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx_data	data;
 	t_map_data	map_data;
 
+	map_data_consructor(&map_data);
 	char	**temp_grid;
 	data.mlx_ptr = mlx_init();
 	data.window_x_size = 600;
@@ -120,7 +140,8 @@ int	main(int ac, char **av)
 		ft_error(1, "the file extention is not .cub\n");
 	map_data.map_lines = count_map_lines(av[1]);
 	temp_grid = convert_file_to_grid(av[1], map_data.map_lines);
-	int	flag;
+	
+	int	flag = 0;
 	int	i;
 	for (i = 0; temp_grid[i]; i++)
 	{
@@ -129,6 +150,9 @@ int	main(int ac, char **av)
 		if (flag == 6)
 			break;
 	}
+	if (got_overflowed(map_data.ceilling_color)
+		|| got_overflowed(map_data.floor_color))
+		ft_error(1, "Invalid rgb numbers\n");
 	if (flag != 6)
 		ft_error(1, "the map requirments are not fullfilled\n");
 	int start = i + 1;
@@ -148,6 +172,6 @@ int	main(int ac, char **av)
 	data.window = mlx_new_window(data.mlx_ptr, data.window_x_size, data.window_y_size, "Cub3D");
 	mlx_hook(data.window, 17, 0, ft_close, &data); 
 	mlx_key_hook(data.window, hook_into_key_events, &data);
-	map_data_consructor(&map_data);
+	show_map_data(map_data);
 	mlx_loop(data.mlx_ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/30 11:50:24 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/31 19:53:21 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,5 @@ char		**convert_file_to_grid(char *file_name, int file_size);
 bool		get_texture_path(char *l, t_map_data *map_data);
 void		check_map_texture(t_map_data map_data);
 int			check_map_borders(t_map_data map_data);
-
+bool	got_overflowed(int *rgb);
 #endif
