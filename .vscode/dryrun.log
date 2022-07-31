@@ -1,5 +1,8 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory `/Users/ytouate/Desktop/Cub3D'
-make: Nothing to be done for `all'.
+gcc -fsanitize=address -g    -c -o map_check.o map_check.c
+cd Libft && make && make bonus && cd ..
+gcc -fsanitize=address -g  ./Libft/libft.a -lmlx -framework OpenGL -framework AppKit ./cub.o ./debug.o ./get_next_line/get_next_line_utils.o ./get_next_line/get_next_line.o ./map_parse.o ./map_check.o -o cub3D
+ 
 make: Leaving directory `/Users/ytouate/Desktop/Cub3D'
  
