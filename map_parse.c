@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 13:54:56 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/30 10:06:30 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/30 11:04:49 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,10 +145,7 @@ char **convert_file_to_grid(char *file_name, int file_size)
 	if (!grid)
 		ft_error(2, "Malloc failed map-parse\n");
 	while (i < file_size)
-	{
-		grid[i] = get_next_line(map_fd);
-		i++;
-	}
+		grid[i++] = get_next_line(map_fd);
 	grid[i - 1] = NULL;
 	close(map_fd);
 	return (grid);
