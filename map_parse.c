@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 13:54:56 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/30 11:04:49 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/07/31 19:53:03 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ bool	get_map_rgb(char *line, t_map_data *map_data)
 		map_data->floor_color[1] = ft_atoi(color[1]);
 		map_data->floor_color[2] = ft_atoi(color[2]);
 		flag += 1;
+		return true;
 	}
 	if (!ft_strncmp(line, "C ", 2))
 	{
@@ -51,11 +52,8 @@ bool	get_map_rgb(char *line, t_map_data *map_data)
 		map_data->ceilling_color[1] = ft_atoi(color[1]);
 		map_data->ceilling_color[2] = ft_atoi(color[2]);
 		flag += 1;
+		return true;
 	}
-	if (got_overflowed(map_data->ceilling_color) || got_overflowed(map_data->floor_color))
-		ft_error(1, "Invalid rgb numbers\n");
-	if (flag > 0)
-		return (true);
 	return (false);
 }
 
