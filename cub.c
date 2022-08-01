@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/01 17:12:07 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/01 18:09:45 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ void print_grid(char **s){
 
 void show_map_data(t_map_data map_data)
 {
-	printf("======================the map======================\n");
-	print_grid(map_data.map);
+	// printf("======================the map======================\n");
+	// print_grid(map_data.map);
 	printf("the textures\n");
 	printf("%s\n", map_data.north_texture);
 	printf("%s\n", map_data.south_texture);
@@ -269,15 +269,16 @@ void init_map_data(t_map_data *map_data)
 	char **temp_grid;
 	int	map_content_end = map_data->map_lines;
 	int i;
+	char *temp;
 
 	i = 0;
 	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
 	map_content_start = fill_map_data(temp_grid, map_data);
-	map_data->map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
+	map_data->map = malloc(sizeof(char *) * map_data->map_lines - map_content_start + 1);
 	while (temp_grid[map_content_start])
 	{
-		char *temp = ft_strtrim(temp_grid[map_content_start++], "\n");
-		map_data->map[i++] = ft_strdup(temp);
+		temp = ft_strtrim(temp_grid[map_content_start++], "\n");
+		map_data->map[i++] = temp;
 		free(temp);
 	}
 	map_data->map[i] = temp_grid[map_content_start];
@@ -298,12 +299,6 @@ int	main(int ac, char **av)
 	if (map_data.map_lines == 0)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
 	init_map_data(&map_data);
-	
-	
-	
-	
-	
-	
 	show_map_data(map_data);
 	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);
