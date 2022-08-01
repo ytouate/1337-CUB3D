@@ -6,13 +6,13 @@
 #    By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 11:23:28 by ytouate           #+#    #+#              #
-#    Updated: 2022/07/31 19:38:21 by ytouate          ###   ########.fr        #
+#    Updated: 2022/08/01 14:28:48 by ytouate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 CC = gcc -fsanitize=address -g
-CFLAGS = -Wall -Wextra -Werror 
+# CFLAGS = -Wall -Wextra -Werror 
 FILES = \
 	./cub.c		\
 	./debug.c	\
@@ -32,7 +32,7 @@ $(NAME): $(O_FILES)
 clean:
 	rm -f cub3D
 	rm -f *.o
-	cd Libft && make clean && cd ..
+	cd Libft && make fclean && cd ..
 
 libft:
 	cd Libft && make && cd ..

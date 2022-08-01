@@ -6,12 +6,15 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/31 19:53:21 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/01 15:28:37 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB_H
 # define CUB_H
+
+
+#define PI 3.141592653589793
 
 # include <unistd.h>
 # include "get_next_line/get_next_line.h"
@@ -25,6 +28,11 @@
 typedef struct mlx_data {
 	void	*mlx_ptr;
 	void	*window;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_size;
+	int		endian;
 	int		window_x_size;
 	int		window_y_size;
 }t_mlx_data;
@@ -32,6 +40,7 @@ typedef struct mlx_data {
 
 typedef struct map_data {
 	char 	**map;
+	char	*map_name;
 	int		map_lines;
 	char	*north_texture;
 	char	*south_texture;
@@ -49,12 +58,14 @@ enum {
 	BOTTOM 	= 125
 };
 
-t_map_data	parse_map(char *map_name);
+int			count_spaces(char *line);
 int			ft_error(int exit_code, char *fatal);
 int			count_map_lines(char *map_name);
-char		**convert_file_to_grid(char *file_name, int file_size);
-bool		get_texture_path(char *l, t_map_data *map_data);
-void		check_map_texture(t_map_data map_data);
 int			check_map_borders(t_map_data map_data);
-bool	got_overflowed(int *rgb);
+char		**convert_file_to_grid(char *file_name, int file_size);
+bool		got_overflowed(int *rgb);
+bool		get_texture_path(char *l, t_map_data *map_data);
+bool		is_valid_line(char *line);
+void		check_map_texture(t_map_data map_data);
+t_map_data	parse_map(char *map_name);
 #endif

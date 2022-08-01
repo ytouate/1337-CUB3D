@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 13:54:56 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/31 19:53:03 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/01 15:43:35 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,16 @@ bool	get_map_rgb(char *line, t_map_data *map_data)
 	return (false);
 }
 
+
+// skips the empty new lines at the top of the file
+// and counts the rest
 int count_map_lines(char *map_name)
 {
     int		count;
     int		i;
     int		map_fd;
 	char	*temp;
+	int		flag = 0;
 
     i = 0;
     count = 0;
@@ -74,7 +78,8 @@ int count_map_lines(char *map_name)
 		temp = get_next_line(map_fd);
 		if (temp == NULL)
 			break;
-		count++;
+		if (is_valid_line(temp) || count > 0)
+			count++;
 		free(temp);
 	}
 	close(map_fd);
@@ -131,11 +136,8 @@ char **convert_file_to_grid(char *file_name, int file_size)
 	char	**grid;
 	int		i;
 	int		map_fd;
-
+	int		flag = 0;
 	i = 0;
-	file_size = count_map_lines(file_name);
-	if (file_size == 0)
-		ft_error(1, "Empty Map\n");
 	map_fd = open(file_name, O_RDONLY);
 	if (map_fd == -1)
 		ft_error(2, "open failed\n");
@@ -143,7 +145,15 @@ char **convert_file_to_grid(char *file_name, int file_size)
 	if (!grid)
 		ft_error(2, "Malloc failed map-parse\n");
 	while (i < file_size)
-		grid[i++] = get_next_line(map_fd);
+	{
+		char *temp = get_next_line(map_fd);
+		if (is_valid_line(temp) || flag > 0)
+		{
+			flag += 1;
+			grid[i++] = ft_strdup(temp);
+		}
+		free(temp);
+	}
 	grid[i - 1] = NULL;
 	close(map_fd);
 	return (grid);

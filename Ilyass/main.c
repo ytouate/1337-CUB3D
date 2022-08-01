@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilefhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 18:35:50 by ilefhail          #+#    #+#             */
-/*   Updated: 2022/07/21 18:35:54 by ilefhail         ###   ########.fr       */
+/*   Updated: 2022/08/01 12:01:32 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <mlx.h>
+
 #include <stdio.h>
 #include <stdlib.h>
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}				t_data;
+
 
 typedef struct t_tringle{
     int x;
@@ -34,13 +28,7 @@ typedef struct t_l
 	int **arr;
 }t_l;
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
 
 void  ft_triangle(t_tringle l, t_data *data)
 {
@@ -101,6 +89,7 @@ void ft_draw_map(int **arr, t_l l)
 		l.h.y += 40;
 	}
 }
+
 void ft_clear_and_put(t_l *l)
 {
 	t_data img;
