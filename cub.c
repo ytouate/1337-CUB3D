@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/01 17:04:25 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/01 17:12:07 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,29 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 	return (-1);
 }
 
+
+void init_map_data(t_map_data *map_data)
+{
+	int map_content_start;
+	char **temp_grid;
+	int	map_content_end = map_data->map_lines;
+	int i;
+
+	i = 0;
+	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
+	map_content_start = fill_map_data(temp_grid, map_data);
+	map_data->map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
+	while (temp_grid[map_content_start])
+	{
+		char *temp = ft_strtrim(temp_grid[map_content_start++], "\n");
+		map_data->map[i++] = ft_strdup(temp);
+		free(temp);
+	}
+	map_data->map[i] = temp_grid[map_content_start];
+	free_grid(temp_grid);
+	map_data->map_lines = i;
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx_data	mlx_data;
@@ -274,30 +297,15 @@ int	main(int ac, char **av)
 	map_data.map_lines = count_map_lines(map_data.map_name);
 	if (map_data.map_lines == 0)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
-	temp_grid = convert_file_to_grid(map_data.map_name, map_data.map_lines);
-	int map_content_start = fill_map_data(temp_grid, &map_data);
-	int	map_content_end = map_data.map_lines;
-	map_data.map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
-	int i = 0;
-	while (temp_grid[map_content_start])
-	{
-		char *temp = ft_strtrim(temp_grid[map_content_start++], "\n");
-		map_data.map[i++] = ft_strdup(temp);
-		free(temp);
-	}
-	map_data.map[i] = temp_grid[map_content_start];
-	free_grid(temp_grid);
-	map_data.map_lines = i;
+	init_map_data(&map_data);
+	
+	
+	
+	
+	
+	
 	show_map_data(map_data);
 	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);
 	mlx_loop(mlx_data.mlx_ptr);
-	// init the mlx_data;
-	// call the constructor on map_data;
-	// checks the args
-	// checks the map if it is valid;
-	// fill the map map_data
-	// hook into the keys
-	// close the window when esc is clicked
-
 }
