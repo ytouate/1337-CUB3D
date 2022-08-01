@@ -14,6 +14,26 @@
 #define FUNCTION_FAILED 2
 #define UNEXPECTED_FLOW 1
 
+//this function for check the zeros not valid in the map;
+void	check_the_zeros(char **map, int i, int j)
+{
+	if (i == 0 || j == 0 || map[i+1] == NULL || map[i][j + 1] == '\0')
+	{
+		write(3, "the map is not valid", 21);
+		exit(EXIT_FAILURE);
+	}
+	if (map[i+1][j] == ' ' || map[i-1][j] == ' ')
+	{
+		write(3, "the map is not valid", 21);
+		exit(EXIT_FAILURE);
+	}
+	else if (map[i][j + 1] == ' ' || map[i][j - 1] == ' ')
+	{
+		write(3, "the map is not valid", 21);
+		exit(EXIT_FAILURE);
+	}
+}
+
 // the key handler function;
 int	hook_into_key_events(int keycode, t_mlx_data *data)
 {
