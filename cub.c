@@ -19,17 +19,17 @@ void	check_the_zeros(char **map, int i, int j)
 {
 	if (i == 0 || j == 0 || map[i+1] == NULL || map[i][j + 1] == '\0')
 	{
-		write(3, "the map is not valid", 21);
+		write(2, "the map is not valid", 21);
 		exit(EXIT_FAILURE);
 	}
 	if (map[i+1][j] == ' ' || map[i-1][j] == ' ')
 	{
-		write(3, "the map is not valid", 21);
+		write(2, "the map is not valid", 21);
 		exit(EXIT_FAILURE);
 	}
 	else if (map[i][j + 1] == ' ' || map[i][j - 1] == ' ')
 	{
-		write(3, "the map is not valid", 21);
+		write(2, "the map is not valid", 21);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -288,7 +288,20 @@ int	main(int ac, char **av)
 	map_data.map[i] = temp_grid[map_content_start];
 	free_grid(temp_grid);
 	map_data.map_lines = i;
+	i = 0;
+	int j = 0;
 	show_map_data(map_data);
+	while (map_data.map[i])
+	{
+		j = 0;
+		while (map_data.map[i][j])
+		{
+			if (map_data.map[i][j] == '0')
+				check_the_zeros(map_data.map, i, j);
+			j++;
+		}
+		i++;
+	}
 	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);
 	mlx_loop(mlx_data.mlx_ptr);
