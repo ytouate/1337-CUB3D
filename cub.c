@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/07/31 19:52:49 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/01 11:54:56 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,14 +126,14 @@ void show_map_data(t_map_data map_data)
 
 int	main(int ac, char **av)
 {
-	t_mlx_data	data;
+	t_mlx_data	mlx_data;
 	t_map_data	map_data;
 
 	map_data_consructor(&map_data);
 	char	**temp_grid;
-	data.mlx_ptr = mlx_init();
-	data.window_x_size = 600;
-	data.window_y_size = 350;
+	mlx_data.mlx_ptr = mlx_init();
+	mlx_data.window_x_size = 600;
+	mlx_data.window_y_size = 350;
 	if (ac < 2)
 		ft_error(1, "A Map file-name is required !\n");
 	if (!check_file_extention(av[1]))
@@ -169,9 +169,11 @@ int	main(int ac, char **av)
 	check_map_borders(map_data);
 	free_grid(temp_grid);
 	check_map_texture(map_data);
-	data.window = mlx_new_window(data.mlx_ptr, data.window_x_size, data.window_y_size, "Cub3D");
-	mlx_hook(data.window, 17, 0, ft_close, &data); 
-	mlx_key_hook(data.window, hook_into_key_events, &data);
+	mlx_data.window = mlx_new_window(mlx_data.mlx_ptr, mlx_data.window_x_size, mlx_data.window_y_size, "Cub3D");
+	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data); 
+	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
+	void *img = mlx_new_image(mlx_data.mlx_ptr, mlx_data.window_x_size, mlx_data.window_y_size);
+	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, img, 0, 0);
 	show_map_data(map_data);
-	mlx_loop(data.mlx_ptr);
+	mlx_loop(mlx_data.mlx_ptr);
 }
