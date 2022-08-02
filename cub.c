@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/01 17:04:25 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/01 18:09:45 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,53 @@
 #define UNEXPECTED_FLOW 1
 
 //this function for check the zeros not valid in the map;
-void	check_the_zeros(char **map, int i, int j)
+void	check_the_zeros(t_fix_map *map, int i, int j, int len)
 {
-	if (i == 0 || j == 0 || map[i+1] == NULL || map[i][j + 1] == '\0')
+	if (i == 0 || j == 0 || i == len - 1 || j == map[i].len - 1)
+		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+	if (j > map[i - 1].len || j > map[i + 1].len)
+		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+	if (map[i].line_of_map[j + 1] == ' ' || map[i].line_of_map[j - 1] == ' ' )
+		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+	if (map[i - 1].line_of_map[j] == ' ' || map[i + 1].line_of_map[j] == ' ' )
+		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+}
+
+void	call_check_zeros(t_fix_map *map, int len)
+{
+	int	i;
+	int j;
+
+	i = 0;
+	while (i < len)
 	{
-		write(2, "the map is not valid", 21);
-		exit(EXIT_FAILURE);
+		j = 0;
+		while (map[i].line_of_map[j])
+		{
+			if (map[i].len == 1 && i < len - 1)
+				ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+			if (map[i].line_of_map[j] == '0')
+				check_the_zeros(map, i, j, len);
+			j++;
+		}
+		i++;
 	}
-	if (map[i+1][j] == ' ' || map[i-1][j] == ' ')
+}
+//this function for fill the map with lens
+void	check_all_the_map(t_map_data map_data)
+{
+	t_fix_map	*map_with_len;
+	int			i;
+
+	i = 0;
+	map_with_len = malloc(sizeof(t_fix_map) * map_data.map_lines + 2);
+	while (map_data.map[i])
 	{
-		write(2, "the map is not valid", 21);
-		exit(EXIT_FAILURE);
+		map_with_len[i].len = ft_strlen(map_data.map[i]);
+		map_with_len[i].line_of_map = map_data.map[i];
+		i++;
 	}
-	else if (map[i][j + 1] == ' ' || map[i][j - 1] == ' ')
-	{
-		write(2, "the map is not valid", 21);
-		exit(EXIT_FAILURE);
-	}
+	call_check_zeros(map_with_len, map_data.map_lines);
 }
 
 // the key handler function;
@@ -127,8 +157,8 @@ void print_grid(char **s){
 
 void show_map_data(t_map_data map_data)
 {
-	printf("======================the map======================\n");
-	print_grid(map_data.map);
+	// printf("======================the map======================\n");
+	// print_grid(map_data.map);
 	printf("the textures\n");
 	printf("%s\n", map_data.north_texture);
 	printf("%s\n", map_data.south_texture);
@@ -262,6 +292,30 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 	return (-1);
 }
 
+
+void init_map_data(t_map_data *map_data)
+{
+	int map_content_start;
+	char **temp_grid;
+	int	map_content_end = map_data->map_lines;
+	int i;
+	char *temp;
+
+	i = 0;
+	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
+	map_content_start = fill_map_data(temp_grid, map_data);
+	map_data->map = malloc(sizeof(char *) * map_data->map_lines - map_content_start + 1);
+	while (temp_grid[map_content_start])
+	{
+		temp = ft_strtrim(temp_grid[map_content_start++], "\n");
+		map_data->map[i++] = temp;
+		free(temp);
+	}
+	map_data->map[i] = temp_grid[map_content_start];
+	free_grid(temp_grid);
+	map_data->map_lines = i;
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx_data	mlx_data;
@@ -285,32 +339,15 @@ int	main(int ac, char **av)
 		map_data.map[i++] = ft_strdup(temp);
 		free(temp);
 	}
+	
 	map_data.map[i] = temp_grid[map_content_start];
 	free_grid(temp_grid);
 	map_data.map_lines = i;
 	i = 0;
 	int j = 0;
 	show_map_data(map_data);
-	while (map_data.map[i])
-	{
-		j = 0;
-		while (map_data.map[i][j])
-		{
-			if (map_data.map[i][j] == '0')
-				check_the_zeros(map_data.map, i, j);
-			j++;
-		}
-		i++;
-	}
+	check_all_the_map(map_data);
 	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);
 	mlx_loop(mlx_data.mlx_ptr);
-	// init the mlx_data;
-	// call the constructor on map_data;
-	// checks the args
-	// checks the map if it is valid;
-	// fill the map map_data
-	// hook into the keys
-	// close the window when esc is clicked
-
 }

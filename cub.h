@@ -50,6 +50,12 @@ typedef struct map_data {
 	int		ceilling_color[3];
 }t_map_data;
 
+typedef struct fix_map
+{
+	char	*line_of_map;
+	int		len;
+}t_fix_map;
+
 enum {
 	RIGHT 	= 124,
 	ESC 	= 53,
