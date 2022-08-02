@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/01 18:09:45 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/01 18:38:26 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ bool	check_map_identifiers(char *line)
 		|| !ft_strncmp("F ", line, 2) || !ft_strncmp("C ", line, 2));
 }
 
+// checks if all the string contains digits
 bool is_number(char *s)
 {
 	int i;
@@ -262,7 +263,7 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 	return (-1);
 }
 
-
+// fill the map_data from the file
 void init_map_data(t_map_data *map_data)
 {
 	int map_content_start;
