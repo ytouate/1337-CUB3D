@@ -1,2 +1,0 @@
-must be surrounded by walls
-the content of the map must be at the bottom of the file

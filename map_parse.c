@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 13:54:56 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/01 18:09:40 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/02 09:35:40 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int count_spaces(char *line)
 	i = 0;
 	while (line[i] && line[i] != ' ')
 		i++;
-	while (line[i] && line[i] == ' ')
+	while (line[i] && (line[i] == ' ' || line[i] == '\n' || line[i] == '\t'))
 		i++;
 	return (i);
 }
@@ -154,7 +154,6 @@ char **convert_file_to_grid(char *file_name, int file_size)
 		{
 			flag += 1;
 			grid[i] = ft_strdup(temp);
-			printf("%s\n", grid[i]);
 			i++;
 		}
 		free(temp);
