@@ -21,12 +21,12 @@ void drawsquare(t_mlx_data *data, int x, int y)
 	int j;
 
 	i = x;
-	while (i < x + 40)
+	while (i < x + 39)
 	{
 		j = y;
-		while (j < y + 40)
+		while (j < y + 39)
 		{
-			my_mlx_pixel_put(data, i, j, 0x008000);
+			my_mlx_pixel_put(data, i, j, 0x808080);
 			j++;
 		}
 		i++;
@@ -158,6 +158,7 @@ void	check_all_the_map(t_map_data map_data)
 // the key handler function;
 int	hook_into_key_events(int keycode, t_mlx_data *data)
 {
+
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->window);
@@ -173,6 +174,7 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		&data->bits_per_pixel, &data->line_size, &data->endian);
 		data->x += 10;
 		draw_player(data->x, data->y, data);
+		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 10, 10);
 	}
 	else if (UP == keycode)
@@ -183,6 +185,7 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		&data->bits_per_pixel, &data->line_size, &data->endian);
 		data->y -= 10;
 		draw_player(data->x, data->y, data);
+		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 10, 10);
 	}
 	else if (LEFT == keycode)
@@ -193,6 +196,7 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		&data->bits_per_pixel, &data->line_size, &data->endian);
 		data->x -= 10;
 		draw_player(data->x, data->y, data);
+		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 10, 10);
 	}
 	else if (BOTTOM == keycode)
@@ -203,6 +207,7 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		&data->bits_per_pixel, &data->line_size, &data->endian);
 		data->y += 10;
 		draw_player(data->x, data->y, data);
+		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 10, 10);
 	}
 	return (0);
@@ -479,11 +484,11 @@ int	main(int ac, char **av)
 	int j = 0;
 	show_map_data(map_data);
 	check_all_the_map(map_data);
-	draw_player(10, 10, &mlx_data);
+	draw_player(42, 42, &mlx_data);
 	mlx_data.map = map_data.map;
 	draw_map(&mlx_data);
-	mlx_data.x = 10;
-	mlx_data.y = 10;
+	mlx_data.x = 42;
+	mlx_data.y = 42;
 	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.img, 10, 10);
 	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
 	//mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);

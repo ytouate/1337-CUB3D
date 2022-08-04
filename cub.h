@@ -35,8 +35,11 @@ typedef struct mlx_data {
 	int		endian;
 	int		window_x_size;
 	int		window_y_size;
-	int		x;
-	int		y;
+	float		x;
+	float		y;
+	float		dx;
+	float		dy;
+	float		angle;
 	char	**map;
 }t_mlx_data;
 
