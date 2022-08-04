@@ -35,6 +35,9 @@ typedef struct mlx_data {
 	int		endian;
 	int		window_x_size;
 	int		window_y_size;
+	int		x;
+	int		y;
+	char	**map;
 }t_mlx_data;
 
 
@@ -74,4 +77,7 @@ bool		get_texture_path(char *l, t_map_data *map_data);
 bool		is_valid_line(char *line);
 void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
+void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
+
+
 #endif
