@@ -101,6 +101,7 @@ void draw_map(t_mlx_data *data)
 				data->player->player_dir = know_angleofp(data->map[i][j]);
 				data->player->player_pos[0] = x;
 				data->player->player_pos[1] = y;
+				data->map[i][j] = '0';
 				draw_player(x, y, data);
 			}
 			x += 64;
@@ -215,13 +216,11 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 	}
 	else if (RIGHT == keycode)
 	{
-		printf("%f\n", data->player->player_pos[0]);
 		data->player->player_pos[0] += 64;
 		mlx_clear_window(data->mlx_ptr, data->window);
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
 		data->addr = mlx_get_data_addr(data->img,
 		&data->bits_per_pixel, &data->line_size, &data->endian);
-		
 		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
