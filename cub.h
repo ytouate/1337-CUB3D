@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/01 15:28:37 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/04 18:36:17 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,14 @@
 
 
 #define PI 3.141592653589793
-
+#define FUNCTION_FAILED 2
+#define UNEXPECTED_FLOW 1
+typedef struct s_vector
+{
+	int	x;
+	int y;
+	struct s_vector	*next;
+}t_vector;
 # include <unistd.h>
 # include "get_next_line/get_next_line.h"
 # include <stdio.h>
@@ -35,6 +42,7 @@ typedef struct mlx_data {
 	int		endian;
 	int		window_x_size;
 	int		window_y_size;
+	t_vector *borders;
 	float		x;
 	float		y;
 	float		dx;
@@ -42,6 +50,7 @@ typedef struct mlx_data {
 	float		angle;
 	char	**map;
 }t_mlx_data;
+
 
 
 typedef struct map_data {
