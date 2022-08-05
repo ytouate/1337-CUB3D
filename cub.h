@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/01 15:28:37 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/05 15:18:36 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 
 #define PI 3.141592653589793
-
+#define FUNCTION_FAILED 2
+#define UNEXPECTED_FLOW 1
 # include <unistd.h>
 # include "get_next_line/get_next_line.h"
 # include <stdio.h>
@@ -24,6 +25,21 @@
 # include <math.h>
 # include "mlx.h"
 # include "Libft/libft.h"
+
+typedef struct s_vector
+{
+	int	x;
+	int y;
+	struct s_vector	*next;
+}t_vector;
+
+typedef struct s_player {
+	int player_pos[2];
+	int player_viewer_height; // the player is half the walls height which is 64 so 32 unit in my case;
+	int player_fov; // must of human have a fov of 90 we sit the fov 60
+	int projection_plane[2]; // projection plane dimension
+	int player_dir; // the player direction represented by an angle
+}t_player;
 
 typedef struct mlx_data {
 	void	*mlx_ptr;
@@ -35,6 +51,7 @@ typedef struct mlx_data {
 	int		endian;
 	int		window_x_size;
 	int		window_y_size;
+	t_vector *borders;
 	float		x;
 	float		y;
 	float		dx;
@@ -42,6 +59,7 @@ typedef struct mlx_data {
 	float		angle;
 	char	**map;
 }t_mlx_data;
+
 
 
 typedef struct map_data {
@@ -67,7 +85,11 @@ enum {
 	ESC 	= 53,
 	LEFT 	= 123,
 	UP 		= 126,
-	BOTTOM 	= 125
+	BOTTOM 	= 125,
+	E = 90,
+	S = 180,
+	W = 270,
+	N =	260
 };
 
 int			count_spaces(char *line);
