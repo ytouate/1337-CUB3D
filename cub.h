@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/05 15:18:36 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/05 15:24:42 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_vector
 }t_vector;
 
 typedef struct s_player {
-	int player_pos[2];
+	float player_pos[2];
 	int player_viewer_height; // the player is half the walls height which is 64 so 32 unit in my case;
 	int player_fov; // must of human have a fov of 90 we sit the fov 60
 	int projection_plane[2]; // projection plane dimension
@@ -54,10 +54,9 @@ typedef struct mlx_data {
 	t_vector *borders;
 	float		x;
 	float		y;
-	float		dx;
-	float		dy;
 	float		angle;
 	char	**map;
+	t_player	player;
 }t_mlx_data;
 
 
