@@ -54,11 +54,9 @@ typedef struct mlx_data {
 	int		window_x_size;
 	int		window_y_size;
 	t_vector *borders;
-	float		x;
-	float		y;
 	float		angle;
 	char	**map;
-	t_player	player;
+	t_player	*player;
 }t_mlx_data;
 
 

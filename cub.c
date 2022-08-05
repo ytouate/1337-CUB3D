@@ -6,12 +6,11 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/05 15:33:12 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/05 16:01:45 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
-
 //this function for check the zeros not valid in the map;
 void drawsquare(t_mlx_data *data, int x, int y)
 {
@@ -30,17 +29,49 @@ void drawsquare(t_mlx_data *data, int x, int y)
 		i++;
 	}
 }
+
+void draw_player(float x, float y, t_mlx_data *data)
+{
+	int i;
+	int j;
+
+	i = x;
+	while (i < x + 8)
+	{
+		j = y;
+		while (j < y + 8)
+		{
+			my_mlx_pixel_put(data, i, j, 0x008000);
+			j++;
+		}
+		i++;
+	}
+}
+
 void	lstadd_front(t_vector **lst, t_vector *new)
 {
 	new ->next = *lst;
 	*lst = new;
 }
+
+int	get_player_dir(char	c)
+{
+	if (c == 'N')
+		return (N);
+	else if (c == 'E')
+		return (E);
+	else if (c == 'W')
+		return (W);
+	else if (c == 'S')
+		return (S);
+	return (0);
+}
 void draw_map(t_mlx_data *data)
 {
 	int	i;
 	int j;
-	int x;
-	int y;
+	float x;
+	float y;
 	t_vector *borders; 
 
 	borders = malloc(sizeof(t_vector));
@@ -65,6 +96,13 @@ void draw_map(t_mlx_data *data)
 				lstadd_front(&borders, temp);
 				drawsquare(data, x, y);
 			}
+			else if (ft_isalpha(data->map[i][j]))
+			{
+				data->player->player_dir = get_player_dir(data->map[i][j]);
+				data->player->player_pos[0] = x;
+				data->player->player_pos[1] = y;
+				draw_player(x, y, data);
+			}
 			x += 64;
 			j++;
 		}
@@ -74,23 +112,6 @@ void draw_map(t_mlx_data *data)
 	data->borders = borders;
 }
 
-void draw_player(float x, float y, t_mlx_data *data)
-{
-	int i;
-	int j;
-
-	i = x;
-	while (i < x + 8)
-	{
-		j = y;
-		while (j < y + 8)
-		{
-			my_mlx_pixel_put(data, i, j, 0x008000);
-			j++;
-		}
-		i++;
-	}
-}
 
 int	check_char(char c)
 {
@@ -174,7 +195,7 @@ bool got_collided(t_mlx_data *data)
 {
 	while (data->borders)
 	{
-		if (data->borders->x == data->x && data->borders->y == data->y)
+		if (data->borders->x == data->player->player_pos[0] && data->borders->y == data->player->player_pos[1])
 			return (true);
 		data->borders = data->borders->next;
 	}
@@ -194,19 +215,14 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 	}
 	else if (RIGHT == keycode)
 	{
-		data->x += 64;
-		if (got_collided(data))
-		{
-			data->x -= 64;
-			return (0);
-		}
-		data->x -= 8;
+		printf("%f\n", data->player->player_pos[0]);
+		data->player->player_pos[0] += 64;
 		mlx_clear_window(data->mlx_ptr, data->window);
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
 		data->addr = mlx_get_data_addr(data->img,
 		&data->bits_per_pixel, &data->line_size, &data->endian);
 		
-		draw_player(data->x, data->y, data);
+		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
@@ -216,8 +232,8 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
 		data->addr = mlx_get_data_addr(data->img,
 		&data->bits_per_pixel, &data->line_size, &data->endian);
-		data->y -= 64;
-		draw_player(data->x, data->y, data);
+		data->player->player_pos[1] -= 64;
+		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
@@ -227,8 +243,8 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
 		data->addr = mlx_get_data_addr(data->img,
 		&data->bits_per_pixel, &data->line_size, &data->endian);
-		data->x -= 64;
-		draw_player(data->x, data->y, data);
+		data->player->player_pos[0] -= 64;
+		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
@@ -238,8 +254,8 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
 		data->addr = mlx_get_data_addr(data->img,
 		&data->bits_per_pixel, &data->line_size, &data->endian);
-		data->y += 64;
-		draw_player(data->x, data->y, data);
+		data->player->player_pos[1] += 64;
+		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
@@ -487,8 +503,12 @@ int	main(int ac, char **av)
 	t_map_data	map_data;
 	char	**temp_grid;
 
+	// check the if there is a map if yes check its extention
+	// and initializing the mlx_data
 	check_basic_requirements(ac, av);
+	// init the struct with NULL for good practices
 	data_constructor(&mlx_data, &map_data);
+	// filling the map_data struct with real values;
 	map_data.map_name = av[1];
 	map_data.map_lines = count_map_lines(map_data.map_name);
 	if (map_data.map_lines == 0)
@@ -515,10 +535,10 @@ int	main(int ac, char **av)
 		&mlx_data.bits_per_pixel, &mlx_data.line_size, &mlx_data.endian);
 	free_grid(temp_grid);
 	map_data.map_lines = i;
-	mlx_data.x = 64;
-	mlx_data.y = 64;
+	mlx_data.player = malloc(sizeof(t_player));
+	mlx_data.player->player_pos[0] = -1;
+	mlx_data.player->player_pos[1] = -1;
 	check_all_the_map(map_data);
-	draw_player(64, 64, &mlx_data);
 	mlx_data.map = map_data.map;
 	draw_map(&mlx_data);
 	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.img, 0, 0);
