@@ -1,11 +1,10 @@
-echo "Insert the commit Message"
-read message
 
+message=$1
 if [[ -z $message ]]
 then
     echo "Insert The Commit Message"
 else
-    git add .
+    git add *
     git commit -m $message
     git push
 fi
