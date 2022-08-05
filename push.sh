@@ -1,4 +1,3 @@
-
 message=$1
 if [[ -z $message ]]
 then
