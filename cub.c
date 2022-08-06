@@ -12,6 +12,19 @@
 
 #include "cub.h"
 //this function for check the zeros not valid in the map;
+
+void draw_lineofdir(t_mlx_data *data)
+{
+	int x;
+	int y;
+
+	if (data->player->player_dir == N)
+	{
+		x = data->player->player_pos[0] + 4;
+		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] - 40, *data);
+	}
+	else if (data->player->player_dir == )
+}
 void drawsquare(t_mlx_data *data, int x, int y)
 {
 	int i;
@@ -28,6 +41,7 @@ void drawsquare(t_mlx_data *data, int x, int y)
 		}
 		i++;
 	}
+	draw_lineofdir(data);
 }
 
 void draw_player(float x, float y, t_mlx_data *data)
