@@ -6,12 +6,39 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/05 16:01:45 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/06 11:27:03 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
+
+/*
+the distance from player to the projection plane is 
+160 (the plane width devided by 2) / tan(30(half the fov angle) == 277
+320 column = 60 deg
+1 colum = 60 / 320
+dimension of the projection plane is 320 * 200 units
+center of the projection plane (160, 100)
+distance to the projection plane 277 units
+angle between subsequent rays 60 / 320
+*/
+
+
+// void trace_rays(void)
+// {
+// 	deg = 30; // half of the fov
+// 	while (not_hit_wall())
+// 	{
+// 		draw_line(x, y);
+// 		x += val
+// 		y += val
+// 	}
+// 	// get the distance from the player to the wall
+// 	// add the angle increment so that the ray moves to the right
+// 	// repeat all that shit 320 merra
+// }
 //this function for check the zeros not valid in the map;
+
 void drawsquare(t_mlx_data *data, int x, int y)
 {
 	int i;
@@ -36,6 +63,7 @@ void draw_player(float x, float y, t_mlx_data *data)
 	int j;
 
 	i = x;
+	printf("%f\n", (data->player->player_dir));
 	while (i < x + 8)
 	{
 		j = y;
@@ -54,7 +82,7 @@ void	lstadd_front(t_vector **lst, t_vector *new)
 	*lst = new;
 }
 
-int	get_player_dir(char	c)
+double	get_player_dir(char	c)
 {
 	if (c == 'N')
 		return (N);
@@ -66,6 +94,7 @@ int	get_player_dir(char	c)
 		return (S);
 	return (0);
 }
+
 void draw_map(t_mlx_data *data)
 {
 	int	i;
@@ -101,6 +130,7 @@ void draw_map(t_mlx_data *data)
 				data->player->player_dir = get_player_dir(data->map[i][j]);
 				data->player->player_pos[0] = x;
 				data->player->player_pos[1] = y;
+				data->map[i][j] = '0';
 				draw_player(x, y, data);
 			}
 			x += 64;
@@ -110,6 +140,7 @@ void draw_map(t_mlx_data *data)
 		y += 64 ;
 	}
 	data->borders = borders;
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 }
 
 
@@ -195,17 +226,48 @@ bool got_collided(t_mlx_data *data)
 {
 	while (data->borders)
 	{
-		if (data->borders->x == data->player->player_pos[0] && data->borders->y == data->player->player_pos[1])
+		if ((data->borders->x > data->player->player_pos[0] || data->borders->y < data->player->player_pos[0])
+			&& data->borders->y == data->player->player_pos[1])
 			return (true);
 		data->borders = data->borders->next;
 	}
 	return (false);
 }
 
+void rotate_player(int keycode,t_mlx_data *data)
+{
+	if (keycode == 0) // left
+	{
+		data->player->player_dir -= 0.1;
+		if (data->player->player_dir < 0)
+			data->player->player_dir += 2 * PI;
+		data->player->pdx = cos(data->player->player_dir) * 5;
+		data->player->pdy = sin(data->player->player_dir) * 5;
+	}
+	else if (keycode == 2) // right
+	{
+		data->player->player_dir += 0.1;
+		if (data->player->player_dir > 2 * PI)
+			data->player->player_dir = 0;
+		data->player->pdx = cos(data->player->player_dir) * 5;
+		data->player->pdy = sin(data->player->player_dir) * 5;
+	}
+	else if (keycode == 13) 
+	{
+		data->player->player_pos[0] += data->player->pdx;
+		data->player->player_pos[1] += data->player->pdy;
+	}
+	else if (keycode == 1)
+	{
+		data->player->player_pos[0] -= data->player->pdx;
+		data->player->player_pos[1] -= data->player->pdy;
+	}
+}
+
 // the key handler function;
 int	hook_into_key_events(int keycode, t_mlx_data *data)
 {
-
+	
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->window);
@@ -215,13 +277,11 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 	}
 	else if (RIGHT == keycode)
 	{
-		printf("%f\n", data->player->player_pos[0]);
 		data->player->player_pos[0] += 64;
 		mlx_clear_window(data->mlx_ptr, data->window);
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
 		data->addr = mlx_get_data_addr(data->img,
 		&data->bits_per_pixel, &data->line_size, &data->endian);
-		
 		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
@@ -259,6 +319,7 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
+	rotate_player(keycode, data);
 	return (0);
 }
 
@@ -497,51 +558,69 @@ void init_map_data(t_map_data *map_data)
 	map_data->map_lines = i;
 }
 
-int	main(int ac, char **av)
+void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 {
-	t_mlx_data	mlx_data;
-	t_map_data	map_data;
-	char	**temp_grid;
-
-	// check the if there is a map if yes check its extention
-	// and initializing the mlx_data
-	check_basic_requirements(ac, av);
-	// init the struct with NULL for good practices
-	data_constructor(&mlx_data, &map_data);
-	// filling the map_data struct with real values;
-	map_data.map_name = av[1];
-	map_data.map_lines = count_map_lines(map_data.map_name);
-	if (map_data.map_lines == 0)
-		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
-	temp_grid = convert_file_to_grid(map_data.map_name, map_data.map_lines);
-	int map_content_start = fill_map_data(temp_grid, &map_data);
-	int	map_content_end = map_data.map_lines;
-	map_data.map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
-	int i = 0;
+	char **temp_grid;
+	int	map_content_start;
+	int map_content_end;
+	int i;
+	
+	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
+	map_content_start = fill_map_data(temp_grid, map_data);
+	map_content_end = map_data->map_lines;
+	map_data->map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
+	i = 0;
 	while (temp_grid[map_content_start])
 	{
 		char *temp = ft_strtrim(temp_grid[map_content_start++], "\n");
-		map_data.map[i++] = ft_strdup(temp);
+		map_data->map[i++] = ft_strdup(temp);
 		free(temp);
 	}
-	map_data.map[i] = temp_grid[map_content_start];
-	map_data.map_lines = i;
-	mlx_data.window_x_size = ft_strlen(map_data.map[0]) * 64;
-	mlx_data.window_y_size = map_data.map_lines  * 64;
-	mlx_data.window = mlx_new_window(mlx_data.mlx_ptr, mlx_data.window_x_size,
-					mlx_data.window_y_size, "Cub3D");
-	mlx_data.img = mlx_new_image(mlx_data.mlx_ptr, mlx_data.window_x_size, mlx_data.window_y_size);
-	mlx_data.addr = mlx_get_data_addr(mlx_data.img,
-		&mlx_data.bits_per_pixel, &mlx_data.line_size, &mlx_data.endian);
+	map_data->map[i] = temp_grid[map_content_start];
+	map_data->map_lines = i;
+	mlx_data->window_x_size = ft_strlen(map_data->map[0]) * 64;
+	mlx_data->window_y_size = map_data->map_lines  * 64;
 	free_grid(temp_grid);
-	map_data.map_lines = i;
-	mlx_data.player = malloc(sizeof(t_player));
-	mlx_data.player->player_pos[0] = -1;
-	mlx_data.player->player_pos[1] = -1;
+}
+
+void init(t_mlx_data *mlx_data, t_map_data *map_data)
+{
+	data_constructor(mlx_data, map_data);
+	
+	map_data->map_lines = count_map_lines(map_data->map_name);
+	if (map_data->map_lines == 0)
+		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
+}
+
+void init_mlx(t_mlx_data *mlx_data)
+{
+	mlx_data->window = mlx_new_window(mlx_data->mlx_ptr, mlx_data->window_x_size,
+					mlx_data->window_y_size, "Cub3D");
+	mlx_data->img = mlx_new_image(mlx_data->mlx_ptr, mlx_data->window_x_size,
+					mlx_data->window_y_size);
+	mlx_data->addr = mlx_get_data_addr(mlx_data->img,
+				&mlx_data->bits_per_pixel, &mlx_data->line_size, &mlx_data->endian);
+	mlx_data->player = malloc(sizeof(t_player));
+	mlx_data->player->player_pos[0] = -1;
+	mlx_data->player->player_pos[1] = -1;
+	mlx_data->player->player_dir = 0;
+}
+
+int	main(int ac, char **av)
+{
+	
+	char	**temp_grid;
+	t_mlx_data mlx_data;
+	t_map_data map_data;
+
+	map_data.map_name = av[1];
+	check_basic_requirements(ac, av);
+	init(&mlx_data, &map_data);
+	fill_map(&map_data, &mlx_data);
+	init_mlx(&mlx_data);
 	check_all_the_map(map_data);
 	mlx_data.map = map_data.map;
 	draw_map(&mlx_data);
-	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.img, 0, 0);
 	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);
 	mlx_loop(mlx_data.mlx_ptr);
