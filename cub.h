@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/05 15:24:42 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/06 11:39:10 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@
 # include "mlx.h"
 # include "Libft/libft.h"
 
+#define E  PI / 2
+#define S  PI
+#define W  3 * PI/2
+#define N  0 * PI
+
 typedef struct s_vector
 {
 	int	x;
@@ -36,9 +41,14 @@ typedef struct s_vector
 typedef struct s_player {
 	float player_pos[2];
 	int player_viewer_height; // the player is half the walls height which is 64 so 32 unit in my case;
-	int player_fov; // must of human have a fov of 90 we sit the fov 60
-	int projection_plane[2]; // projection plane dimension
-	int player_dir; // the player direction represented by an angle
+	long	player_fov; // must of human have a fov of 90 we sit the fov 60
+	int projection_plane[2]; // projection plane dimension 320 units wide and 
+							//200 units high is good choice since this is the
+							// resolution of most vfa video cards
+	double player_dir; // the player direction represented by an angle
+	int player_dist; // distance between the player and the projection plane
+	int pdx;
+	int pdy;
 }t_player;
 
 typedef struct mlx_data {
@@ -83,10 +93,7 @@ enum {
 	LEFT 	= 123,
 	UP 		= 126,
 	BOTTOM 	= 125,
-	E = 90,
-	S = 180,
-	W = 270,
-	N =	260
+	
 };
 
 int			count_spaces(char *line);
