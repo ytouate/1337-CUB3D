@@ -20,7 +20,8 @@ FILES = \
 	./get_next_line/get_next_line.c			\
 	./map_parse.c							\
 	./map_check.c							\
-	./drawing_utils.c
+	./drawing_utils.c						\
+	./ddaline.c							\
 
 O_FILES = $(FILES:.c=.o)
 

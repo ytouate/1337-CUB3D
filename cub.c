@@ -39,6 +39,32 @@ angle between subsequent rays 60 / 320
 // }
 //this function for check the zeros not valid in the map;
 
+void draw_lineofdir(t_mlx_data *data)
+{
+	int x;
+	int y;
+
+	if (data->player->player_dir == E)
+	{
+		x = data->player->player_pos[0] + 4;
+		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] - 40, *data);
+	}
+	else if (data->player->player_dir == N)
+	{
+		y = data->player->player_pos[1] + 4;
+		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] + 40, y, *data);
+	}
+	else if (data->player->player_dir == S)
+	{
+		y = data->player->player_pos[1] + 4;
+		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] - 40, y, *data);
+	}
+	if (data->player->player_dir == W)
+	{
+		x = data->player->player_pos[0] + 4;
+		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] + 40, *data);
+	}
+}
 void drawsquare(t_mlx_data *data, int x, int y)
 {
 	int i;
@@ -55,6 +81,7 @@ void drawsquare(t_mlx_data *data, int x, int y)
 		}
 		i++;
 	}
+	draw_lineofdir(data);
 }
 
 void draw_player(float x, float y, t_mlx_data *data)

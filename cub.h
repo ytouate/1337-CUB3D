@@ -107,6 +107,6 @@ bool		is_valid_line(char *line);
 void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
-double radian_to_degreee(double radian);
+void	ddaline(int x,int y, int x1, int y1, t_mlx_data img);
 
 #endif
