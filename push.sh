@@ -1,4 +1,4 @@
-message=$1
+read message
 if [[ -z $message ]]
 then
     echo "Insert The Commit Message"
