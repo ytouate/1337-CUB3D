@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/06 11:27:03 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/07 10:29:57 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void draw_lineofdir(t_mlx_data *data)
 		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] + 40, *data);
 	}
 }
+
 void drawsquare(t_mlx_data *data, int x, int y)
 {
 	int i;
@@ -81,16 +82,14 @@ void drawsquare(t_mlx_data *data, int x, int y)
 		}
 		i++;
 	}
-	draw_lineofdir(data);
 }
 
 void draw_player(float x, float y, t_mlx_data *data)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = x;
-	printf("%f\n", (data->player->player_dir));
 	while (i < x + 8)
 	{
 		j = y;
@@ -101,6 +100,7 @@ void draw_player(float x, float y, t_mlx_data *data)
 		}
 		i++;
 	}
+	draw_lineofdir(data);
 }
 
 void	lstadd_front(t_vector **lst, t_vector *new)

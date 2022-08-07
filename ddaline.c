@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:38:26 by ilefhail          #+#    #+#             */
-/*   Updated: 2022/08/01 12:00:44 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/06 15:28:40 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	ddaline(int x,int y, int x1, int y1, t_mlx_data img)
 {
-	float	len;
-	int dx;
-	int dy;
-	float sx;
-	float sy;
+	float	len; 
+	int		dx;
+	int		dy;
+	float 	sx;
+	float 	sy;
 	float	xinc;
 	float	yinc;
 	int h;

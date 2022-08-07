@@ -6,13 +6,12 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/06 11:39:10 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/06 15:31:53 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB_H
 # define CUB_H
-
 
 #define PI 3.141592653589793
 #define FUNCTION_FAILED 2
