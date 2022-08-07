@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/06 15:31:53 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/07 14:08:32 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,18 @@
 # include "mlx.h"
 # include "Libft/libft.h"
 
-#define E  PI / 2
-#define S  PI
-#define W  3 * PI/2
-#define N  0 * PI
-
+# define E  PI / 2
+# define S  PI
+# define W  3 * PI/2
+# define N  0 * PI
+# define A_KEY 0
+# define W_KEY 13
+# define S_KEY 1
+# define D_KEY 2
+# define KEYPRESS 2
+# define KEYRELEASE 3
+# define KEYPRESSMASK 1L
+# define KEYRELEASEMASK 2L
 typedef struct s_vector
 {
 	int	x;
@@ -38,16 +45,17 @@ typedef struct s_vector
 }t_vector;
 
 typedef struct s_player {
-	float player_pos[2];
+	double player_pos[2];
 	int player_viewer_height; // the player is half the walls height which is 64 so 32 unit in my case;
-	long	player_fov; // must of human have a fov of 90 we sit the fov 60
+	double	player_fov; // must of human have a fov of 90 we sit the fov 60
 	int projection_plane[2]; // projection plane dimension 320 units wide and 
 							//200 units high is good choice since this is the
 							// resolution of most vfa video cards
 	double player_dir; // the player direction represented by an angle
 	int player_dist; // distance between the player and the projection plane
-	int pdx;
-	int pdy;
+
+	double player_angle;
+	double player_half_fov;
 }t_player;
 
 typedef struct mlx_data {
@@ -106,6 +114,6 @@ bool		is_valid_line(char *line);
 void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
-void	ddaline(int x,int y, int x1, int y1, t_mlx_data img);
+void	ddaline(int x,int y, int x1, int y1, t_mlx_data img, int color);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/07 10:29:57 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/07 14:11:17 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,32 @@ angle between subsequent rays 60 / 320
 // }
 //this function for check the zeros not valid in the map;
 
-void draw_lineofdir(t_mlx_data *data)
-{
-	int x;
-	int y;
+// void draw_lineofdir(t_mlx_data *data)
+// {
+// 	int x;
+// 	int y;
 
-	if (data->player->player_dir == E)
-	{
-		x = data->player->player_pos[0] + 4;
-		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] - 40, *data);
-	}
-	else if (data->player->player_dir == N)
-	{
-		y = data->player->player_pos[1] + 4;
-		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] + 40, y, *data);
-	}
-	else if (data->player->player_dir == S)
-	{
-		y = data->player->player_pos[1] + 4;
-		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] - 40, y, *data);
-	}
-	if (data->player->player_dir == W)
-	{
-		x = data->player->player_pos[0] + 4;
-		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] + 40, *data);
-	}
-}
+// 	if (data->player->player_dir == E)
+// 	{
+// 		x = data->player->player_pos[0] + 4;
+// 		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] - 40, *data);
+// 	}
+// 	else if (data->player->player_dir == N)
+// 	{
+// 		y = data->player->player_pos[1] + 4;
+// 		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] + 40, y, *data);
+// 	}
+// 	else if (data->player->player_dir == S)
+// 	{
+// 		y = data->player->player_pos[1] + 4;
+// 		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] - 40, y, *data);
+// 	}
+// 	if (data->player->player_dir == W)
+// 	{
+// 		x = data->player->player_pos[0] + 4;
+// 		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] + 40, *data);
+// 	}
+// }
 
 void drawsquare(t_mlx_data *data, int x, int y)
 {
@@ -100,7 +100,7 @@ void draw_player(float x, float y, t_mlx_data *data)
 		}
 		i++;
 	}
-	draw_lineofdir(data);
+	// draw_lineofdir(data);
 }
 
 void	lstadd_front(t_vector **lst, t_vector *new)
@@ -154,11 +154,27 @@ void draw_map(t_mlx_data *data)
 			}
 			else if (ft_isalpha(data->map[i][j]))
 			{
-				data->player->player_dir = get_player_dir(data->map[i][j]);
 				data->player->player_pos[0] = x;
 				data->player->player_pos[1] = y;
 				data->map[i][j] = '0';
-				draw_player(x, y, data);
+				ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
+				ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle - data->player->player_half_fov) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle - data->player->player_half_fov) * 50,
+					*data, 0xFF0000
+				);
+				// ddaline(
+				// 	data->player->player_pos[0], data->player->player_pos[1],
+				// 	data->player->player_pos[0] + sin(data->player->player_angle + data->player->player_half_fov) * 50,
+				// 	data->player->player_pos[1] + cos(data->player->player_angle + data->player->player_half_fov) * 50,
+				// 	*data, 0xFF00FF
+				// );
 			}
 			x += 64;
 			j++;
@@ -169,7 +185,6 @@ void draw_map(t_mlx_data *data)
 	data->borders = borders;
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 }
-
 
 int	check_char(char c)
 {
@@ -232,6 +247,7 @@ void	call_check_zeros(t_fix_map *map, int len)
 	if (flag == -1)
 		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
 }
+
 //this function for fill the map with lens
 void	check_all_the_map(t_map_data map_data)
 {
@@ -261,34 +277,46 @@ bool got_collided(t_mlx_data *data)
 	return (false);
 }
 
-void rotate_player(int keycode,t_mlx_data *data)
+int rotate_player(int keycode,t_mlx_data *data)
 {
-	if (keycode == 0) // left
+	if (keycode == LEFT)
 	{
-		data->player->player_dir -= 0.1;
-		if (data->player->player_dir < 0)
-			data->player->player_dir += 2 * PI;
-		data->player->pdx = cos(data->player->player_dir) * 5;
-		data->player->pdy = sin(data->player->player_dir) * 5;
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
 	}
-	else if (keycode == 2) // right
+	else if (keycode == RIGHT)
 	{
-		data->player->player_dir += 0.1;
-		if (data->player->player_dir > 2 * PI)
-			data->player->player_dir = 0;
-		data->player->pdx = cos(data->player->player_dir) * 5;
-		data->player->pdy = sin(data->player->player_dir) * 5;
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
+		draw_map(data);
 	}
-	else if (keycode == 13) 
+	else if (keycode == UP) 
 	{
-		data->player->player_pos[0] += data->player->pdx;
-		data->player->player_pos[1] += data->player->pdy;
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
 	}
-	else if (keycode == 1)
+	else if (keycode == BOTTOM)
 	{
-		data->player->player_pos[0] -= data->player->pdx;
-		data->player->player_pos[1] -= data->player->pdy;
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
 	}
+	return (0);
 }
 
 // the key handler function;
@@ -302,7 +330,7 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 			// Free all the resources;
 		exit(EXIT_SUCCESS);
 	}
-	else if (RIGHT == keycode)
+	else if (D_KEY == keycode)
 	{
 		data->player->player_pos[0] += 64;
 		mlx_clear_window(data->mlx_ptr, data->window);
@@ -310,10 +338,22 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->addr = mlx_get_data_addr(data->img,
 		&data->bits_per_pixel, &data->line_size, &data->endian);
 		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle - data->player->player_half_fov) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle - data->player->player_half_fov) * 50,
+					*data, 0xFF0000
+				);
 		draw_map(data);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
-	else if (UP == keycode)
+	else if (W_KEY == keycode)
 	{
 		mlx_clear_window(data->mlx_ptr, data->window);
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
@@ -322,9 +362,21 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->player->player_pos[1] -= 64;
 		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle - data->player->player_half_fov) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle - data->player->player_half_fov) * 50,
+					*data, 0xFF0000
+				);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
-	else if (LEFT == keycode)
+	else if (A_KEY == keycode)
 	{
 		mlx_clear_window(data->mlx_ptr, data->window);
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
@@ -333,9 +385,21 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->player->player_pos[0] -= 64;
 		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle - data->player->player_half_fov) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle - data->player->player_half_fov) * 50,
+					*data, 0xFF0000
+				);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
-	else if (BOTTOM == keycode)
+	else if (S_KEY == keycode)
 	{
 		mlx_clear_window(data->mlx_ptr, data->window);
 		data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
@@ -344,9 +408,21 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->player->player_pos[1] += 64;
 		draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
 		draw_map(data);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					*data, 0xFF0000
+				);
+		ddaline(
+					data->player->player_pos[0], data->player->player_pos[1],
+					data->player->player_pos[0] + sin(data->player->player_angle - data->player->player_half_fov) * 50,
+					data->player->player_pos[1] + cos(data->player->player_angle - data->player->player_half_fov) * 50,
+					*data, 0xFF0000
+				);
 		mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	}
-	rotate_player(keycode, data);
+	// rotate_player(keycode, data);
 	return (0);
 }
 
@@ -646,9 +722,16 @@ int	main(int ac, char **av)
 	fill_map(&map_data, &mlx_data);
 	init_mlx(&mlx_data);
 	check_all_the_map(map_data);
+	mlx_data.player->player_fov = PI / 3;
+	mlx_data.player->player_half_fov = mlx_data.player->player_fov / 2;
+	mlx_data.player->player_angle = PI;
 	mlx_data.map = map_data.map;
+	mlx_data.player->player_pos[0] = -1;
+	mlx_data.player->player_pos[1] = -1;
 	draw_map(&mlx_data);
-	mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
+	// mlx_key_hook(mlx_data.window, hook_into_key_events, &mlx_data);
+	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
+	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);
 	mlx_loop(mlx_data.mlx_ptr);
 }
