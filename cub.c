@@ -449,7 +449,7 @@ void show_map_data(t_map_data map_data)
 	printf("======================the map======================\n");
 	print_grid(map_data.map);
 	printf("the textures\n");
-	printf("%s\n", map_data.north_texture);
+	printf("%sa\n", map_data.north_texture);
 	printf("%s\n", map_data.south_texture);
 	printf("%s\n", map_data.west_textrure);
 	printf("%s\n", map_data.east_texture);
@@ -607,7 +607,7 @@ void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 	int	map_content_start;
 	int map_content_end;
 	int i;
-	
+
 	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
 	map_content_start = fill_map_data(temp_grid, map_data);
 	map_content_end = map_data->map_lines;
@@ -687,6 +687,7 @@ int	main(int ac, char **av)
 	fill_map(&map_data, &mlx_data);
 	init_mlx(&mlx_data);
 	check_all_the_map(map_data);
+	show_map_data(map_data);
 	mlx_data.rays = malloc(sizeof(t_rays));
 	mlx_data.player->player_angle = PI;
 	mlx_data.map = map_data.map;

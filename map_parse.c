@@ -137,6 +137,7 @@ char **convert_file_to_grid(char *file_name, int file_size)
 	int		i;
 	int		map_fd;
 	int		flag = 0;
+
 	i = 0;
 	map_fd = open(file_name, O_RDONLY);
 	if (map_fd == -1)
