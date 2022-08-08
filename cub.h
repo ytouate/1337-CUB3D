@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/07 14:08:32 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 10:45:32 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@
 # define KEYRELEASE 3
 # define KEYPRESSMASK 1L
 # define KEYRELEASEMASK 2L
+# define FOV PI / 3
+# define HALF_FOV FOV / 2
+# define CASTED_RAYS 120
+# define STEP_ANGLE FOV / CASTED_RAYS
 typedef struct s_vector
 {
 	int	x;
@@ -44,18 +48,22 @@ typedef struct s_vector
 	struct s_vector	*next;
 }t_vector;
 
+
+typedef struct s_rays {
+	double step_angle;
+	double casted_rays;
+	double start_angle;
+	const double max_depth;
+}t_rays;
+
 typedef struct s_player {
 	double player_pos[2];
-	int player_viewer_height; // the player is half the walls height which is 64 so 32 unit in my case;
-	double	player_fov; // must of human have a fov of 90 we sit the fov 60
-	int projection_plane[2]; // projection plane dimension 320 units wide and 
-							//200 units high is good choice since this is the
-							// resolution of most vfa video cards
-	double player_dir; // the player direction represented by an angle
-	int player_dist; // distance between the player and the projection plane
+	int player_viewer_height;
+	int projection_plane[2];
+	double player_dir;
+	int player_dist;
 
 	double player_angle;
-	double player_half_fov;
 }t_player;
 
 typedef struct mlx_data {
@@ -71,6 +79,7 @@ typedef struct mlx_data {
 	t_vector *borders;
 	float		angle;
 	char	**map;
+	t_rays		*rays;
 	t_player	*player;
 }t_mlx_data;
 
@@ -115,5 +124,6 @@ void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
 void	ddaline(int x,int y, int x1, int y1, t_mlx_data img, int color);
-
+void draw_map(t_mlx_data *data);
+void draw_player(float x, float y, t_mlx_data *data);
 #endif
