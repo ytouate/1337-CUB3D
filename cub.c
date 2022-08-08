@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/08 15:26:19 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 15:44:12 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -408,14 +408,6 @@ void show_map_data(t_map_data map_data)
 	
 }
 
-void	data_constructor(t_mlx_data *mlx_data, t_map_data *map_data)
-{
-	map_data_constructor(map_data);
-	mlx_data->mlx_ptr = mlx_init();
-
-	
-}
-
 // checks if there is a map file-name in the av and checks if the file name is valid
 void	check_basic_requirements(int ac, char **av)
 {
@@ -571,8 +563,8 @@ void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 
 void init(t_mlx_data *mlx_data, t_map_data *map_data)
 {
-	data_constructor(mlx_data, map_data);
-	
+	map_data_constructor(map_data);
+	mlx_data->mlx_ptr = mlx_init();
 	map_data->map_lines = count_map_lines(map_data->map_name);
 	if (map_data->map_lines == 0)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
