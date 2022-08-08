@@ -6,16 +6,13 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/08 15:15:46 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 17:45:21 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB_H
 # define CUB_H
 
-#define PI 3.141592653589793
-#define FUNCTION_FAILED 2
-#define UNEXPECTED_FLOW 1
 # include <unistd.h>
 # include "get_next_line/get_next_line.h"
 # include <stdio.h>
@@ -29,17 +26,34 @@
 # define S  PI
 # define W  3 * PI/2
 # define N  0 * PI
+
 # define A_KEY 0
 # define W_KEY 13
 # define S_KEY 1
 # define D_KEY 2
-# define KEYPRESS 2
+
+# define PI 3.141592653589793
+# define TWO_PI 6.28318530
+
+#define FUNCTION_FAILED 2
+#define UNEXPECTED_FLOW 1
+
 # define KEYRELEASE 3
 # define KEYPRESSMASK 1L
+# define KEYPRESS 2
 # define KEYRELEASEMASK 2L
-# define FOV 60 * (PI / 180.0)
+
+# define TITLE_SIZE 64
+# define MAP_NUM_ROWS 13
+# define MAP_NUM_COLS 20
+
+# define WINDOW_WIDTH (MAP_NUM_COLS * TITLE_SIZE)
+# define WINDWO_HEIGHT (MAP_NUM_ROWS * TITLE_SIZE)
+
+# define FOV (60 * (PI / 180.0))
 # define HALF_FOV FOV / 2
-# define NUM_RAYS 320
+
+# define NUM_RAYS WINDOW_WIDTH
 # define STEP_ANGLE FOV / NUM_RAYS
 
 typedef struct s_vector
@@ -58,18 +72,21 @@ typedef struct s_rays {
 }t_rays;
 
 typedef struct s_player {
-	double	player_pos[2];
-	double	player_dir;
-	double	player_angle;
-	int		player_viewer_height;
-	int		projection_plane[2];
-	int		player_dist;
+	float	x;
+	float	y;
+	float	width;
+	float	height;
+	int		turn_direction; // -1 for left +1 for right;
+	int		walk_direction; // -1 for back, +1 for fron
+	float	rotation_angle;
+	float	walk_speed;
+	float	turn_speed;
 }t_player;
 
 typedef struct mlx_data {
 	t_vector	*borders;
-	t_player	*player;
-	t_rays		*rays;
+	t_player	player;
+	t_rays		rays;
 	float		angle;
 	void		*mlx_ptr;
 	void		*window;
