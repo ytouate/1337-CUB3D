@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 13:54:56 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/02 09:35:40 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 15:26:57 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int count_map_lines(char *map_name)
     int		i;
     int		map_fd;
 	char	*temp;
-	int		flag = 0;
 
     i = 0;
     count = 0;

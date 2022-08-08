@@ -6,66 +6,11 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/08 10:59:54 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 15:26:19 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
-
-/*
-the distance from player to the projection plane is 
-160 (the plane width devided by 2) / tan(30(half the fov angle) == 277
-320 column = 60 deg
-1 colum = 60 / 320
-dimension of the projection plane is 320 * 200 units
-center of the projection plane (160, 100)
-distance to the projection plane 277 units
-angle between subsequent rays 60 / 320
-*/
-
-
-// void trace_rays(void)
-// {
-// 	deg = 30; // half of the fov
-// 	while (not_hit_wall())
-// 	{
-// 		draw_line(x, y);
-// 		x += val
-// 		y += val
-// 	}
-// 	// get the distance from the player to the wall
-// 	// add the angle increment so that the ray moves to the right
-// 	// repeat all that shit 320 merra
-// }
-//this function for check the zeros not valid in the map;
-
-// void draw_lineofdir(t_mlx_data *data)
-// {
-// 	int x;
-// 	int y;
-
-// 	if (data->player->player_dir == E)
-// 	{
-// 		x = data->player->player_pos[0] + 4;
-// 		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] - 40, *data);
-// 	}
-// 	else if (data->player->player_dir == N)
-// 	{
-// 		y = data->player->player_pos[1] + 4;
-// 		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] + 40, y, *data);
-// 	}
-// 	else if (data->player->player_dir == S)
-// 	{
-// 		y = data->player->player_pos[1] + 4;
-// 		ddaline(data->player->player_pos[0], y, data->player->player_pos[1] - 40, y, *data);
-// 	}
-// 	if (data->player->player_dir == W)
-// 	{
-// 		x = data->player->player_pos[0] + 4;
-// 		ddaline(x, data->player->player_pos[1], x, data->player->player_pos[1] + 40, *data);
-// 	}
-// }
-
 
 void ft_draw_player(t_mlx_data *data)
 {
@@ -324,7 +269,6 @@ int rotate_player(int keycode,t_mlx_data *data)
 	return (0);
 }
 
-
 // the key handler function;
 int	hook_into_key_events(int keycode, t_mlx_data *data)
 {
@@ -582,7 +526,6 @@ void init_map_data(t_map_data *map_data)
 {
 	int map_content_start;
 	char **temp_grid;
-	int	map_content_end = map_data->map_lines;
 	int i;
 	char *temp;
 
@@ -649,35 +592,16 @@ void init_mlx(t_mlx_data *mlx_data)
 	mlx_data->player->player_dir = 0;
 }
 
+double deg2rad(double degrees) {
+	return (degrees * (PI / 180.0));
+}
 
-void ray_casting(t_mlx_data *data)
-{
-	// define left most angle of fov
-	const double max_depth = data->window_x_size;
-	data->rays->start_angle = data->player->player_angle - HALF_FOV;
-	ddaline(
-			data->player->player_pos[0], data->player->player_pos[1], 10, 10, *data, 0x00FF00
-	);
-	printf("the player x is %f \n", data->player->player_pos[1]);
-	printf("the player y is %f \n", data->player->player_pos[1]);
-	draw_player(352, 320, data);
-	for (int ray = 0; ray < CASTED_RAYS; ray++)
-	{
-		for (int depth = 0; depth < max_depth; depth++)
-		{
-			double target_x = data->player->player_pos[0] - sin(data->rays->start_angle) * depth;
-			double target_y = data->player->player_pos[1] + cos(data->rays->start_angle) * depth;
-			ddaline(
-				data->player->player_pos[0], data->player->player_pos[1], target_x, target_y, *data, 0x00FF00
-			);
-		}
-		data->rays->start_angle += STEP_ANGLE;
-	}
+double rad2deg(double radian) {
+	return (radian / (PI / 180.0));
 }
 
 int	main(int ac, char **av)
 {
-	char	**temp_grid;
 	t_mlx_data mlx_data;
 	t_map_data map_data;
 
@@ -693,9 +617,8 @@ int	main(int ac, char **av)
 	mlx_data.map = map_data.map;
 	mlx_data.player->player_pos[0] = -1;
 	mlx_data.player->player_pos[1] = -1;
+	show_map_data(map_data);
 	draw_map(&mlx_data);
-	ray_casting(&mlx_data);
-	// cast_rays(&mlx_data);
 	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);

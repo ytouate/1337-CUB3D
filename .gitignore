@@ -1,3 +1,4 @@
 *.o
 *.tldr
 .vscode
+cub3D

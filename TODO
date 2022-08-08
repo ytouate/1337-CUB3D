@@ -1,1 +1,13 @@
 // the must be surrounded by wallss 
+rays are cast and traced in groups
+in a 320*200 display resolution a raycaster traces only 320 rays
+fast rendering
+resulting image is not very realistic
+walls are predendicular (90 angle) with the floor
+floor is always flat
+walls are made of cubes that have the same size (square grid only)
+
+distance between rays is (the FOV / The projection plane )
+// ray tracing 
+each ray is traced seperately, so each point usually a pixel is traced by one single ray
+needs to tra

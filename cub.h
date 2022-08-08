@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/08 10:45:32 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 15:15:46 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,53 +37,51 @@
 # define KEYRELEASE 3
 # define KEYPRESSMASK 1L
 # define KEYRELEASEMASK 2L
-# define FOV PI / 3
+# define FOV 60 * (PI / 180.0)
 # define HALF_FOV FOV / 2
-# define CASTED_RAYS 120
-# define STEP_ANGLE FOV / CASTED_RAYS
+# define NUM_RAYS 320
+# define STEP_ANGLE FOV / NUM_RAYS
+
 typedef struct s_vector
 {
-	int	x;
-	int y;
+	int				x;
+	int				y;
 	struct s_vector	*next;
 }t_vector;
 
 
 typedef struct s_rays {
-	double step_angle;
-	double casted_rays;
-	double start_angle;
-	const double max_depth;
+	double	step_angle;
+	double	casted_rays;
+	double	start_angle;
+	double	max_depth;
 }t_rays;
 
 typedef struct s_player {
-	double player_pos[2];
-	int player_viewer_height;
-	int projection_plane[2];
-	double player_dir;
-	int player_dist;
-
-	double player_angle;
+	double	player_pos[2];
+	double	player_dir;
+	double	player_angle;
+	int		player_viewer_height;
+	int		projection_plane[2];
+	int		player_dist;
 }t_player;
 
 typedef struct mlx_data {
-	void	*mlx_ptr;
-	void	*window;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_size;
-	int		endian;
-	int		window_x_size;
-	int		window_y_size;
-	t_vector *borders;
-	float		angle;
-	char	**map;
-	t_rays		*rays;
+	t_vector	*borders;
 	t_player	*player;
+	t_rays		*rays;
+	float		angle;
+	void		*mlx_ptr;
+	void		*window;
+	void		*img;
+	char		*addr;
+	char		**map;
+	int			bits_per_pixel;
+	int			line_size;
+	int			endian;
+	int			window_x_size;
+	int			window_y_size;
 }t_mlx_data;
-
-
 
 typedef struct map_data {
 	char 	**map;
@@ -109,7 +107,6 @@ enum {
 	LEFT 	= 123,
 	UP 		= 126,
 	BOTTOM 	= 125,
-	
 };
 
 int			count_spaces(char *line);
