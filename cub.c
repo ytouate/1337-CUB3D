@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/08 15:26:19 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 15:44:12 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,17 +180,12 @@ void	call_check_zeros(t_fix_map *map, int len)
 {
 	int	i;
 	int j;
-	int	flag;
 
 	i = 0;
 	while (i < len)
 	{
 		j = 0;
-		if (map[i].len == 0)
-			flag = -1;
-		else
-			flag = 0;
-		if (map[i].len == 0 && i < len - 1)
+		if (map[i].len == 0 && i < len - 1 && map[i + 1].len > 0)
 			ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
 		while (map[i].line_of_map[j])
 		{
@@ -202,8 +197,6 @@ void	call_check_zeros(t_fix_map *map, int len)
 		}
 		i++;
 	}
-	if (flag == -1)
-		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
 }
 
 //this function for fill the map with lens
@@ -213,7 +206,7 @@ void	check_all_the_map(t_map_data map_data)
 	int			i;
 
 	i = 0;
-	map_with_len = malloc(sizeof(t_fix_map) * map_data.map_lines + 2);
+	map_with_len = malloc(sizeof(t_fix_map) * map_data.map_lines);
 	while (map_data.map[i])
 	{
 		map_with_len[i].len = ft_strlen(map_data.map[i]);
@@ -341,8 +334,8 @@ void	map_data_constructor(t_map_data *map_data)
 	map_data->south_texture = NULL;
 	map_data->east_texture = NULL;
 	map_data->map_lines = -1;
-	ft_memset(map_data->ceilling_color, 0, 3 * sizeof(int));
-	ft_memset(map_data->floor_color, 0, 3 * sizeof(int));
+	ft_memset(map_data->ceilling_color, -1, 3 * sizeof(int));
+	ft_memset(map_data->floor_color, -1, 3 * sizeof(int));
 }
 
 // returns true if the line send to it contain some content
@@ -405,14 +398,6 @@ void show_map_data(t_map_data map_data)
 	for (int i = 0; i < 3; i++)
 		printf("%d\t", map_data.ceilling_color[i]);
 	printf("\n");
-	
-}
-
-void	data_constructor(t_mlx_data *mlx_data, t_map_data *map_data)
-{
-	map_data_constructor(map_data);
-	mlx_data->mlx_ptr = mlx_init();
-
 	
 }
 
@@ -486,34 +471,57 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 {
 	int	i;
 	char *line;
-	int	flag;
 	int spaces;
+	int		*check;
 
-	flag = 0;
 	i = 0;
+	check = malloc(sizeof(int) * 6);
+	ft_memset(check, 0, sizeof(int) * 6);
 	while (grid[i])
 	{
 		if (is_valid_line(grid[i])){
 			line = ft_strtrim(grid[i], "\n \t");
-			flag += check_map_identifiers(line);
 			spaces = count_spaces(line);
 			if (!ft_strncmp("NO ", line, 3))
+			{
+				check[0] += 1;
 				map_data->north_texture = ft_strdup(line + spaces);
+			}
 			else if (!ft_strncmp("SO ", line, 3))
+			{
+				check[1] += 1;
 				map_data->south_texture = ft_strdup(line + spaces);
+			}
 			else if (!ft_strncmp("WE ", line, 3))
+			{
+				check[2] += 1;
 				map_data->west_textrure = ft_strdup(line + spaces);
+			}
 			else if (!ft_strncmp("EA ", line, 3))
+			{
+				check[3] += 1;
 				map_data->east_texture = ft_strdup(line + spaces);
+			}
 			else if (!ft_strncmp("F ", line, 2))
+			{
+				check[4] += 1;
 				fill_rgb_array(line, map_data->floor_color);
+			}
 			else if (!ft_strncmp("C ", line, 2))
+			{
+				check[5] += 1;
 				fill_rgb_array(line, map_data->ceilling_color);
+			}
 			else
 			{
-				if (flag == 6)
-					return (i);
-				ft_error(UNEXPECTED_FLOW, "UNEXPECTED/MISSING MAP IDENTIFIER\n");
+				int j = 0;
+				while (j < 6)
+				{
+					if (check[j] != 1)
+						return (-1);
+					j++;
+				}
+				return (i);
 			}
 		}
 		i++;
@@ -553,6 +561,9 @@ void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 
 	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
 	map_content_start = fill_map_data(temp_grid, map_data);
+	printf("%d\n",map_content_start);
+	if (map_content_start == -1)
+		ft_error(UNEXPECTED_FLOW, "the elements are not valid");
 	map_content_end = map_data->map_lines;
 	map_data->map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
 	i = 0;
@@ -571,8 +582,8 @@ void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 
 void init(t_mlx_data *mlx_data, t_map_data *map_data)
 {
-	data_constructor(mlx_data, map_data);
-	
+	map_data_constructor(map_data);
+	mlx_data->mlx_ptr = mlx_init();
 	map_data->map_lines = count_map_lines(map_data->map_name);
 	if (map_data->map_lines == 0)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");

@@ -6,7 +6,7 @@
 #    By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 11:23:28 by ytouate           #+#    #+#              #
-#    Updated: 2022/08/08 15:29:35 by ytouate          ###   ########.fr        #
+#    Updated: 2022/08/08 15:35:48 by ytouate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,9 @@ fclean:
 	cd Libft && make fclean && cd ..
 
 re: fclean all
+
+run:
+	./cub3D a.cub
 
 libft:
 	cd Libft && make && cd ..
