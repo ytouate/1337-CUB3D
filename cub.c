@@ -6,11 +6,27 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/08 15:44:12 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/08 17:50:59 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
+
+const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
+	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+	{1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1},
+	{1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+};
 
 void ft_draw_player(t_mlx_data *data)
 {
@@ -18,24 +34,24 @@ void ft_draw_player(t_mlx_data *data)
 	data->img = mlx_new_image(data->mlx_ptr, data->window_x_size, data->window_y_size);
 	data->addr = mlx_get_data_addr(data->img,
 	&data->bits_per_pixel, &data->line_size, &data->endian);
-	// draw_player(data->player->player_pos[0], data->player->player_pos[1], data);
+	// draw_player(data->player.x, data->player.y, data);
 	draw_map(data);
 	ddaline(
-		data->player->player_pos[0], data->player->player_pos[1],
-		data->player->player_pos[0] - sin(data->player->player_angle) * 50,
-		data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+		data->player.x, data->player.y,
+		data->player.x - sin(data->player.rotation_angle) * 50,
+		data->player.y + cos(data->player.rotation_angle) * 50,
 		*data, 0xFF0000
 	);
 	ddaline(
-		data->player->player_pos[0], data->player->player_pos[1],
-		data->player->player_pos[0] - sin(data->player->player_angle - HALF_FOV) * 50,
-		data->player->player_pos[1] + cos(data->player->player_angle - HALF_FOV) * 50,
+		data->player.x, data->player.y,
+		data->player.x - sin(data->player.rotation_angle - HALF_FOV) * 50,
+		data->player.y + cos(data->player.rotation_angle - HALF_FOV) * 50,
 		*data, 0xFF0000
 	);
 	ddaline(
-		data->player->player_pos[0], data->player->player_pos[1],
-		data->player->player_pos[0] - sin(data->player->player_angle + HALF_FOV) * 50,
-		data->player->player_pos[1] + cos(data->player->player_angle + HALF_FOV) * 50,
+		data->player.x, data->player.y,
+		data->player.x - sin(data->player.rotation_angle + HALF_FOV) * 50,
+		data->player.y + cos(data->player.rotation_angle + HALF_FOV) * 50,
 		*data, 0xFF0000
 	);
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
@@ -65,16 +81,17 @@ void draw_player(float x, float y, t_mlx_data *data)
 	int	j;
 
 	i = x;
-	while (i < x + 8)
+	while (i < x + 10)
 	{
 		j = y;
-		while (j < y + 8)
+		while (j < y + 10)
 		{
 			my_mlx_pixel_put(data, i, j, 0x008000);
 			j++;
 		}
 		i++;
 	}
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 }
 
 void	lstadd_front(t_vector **lst, t_vector *new)
@@ -128,8 +145,8 @@ void draw_map(t_mlx_data *data)
 			}
 			else if (ft_isalpha(data->map[i][j]))
 			{
-				data->player->player_pos[0] = x;
-				data->player->player_pos[1] = y;
+				data->player.x = x;
+				data->player.y = y;
 				data->map[i][j] = '0';
 				
 				ft_draw_player(data);
@@ -180,8 +197,10 @@ void	call_check_zeros(t_fix_map *map, int len)
 {
 	int	i;
 	int j;
+	int	flag;
 
 	i = 0;
+	flag = 0;
 	while (i < len)
 	{
 		j = 0;
@@ -193,10 +212,14 @@ void	call_check_zeros(t_fix_map *map, int len)
 				ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
 			if (map[i].line_of_map[j] == '0')
 				check_the_zeros(map, i, j, len);
+			if (ft_isalpha(map[i].line_of_map[j]))
+				flag += 1;
 			j++;
 		}
 		i++;
 	}
+	if (flag != 1)
+		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
 }
 
 //this function for fill the map with lens
@@ -220,8 +243,8 @@ bool got_collided(t_mlx_data *data)
 {
 	while (data->borders)
 	{
-		if ((data->borders->x > data->player->player_pos[0] || data->borders->y < data->player->player_pos[0])
-			&& data->borders->y == data->player->player_pos[1])
+		if ((data->borders->x > data->player.x || data->borders->y < data->player.x)
+			&& data->borders->y == data->player.y)
 			return (true);
 		data->borders = data->borders->next;
 	}
@@ -232,30 +255,30 @@ int rotate_player(int keycode,t_mlx_data *data)
 {
 	if (keycode == LEFT)
 	{
-		data->player->player_angle -= 0.1;
+		data->player.rotation_angle -= 0.1;
 		ft_draw_player(data);
 	}
 	else if (keycode == RIGHT)
 	{
-		data->player->player_angle += 0.1;
+		data->player.rotation_angle += 0.1;
 		ft_draw_player(data);
 	}
 	else if (keycode == UP) 
 	{
 		
 		ddaline(
-					data->player->player_pos[0], data->player->player_pos[1],
-					data->player->player_pos[0] - sin(data->player->player_angle) * 50,
-					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					data->player.x, data->player.y,
+					data->player.x - sin(data->player.rotation_angle) * 50,
+					data->player.y + cos(data->player.rotation_angle) * 50,
 					*data, 0xFF0000
 				);
 	}
 	else if (keycode == BOTTOM)
 	{
 		ddaline(
-					data->player->player_pos[0], data->player->player_pos[1],
-					data->player->player_pos[0] - sin(data->player->player_angle) * 50,
-					data->player->player_pos[1] + cos(data->player->player_angle) * 50,
+					data->player.x, data->player.y,
+					data->player.x - sin(data->player.rotation_angle) * 50,
+					data->player.y + cos(data->player.rotation_angle) * 50,
 					*data, 0xFF0000
 				);
 	}
@@ -265,42 +288,44 @@ int rotate_player(int keycode,t_mlx_data *data)
 // the key handler function;
 int	hook_into_key_events(int keycode, t_mlx_data *data)
 {
-	
-	if (keycode == ESC)
-	{
-		mlx_destroy_window(data->mlx_ptr, data->window);
-		//TODO:
-			// Free all the resources;
-		exit(EXIT_SUCCESS);
-	}
-	else if (D_KEY == keycode)
-	{
-		data->player->player_pos[0] += 32;
-		printf("%f\n", data->player->player_pos[0]);
-		printf("%f\n", data->player->player_pos[1]);
-		ft_draw_player(data);
-		draw_map(data);
-	}
-	else if (W_KEY == keycode)
-	{
-		
-		data->player->player_pos[1] -= 32;
-		ft_draw_player(data);
-		draw_map(data);
-	}
-	else if (A_KEY == keycode)
-	{
-		data->player->player_pos[0] -= 32;
-		ft_draw_player(data);
-		draw_map(data);
-	}
-	else if (S_KEY == keycode)
-	{
-		data->player->player_pos[1] += 32;
-		ft_draw_player(data);
-		draw_map(data);
-	}
+	data->player.x += 0;
+	data->player.y += 1;
 	return (0);
+	// if (keycode == ESC)
+	// {
+	// 	mlx_destroy_window(data->mlx_ptr, data->window);
+	// 	//TODO:
+	// 		// Free all the resources;
+	// 	exit(EXIT_SUCCESS);
+	// }
+	// else if (D_KEY == keycode)
+	// {
+	// 	data->player.x += 32;
+	// 	printf("%f\n", data->player.x);
+	// 	printf("%f\n", data->player.y);
+	// 	ft_draw_player(data);
+	// 	draw_map(data);
+	// }
+	// else if (W_KEY == keycode)
+	// {
+		
+	// 	data->player.y -= 32;
+	// 	ft_draw_player(data);
+	// 	draw_map(data);
+	// }
+	// else if (A_KEY == keycode)
+	// {
+	// 	data->player.x -= 32;
+	// 	ft_draw_player(data);
+	// 	draw_map(data);
+	// }
+	// else if (S_KEY == keycode)
+	// {
+	// 	data->player.y += 32;
+	// 	ft_draw_player(data);
+	// 	draw_map(data);
+	// }
+	// return (0);
 }
 
 // closes the window when the red button is clicked
@@ -575,15 +600,20 @@ void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 	}
 	map_data->map[i] = temp_grid[map_content_start];
 	map_data->map_lines = i;
-	mlx_data->window_x_size = ft_strlen(map_data->map[0]) * 64;
-	mlx_data->window_y_size = map_data->map_lines  * 64;
+	mlx_data->window_x_size = 800;
+	mlx_data->window_y_size = 600;
 	free_grid(temp_grid);
 }
 
 void init(t_mlx_data *mlx_data, t_map_data *map_data)
 {
 	map_data_constructor(map_data);
+	mlx_data->player.x = 0;
+	mlx_data->player.y = 0;
+	
 	mlx_data->mlx_ptr = mlx_init();
+	if (mlx_data == NULL)
+		ft_error(FUNCTION_FAILED, "mlx_init() FAILED \n");
 	map_data->map_lines = count_map_lines(map_data->map_name);
 	if (map_data->map_lines == 0)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
@@ -597,10 +627,8 @@ void init_mlx(t_mlx_data *mlx_data)
 					mlx_data->window_y_size);
 	mlx_data->addr = mlx_get_data_addr(mlx_data->img,
 				&mlx_data->bits_per_pixel, &mlx_data->line_size, &mlx_data->endian);
-	mlx_data->player = malloc(sizeof(t_player));
-	mlx_data->player->player_pos[0] = -1;
-	mlx_data->player->player_pos[1] = -1;
-	mlx_data->player->player_dir = 0;
+	mlx_data->player.x = -1;
+	mlx_data->player.y = -1;
 }
 
 double deg2rad(double degrees) {
@@ -609,6 +637,12 @@ double deg2rad(double degrees) {
 
 double rad2deg(double radian) {
 	return (radian / (PI / 180.0));
+}
+
+void render(t_mlx_data *data) {
+	// TODO:
+		// RENDER ALL THE GAME OBJECTS FOR THE CURRENT FRAME
+	
 }
 
 int	main(int ac, char **av)
@@ -623,15 +657,15 @@ int	main(int ac, char **av)
 	init_mlx(&mlx_data);
 	check_all_the_map(map_data);
 	show_map_data(map_data);
-	mlx_data.rays = malloc(sizeof(t_rays));
-	mlx_data.player->player_angle = PI;
+	// mlx_data.rays = malloc(sizeof(t_rays));
+	// mlx_data.player.player_angle = PI;
 	mlx_data.map = map_data.map;
-	mlx_data.player->player_pos[0] = -1;
-	mlx_data.player->player_pos[1] = -1;
-	show_map_data(map_data);
-	draw_map(&mlx_data);
-	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
-	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
-	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data);
+	mlx_data.player.x = 0;
+	mlx_data.player.y = 0;
+	draw_player(mlx_data.player.x,
+		mlx_data.player.y, &mlx_data);
+	// mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
+	// mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
+	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data); 
 	mlx_loop(mlx_data.mlx_ptr);
 }
