@@ -210,7 +210,7 @@ void	call_check_zeros(t_fix_map *map, int len)
 		{
 			if (check_char(map[i].line_of_map[j]) == 0)
 				ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
-			if (map[i].line_of_map[j] == '0')
+			if (map[i].line_of_map[j] == '0' || ft_isalpha(map[i].line_of_map[j]))
 				check_the_zeros(map, i, j, len);
 			if (ft_isalpha(map[i].line_of_map[j]))
 				flag += 1;
@@ -505,7 +505,7 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 	while (grid[i])
 	{
 		if (is_valid_line(grid[i])){
-			line = ft_strtrim(grid[i], "\n \t");
+			line = ft_strtrim(grid[i], "\n\t");
 			spaces = count_spaces(line);
 			if (!ft_strncmp("NO ", line, 3))
 			{
