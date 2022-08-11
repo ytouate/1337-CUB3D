@@ -6,7 +6,7 @@
 #    By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 11:23:28 by ytouate           #+#    #+#              #
-#    Updated: 2022/08/08 16:35:50 by ytouate          ###   ########.fr        #
+#    Updated: 2022/08/11 11:05:49 by ytouate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,11 @@ FILES = \
 	./map_check.c							\
 	./drawing_utils.c						\
 	./ddaline.c								\
+	./map_validator.c						\
+	./map_validator_utils.c					\
+	./rendering_utils.c						\
+	./hooks.c								\
+	./init_functions.c						\
 
 O_FILES = $(FILES:.c=.o)
 
@@ -39,8 +44,10 @@ clean:
 	cd Libft && make clean && cd ..
 
 fclean:
+	rm -f *.o
 	rm -f cub3D
 	cd Libft && make fclean && cd ..
+	
 
 re: fclean all
 
