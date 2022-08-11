@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:41:27 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 12:14:10 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 13:46:16 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,32 +29,39 @@ const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 };
 
+void draw_rectangle(float x, float y, float weight, float width, float height, t_mlx_data *data)
+{
+	int h;
+	int w;
+	ft_drawsquare(data, x, y);
+}
 void render(t_mlx_data *data) {
 	// TODO:
 		// RENDER ALL THE GAME OBJECTS FOR THE CURRENT FRAME
-	int x = 0;
-	int y  = 0;
-	while (y < WINDOW_HEIGHT / 2)
-	{
-		x = 0;
-		while (x < WINDOW_WIDTH)
-		{
-			my_mlx_pixel_put(data, x, y, 0xFF0FFF);
-			x+=1;
-		}
-		y+=1;
-	}
-	x = 0;
-	while (y < WINDOW_HEIGHT)
-	{
-		x = 0;
-		while(x < WINDOW_WIDTH)
-		{
-			my_mlx_pixel_put(data, x, y, 0x00F000);
-			x += 1;
-		}
-		y += 1;
-	}
+	// int x = 0;
+	// int y  = 0;
+	// while (y < WINDOW_HEIGHT / 2)
+	// {
+	// 	x = 0;
+	// 	while (x < WINDOW_WIDTH)
+	// 	{
+	// 		my_mlx_pixel_put(data, x, y, 0x808080);
+	// 		x+=1;
+	// 	}
+	// 	y+=1;
+	// }
+	// x = 0;
+	// while (y < WINDOW_HEIGHT)
+	// {
+	// 	x = 0;
+	// 	while(x < WINDOW_WIDTH)
+	// 	{
+	// 		my_mlx_pixel_put(data, x, y, 0xD3D3D3);
+	// 		x += 1;
+	// 	}
+	// 	y += 1;
+	// }
+	cast_rays_toward_player_fov(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	// ft_draw_player(data);
 	// draw_map(data);
@@ -92,9 +99,12 @@ void	cast_rays_toward_player_fov(t_mlx_data *data)
 	int x;
 	int y;
 	start_angle = data->player.rotation_angle - HALF_FOV;
-	for (int ray = 0; ray < NUM_RAYS; ray++)
+	int ray = 0;
+	int depth = 0;
+	while (ray < NUM_RAYS)
 	{
-		for (int depth = 0; depth < WINDOW_WIDTH; depth++)
+		depth = 0;
+		while (depth < WINDOW_WIDTH)
 		{
 			target_x = data->player.x - sin(start_angle) * depth;
 			target_y = data->player.y + cos(start_angle) * depth;
@@ -102,19 +112,21 @@ void	cast_rays_toward_player_fov(t_mlx_data *data)
 			y = target_y / TILE_SIZE;
 			if (map[y][x] == 1)
 			{
+				// ddaline(data->player.x, data->player.y, target_x, target_y, data, 0xFFFFFF);
 				wall_height = 21000 / (depth + 0.0001);
 				data->rays.height = wall_height;
 				data->rays.width = SCALE;
-				printf("%f %f\n", (WINDOW_HEIGHT / 1.0) + ray * SCALE, (WINDOW_HEIGHT / 2) - wall_height / 2);
-				ddaline(data->player.x, data->player.y,
-					(WINDOW_HEIGHT / 1.0 + ray * SCALE),
-					((WINDOW_HEIGHT / 2) - wall_height / 2),
-					data, 0xFF0FFF);
-				// ddaline(data->player.x, data->player.y, target_x, target_y, data, 0xFF00FF);
+				ft_drawsquare
+				(
+					data,
+					(WINDOW_HEIGHT / 1.0) + ray,
+					(WINDOW_HEIGHT / 2.0) - wall_height / 2
+				);
 				break ;
 			}
-			
+			depth += 1;
 		}
+		ray += 1;
 		start_angle += STEP_ANGLE;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);

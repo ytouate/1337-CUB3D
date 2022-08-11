@@ -12,6 +12,213 @@
 
 # include "cub.h"
 
+
+// checks if there is a map file-name in the av and checks if the file name is valid
+void	check_basic_requirements(int ac, char **av)
+{
+	if (ac != 2)
+		ft_error(UNEXPECTED_FLOW, "A MAP NAME IS REQUIRED !\n");
+	else
+		if (!check_file_extention(av[1]))
+			ft_error(UNEXPECTED_FLOW, "THE MAP FILE-NAME MUST END WITH .cub\n");
+}
+
+// returns true if the map identifiers are valid
+bool	check_map_identifiers(char *line)
+{
+	return (!ft_strncmp("NO ", line, 3) || !ft_strncmp("SO ", line, 3)
+		|| !ft_strncmp("WE ", line, 3) || !ft_strncmp("EA ", line, 3)
+		|| !ft_strncmp("F ", line, 2) || !ft_strncmp("C ", line, 2));
+}
+
+// checks if all the string contains digits
+bool is_number(char *s)
+{
+	int i;
+	i = 0;
+	int len;
+	
+	s = ft_strtrim(s, " ");
+	len = ft_strlen(s);
+	while (i < len)
+	{
+		if (!ft_isdigit(s[i++]))
+			return (false);
+	}
+	return (true);
+}
+
+//count the commas in rgb;
+void	count_commas(char *line)
+{
+	int i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		if(line[i] == ',')
+			j++;
+		i++;
+	}
+	if (j != 2)
+		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
+}
+// fills the rgb array and checks if the colors are valid;
+void	fill_rgb_array(char *line, int *arr)
+{
+	char **temp;
+	int spaces;
+	int i;
+
+	i = -1;
+	spaces = count_spaces(line);
+	count_commas(line);
+	temp = ft_split(line + spaces, ',');
+	if (temp[0] && temp[1] && temp[2])
+	{
+		if (is_number(temp[0]) && is_number(temp[1]) && is_number(temp[2]))
+		{
+			arr[0] = ft_atoi(temp[0]);
+			arr[1] = ft_atoi(temp[1]);
+			arr[2] = ft_atoi(temp[2]);
+			while (++i < 3)
+				if (arr[i] > 255  || arr[i] < 0)
+					ft_error(UNEXPECTED_FLOW, "RGB OVERFLOW OR UNDERFLOW\n");
+		}
+		else
+			ft_error(UNEXPECTED_FLOW, "INVALID RGB COLORS\n");
+	}
+	else
+		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
+}
+//check if there a characters after space in line;
+void	check_line(char *line, int i)
+{
+	while (line[i])
+	{
+		if (line[i] != ' ')
+			ft_error(UNEXPECTED_FLOW, "INVALID MAP");
+		i++;
+	}
+}
+//fill the textures;
+char	*fill_the_path(char *line)
+{
+	int		i;
+	char	*s;
+	int		j;
+
+	s = ft_strdup("");
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		i++;
+		if (line[i] == ' ' && line[i - 1] != '\\')
+			break ;
+	}
+	s = malloc(sizeof(char) * i + 1);
+	while (j < i)
+	{
+		s[j] = line[j];
+		j++;
+	}
+	s[j] = '\0';
+	check_line(line, i);
+	return (s);
+}
+
+// fill the first sex lines;
+int	fill_map_data(char **grid, t_map_data *map_data)
+{
+	int	i;
+	char *line;
+	int spaces;
+	int		*check;
+
+	i = 0;
+	check = malloc(sizeof(int) * 6);
+	ft_memset(check, 0, sizeof(int) * 6);
+	while (grid[i])
+	{
+		if (is_valid_line(grid[i])){
+			line = ft_strtrim(grid[i], "\n\t");
+			spaces = count_spaces(line);
+			if (!ft_strncmp("NO ", line, 3))
+			{
+				check[0] += 1;
+				map_data->north_texture = fill_the_path(line + spaces);
+			}
+			else if (!ft_strncmp("SO ", line, 3))
+			{
+				check[1] += 1;
+				map_data->south_texture = fill_the_path(line + spaces);
+			}
+			else if (!ft_strncmp("WE ", line, 3))
+			{
+				check[2] += 1;
+				map_data->west_textrure = fill_the_path(line + spaces);
+			}
+			else if (!ft_strncmp("EA ", line, 3))
+			{
+				check[3] += 1;
+				map_data->east_texture = fill_the_path(line + spaces);
+			}
+			else if (!ft_strncmp("F ", line, 2))
+			{
+				check[4] += 1;
+				fill_rgb_array(line, map_data->floor_color);
+			}
+			else if (!ft_strncmp("C ", line, 2))
+			{
+				check[5] += 1;
+				fill_rgb_array(line, map_data->ceilling_color);
+			}
+			else
+			{
+				int j = 0;
+				while (j < 6)
+				{
+					if (check[j] != 1)
+						return (-1);
+					j++;
+				}
+				return (i);
+			}
+		}
+		i++;
+	}
+	return (-1);
+}
+
+// fill the map_data from the file
+void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
+{
+	char **temp_grid;
+	int	map_content_start;
+	int map_content_end;
+	int i;
+
+	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
+	map_content_start = fill_map_data(temp_grid, map_data);
+	if (map_content_start == -1)
+		ft_error(UNEXPECTED_FLOW, "the elements are not valid");
+	map_content_end = map_data->map_lines;
+	map_data->map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
+	i = 0;
+	while (temp_grid[map_content_start])
+	{
+		char *temp = ft_strtrim(temp_grid[map_content_start++], "\n");
+		map_data->map[i++] = ft_strdup(temp);
+		free(temp);
+	}
+	map_data->map[i] = temp_grid[map_content_start];
+	map_data->map_lines = i;
+	free_grid(temp_grid);
+}
+
 // checks the rgb array if it passed 255 or went below 0;
 bool	got_overflowed(int *rgb)
 

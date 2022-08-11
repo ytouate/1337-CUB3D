@@ -29,6 +29,7 @@ FILES = \
 	./map_validator_utils.c					\
 	./rendering_utils.c						\
 	./hooks.c								\
+	./init_functions.c						\
 
 O_FILES = $(FILES:.c=.o)
 

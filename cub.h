@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 11:39:22 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 13:14:39 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@
 
 # define NUM_RAYS WINDOW_WIDTH
 # define STEP_ANGLE FOV / NUM_RAYS
-# define SCALE (WINDOW_WIDTH / 2) / NUM_RAYS
+# define SCALE 100
 typedef struct s_vector
 {
 	int				x;
@@ -171,7 +171,9 @@ bool		is_valid_line(char *line);
 void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
-void draw_map(t_mlx_data *data);
+void		draw_map(t_mlx_data *data);
 void draw_player(float x, float y, t_mlx_data *data);
 void render(t_mlx_data *data);
+void ft_drawsquare(t_mlx_data *data, float x, float y);
+void draw_rectangle(float x, float y, float weight,  float width, float height, t_mlx_data *data);
 #endif
