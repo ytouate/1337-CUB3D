@@ -483,33 +483,45 @@ void	fill_rgb_array(char *line, int *arr)
 					ft_error(UNEXPECTED_FLOW, "RGB OVERFLOW OR UNDERFLOW\n");
 		}
 		else
-		{
 			ft_error(UNEXPECTED_FLOW, "INVALID RGB COLORS\n");
-		}
 	}
 	else
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
 }
-
+//check if there a characters after space in line;
+void	check_line(char *line, int i)
+{
+	while (line[i])
+	{
+		if (line[i] != ' ')
+			ft_error(UNEXPECTED_FLOW, "INVALID MAP");
+		i++;
+	}
+}
+//fill the textures;
 char	*fill_the_path(char *line)
 {
 	int		i;
 	char	*s;
-	char	*temp;
-	char	l;
+	int		j;
 
 	s = ft_strdup("");
 	i = 0;
+	j = 0;
 	while (line[i])
 	{
-		temp = s;
-		l = line[i];
-		s = ft_strjoin(s, m);
-		free(temp);
 		i++;
 		if (line[i] == ' ' && line[i - 1] != '\\')
-			return (s);
+			break ;
 	}
+	s = malloc(sizeof(char) * i + 1);
+	while (j < i)
+	{
+		s[j] = line[j];
+		j++;
+	}
+	s[j] = '\0';
+	check_line(line, i);
 	return (s);
 }
 // fill the first sex lines;
