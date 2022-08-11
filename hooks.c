@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:45:02 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 11:28:40 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 11:33:56 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,20 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 	}
 	else if (W_KEY == keycode)
 	{
-
+		update_window(data);
+		data->player.x += -sin(data->player.rotation_angle) * 10;
+		data->player.y += cos(data->player.rotation_angle) * 10;
+		render(data);
 	}
 	else if (A_KEY == keycode)
 	{
 	}
 	else if (S_KEY == keycode)
 	{
+		update_window(data);
+		data->player.x -= -sin(data->player.rotation_angle) * 10;
+		data->player.y -= cos(data->player.rotation_angle) * 10;
+		render(data);
 	}
 	return (0);
 }
