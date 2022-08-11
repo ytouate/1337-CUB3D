@@ -511,6 +511,8 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 			{
 				check[0] += 1;
 				map_data->north_texture = ft_strdup(line + spaces);
+				printf("%saaa\n", map_data->north_texture);
+				int fd = open(map_data->north_texture, O_CREAT);
 			}
 			else if (!ft_strncmp("SO ", line, 3))
 			{
@@ -586,7 +588,6 @@ void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 
 	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
 	map_content_start = fill_map_data(temp_grid, map_data);
-	printf("%d\n",map_content_start);
 	if (map_content_start == -1)
 		ft_error(UNEXPECTED_FLOW, "the elements are not valid");
 	map_content_end = map_data->map_lines;
