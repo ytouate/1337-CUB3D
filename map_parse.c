@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 13:54:56 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/08 15:26:57 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 10:53:38 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // checks the rgb array if it passed 255 or went below 0;
 bool	got_overflowed(int *rgb)
+
 {
 	int	i;
 	i = 0;
@@ -56,7 +57,6 @@ bool	get_map_rgb(char *line, t_map_data *map_data)
 	}
 	return (false);
 }
-
 
 // skips the empty new lines at the top of the file
 // and counts the rest
@@ -129,7 +129,6 @@ bool	get_texture_path(char *l, t_map_data *map_data)
 	return (false);
 }
 
-
 char **convert_file_to_grid(char *file_name, int file_size)
 {
 	char	**grid;
@@ -162,7 +161,6 @@ char **convert_file_to_grid(char *file_name, int file_size)
 	close(map_fd);
 	return (grid);
 }
-
 
 // checks if all the map texture is there
 void check_map_texture(t_map_data map_data)
