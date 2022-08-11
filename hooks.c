@@ -6,12 +6,13 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:45:02 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 11:33:56 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 16:01:28 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "cub.h"
 
+extern const int map[MAP_NUM_COLS][MAP_NUM_COLS];
 int	hook_into_key_events(int keycode, t_mlx_data *data)
 {
 	if (keycode == ESC)
@@ -54,7 +55,9 @@ int		ft_close(t_mlx_data *data)
 
 int rotate_player(int keycode,t_mlx_data *data)
 {
-	if (keycode == LEFT)
+	if (keycode == ESC)
+		exit(EXIT_SUCCESS);
+	else if (keycode == LEFT)
 	{
 		data->player.rotation_angle -= 0.1;
 		update_window(data);
@@ -68,12 +71,24 @@ int rotate_player(int keycode,t_mlx_data *data)
 	}
 	else if (keycode == UP) 
 	{
-		update_window(data);;
+		update_window(data);
+		data->player.x += -sin(data->player.rotation_angle) * 10;
+		data->player.y += cos(data->player.rotation_angle) * 10;
+		int x = data->player.x / TILE_SIZE;
+		int y = data->player.y / TILE_SIZE;
+		if (map[y][x] == 1)
+			printf("colided\n");
 		render(data);
 	}
 	else if (keycode == BOTTOM)
 	{
 		update_window(data);;
+		data->player.x -= -sin(data->player.rotation_angle) * 10;
+		data->player.y -= cos(data->player.rotation_angle) * 10;
+		int x = data->player.x / TILE_SIZE;
+		int y = data->player.y / TILE_SIZE;
+		if (map[y][x] == 1)
+			printf("collided\n");
 		render(data);
 	}
 	return (0);

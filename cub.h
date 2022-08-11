@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 13:14:39 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 15:30:23 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@
 # define WINDOW_WIDTH (MAP_NUM_COLS * TILE_SIZE)
 # define WINDOW_HEIGHT (MAP_NUM_ROWS * TILE_SIZE)
 
-# define FOV (60 * (PI / 180.0))
+# define FOV (66 * (PI / 180.0))
 # define HALF_FOV FOV / 2
 
-# define NUM_RAYS WINDOW_WIDTH
+# define NUM_RAYS 60
 # define STEP_ANGLE FOV / NUM_RAYS
-# define SCALE 100
+# define SCALE 1.1
 typedef struct s_vector
 {
 	int				x;

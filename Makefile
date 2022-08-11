@@ -6,13 +6,13 @@
 #    By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 11:23:28 by ytouate           #+#    #+#              #
-#    Updated: 2022/08/11 11:05:49 by ytouate          ###   ########.fr        #
+#    Updated: 2022/08/11 13:48:23 by ytouate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 
-CC = gcc -fsanitize=address -g
+CC = gcc -fsanitize=address -g -Ofast
 
 # CFLAGS = -Wall -Wextra -Werror
 

@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 12:18:04 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 15:23:38 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int	main(int ac, char **av)
 	check_all_the_map(map_data);
 	mlx_data.map = map_data.map;
 	render(&mlx_data);
-	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
-	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
+	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, rotate_player, &mlx_data);
+	// mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data); 
 	mlx_loop(mlx_data.mlx_ptr);
 }
