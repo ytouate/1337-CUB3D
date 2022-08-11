@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 11:12:58 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 11:50:40 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,8 +281,6 @@ void init(t_mlx_data *mlx_data, t_map_data *map_data)
 	if (map_data->map_lines == 0)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
 }
-
-
 
 int	main(int ac, char **av)
 {

@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:41:27 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 11:30:26 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 12:14:10 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,56 @@ const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 };
+
 void render(t_mlx_data *data) {
 	// TODO:
 		// RENDER ALL THE GAME OBJECTS FOR THE CURRENT FRAME
+	int x = 0;
+	int y  = 0;
+	while (y < WINDOW_HEIGHT / 2)
+	{
+		x = 0;
+		while (x < WINDOW_WIDTH)
+		{
+			my_mlx_pixel_put(data, x, y, 0xFF0FFF);
+			x+=1;
+		}
+		y+=1;
+	}
+	x = 0;
+	while (y < WINDOW_HEIGHT)
+	{
+		x = 0;
+		while(x < WINDOW_WIDTH)
+		{
+			my_mlx_pixel_put(data, x, y, 0x00F000);
+			x += 1;
+		}
+		y += 1;
+	}
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
+	// ft_draw_player(data);
+	// draw_map(data);
+	// cast_rays_toward_player_fov(data);
 	
-	ft_draw_player(data);
-	cast_rays_toward_player_fov(data);
-	draw_map(data);
-	
+}
+
+void ft_drawsquare(t_mlx_data *data, float x, float y)
+{
+	int i;
+	int j;
+
+	i = x;
+	while (i < x + data->rays.width)
+	{
+		j = y;
+		while (j < y + data->rays.height)
+		{
+			my_mlx_pixel_put(data, i, j, 0xFF00FF);
+			j++;
+		}
+		i++;
+	}
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 }
 
@@ -45,6 +87,8 @@ void	cast_rays_toward_player_fov(t_mlx_data *data)
 	float start_angle;
 	float target_x;
 	float target_y;
+	float wall_height;
+
 	int x;
 	int y;
 	start_angle = data->player.rotation_angle - HALF_FOV;
@@ -58,7 +102,15 @@ void	cast_rays_toward_player_fov(t_mlx_data *data)
 			y = target_y / TILE_SIZE;
 			if (map[y][x] == 1)
 			{
-				ddaline(data->player.x, data->player.y, target_x, target_y, data, 0xFF00FF);
+				wall_height = 21000 / (depth + 0.0001);
+				data->rays.height = wall_height;
+				data->rays.width = SCALE;
+				printf("%f %f\n", (WINDOW_HEIGHT / 1.0) + ray * SCALE, (WINDOW_HEIGHT / 2) - wall_height / 2);
+				ddaline(data->player.x, data->player.y,
+					(WINDOW_HEIGHT / 1.0 + ray * SCALE),
+					((WINDOW_HEIGHT / 2) - wall_height / 2),
+					data, 0xFF0FFF);
+				// ddaline(data->player.x, data->player.y, target_x, target_y, data, 0xFF00FF);
 				break ;
 			}
 			
@@ -113,10 +165,10 @@ void drawsquare(t_mlx_data *data, int x, int y)
 	int j;
 
 	i = x;
-	while (i < x + data->rays.width)
+	while (i < x + TILE_SIZE)
 	{
 		j = y;
-		while (j < y + data->rays.height)
+		while (j < y + TILE_SIZE)
 		{
 			my_mlx_pixel_put(data, i, j, 0x808080);
 			j++;
@@ -146,6 +198,5 @@ void ft_draw_player(t_mlx_data *data)
 		data->player.y + cos(data->player.rotation_angle + HALF_FOV) * 50,
 		data, 0xFF0000
 	);
-	
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 }
