@@ -491,6 +491,27 @@ void	fill_rgb_array(char *line, int *arr)
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
 }
 
+char	*fill_the_path(char *line)
+{
+	int		i;
+	char	*s;
+	char	*temp;
+	char	l;
+
+	s = ft_strdup("");
+	i = 0;
+	while (line[i])
+	{
+		temp = s;
+		l = line[i];
+		s = ft_strjoin(s, m);
+		free(temp);
+		i++;
+		if (line[i] == ' ' && line[i - 1] != '\\')
+			return (s);
+	}
+	return (s);
+}
 // fill the first sex lines;
 int	fill_map_data(char **grid, t_map_data *map_data)
 {
@@ -510,24 +531,22 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 			if (!ft_strncmp("NO ", line, 3))
 			{
 				check[0] += 1;
-				map_data->north_texture = ft_strdup(line + spaces);
-				printf("%saaa\n", map_data->north_texture);
-				int fd = open(map_data->north_texture, O_CREAT);
+				map_data->north_texture = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("SO ", line, 3))
 			{
 				check[1] += 1;
-				map_data->south_texture = ft_strdup(line + spaces);
+				map_data->south_texture = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("WE ", line, 3))
 			{
 				check[2] += 1;
-				map_data->west_textrure = ft_strdup(line + spaces);
+				map_data->west_textrure = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("EA ", line, 3))
 			{
 				check[3] += 1;
-				map_data->east_texture = ft_strdup(line + spaces);
+				map_data->east_texture = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("F ", line, 2))
 			{
