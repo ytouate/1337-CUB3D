@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 11:25:03 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 15:30:23 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@
 # define WINDOW_WIDTH (MAP_NUM_COLS * TILE_SIZE)
 # define WINDOW_HEIGHT (MAP_NUM_ROWS * TILE_SIZE)
 
-# define FOV (60 * (PI / 180.0))
+# define FOV (66 * (PI / 180.0))
 # define HALF_FOV FOV / 2
 
-# define NUM_RAYS WINDOW_WIDTH
+# define NUM_RAYS 60
 # define STEP_ANGLE FOV / NUM_RAYS
-
+# define SCALE 1.1
 typedef struct s_vector
 {
 	int				x;
@@ -174,5 +174,6 @@ void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
 void		draw_map(t_mlx_data *data);
 void draw_player(float x, float y, t_mlx_data *data);
 void render(t_mlx_data *data);
-
+void ft_drawsquare(t_mlx_data *data, float x, float y);
+void draw_rectangle(float x, float y, float weight,  float width, float height, t_mlx_data *data);
 #endif
