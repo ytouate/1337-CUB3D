@@ -6,7 +6,7 @@
 #    By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 11:23:28 by ytouate           #+#    #+#              #
-#    Updated: 2022/08/11 13:48:23 by ytouate          ###   ########.fr        #
+#    Updated: 2022/08/12 11:54:52 by ytouate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ FILES = \
 	./rendering_utils.c						\
 	./hooks.c								\
 	./init_functions.c						\
+	./raycasting.c
 
 O_FILES = $(FILES:.c=.o)
 

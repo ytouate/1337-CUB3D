@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:35:22 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 15:23:38 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/12 12:32:15 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void show_map_data(t_map_data map_data)
 	printf("======================the map======================\n");
 	print_grid(map_data.map);
 	printf("the textures\n");
-	printf("%sa\n", map_data.north_texture);
+	printf("%s\n", map_data.north_texture);
 	printf("%s\n", map_data.south_texture);
 	printf("%s\n", map_data.west_textrure);
 	printf("%s\n", map_data.east_texture);
@@ -74,7 +74,6 @@ void show_map_data(t_map_data map_data)
 	for (int i = 0; i < 3; i++)
 		printf("%d\t", map_data.ceilling_color[i]);
 	printf("\n");
-	
 }
 int	main(int ac, char **av)
 {
@@ -87,7 +86,8 @@ int	main(int ac, char **av)
 	fill_map(&map_data, &mlx_data);
 	init_mlx(&mlx_data);
 	check_all_the_map(map_data);
-	mlx_data.map = map_data.map;
+	// mlx_data.map = map_data.map;
+	mlx_data.map_data = map_data;
 	render(&mlx_data);
 	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, rotate_player, &mlx_data);
 	// mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);

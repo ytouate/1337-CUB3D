@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:41:27 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 15:57:44 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/12 11:43:26 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 };
 
+void raycasting(t_mlx_data *data)
+{
+	
+}
 
 void draw_ceiling_and_floor(t_mlx_data *data)
 {
@@ -58,12 +62,13 @@ void draw_ceiling_and_floor(t_mlx_data *data)
 		y += 1;
 	}
 }
+
 void render(t_mlx_data *data) {
 
-	
+	draw_ceiling_and_floor(data);
 	cast_rays_toward_player_fov(data);
-	draw_map(data);
-	ft_draw_player(data);
+	// draw_map(data);
+	// ft_draw_player(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
 	
 }
@@ -83,7 +88,7 @@ void ft_drawsquare(t_mlx_data *data, float x, float y)
 		j = y;
 		while (j < y + data->rays.height)
 		{
-			my_mlx_pixel_put(data, i, j, 0xFFFFFF);
+			my_mlx_pixel_put(data, i, j, 0x656565);
 			j++;
 		}
 		i++;
@@ -119,18 +124,14 @@ void	cast_rays_toward_player_fov(t_mlx_data *data)
 				depth *= cos(data->player.rotation_angle - start_angle);
 				wall_height = 21000 / (depth + 0.0001);
 				// fixing getting stuck when the player collid with a wall
-				if (wall_height >= WINDOW_HEIGHT - TILE_SIZE)
-				{
-					wall_height = WINDOW_HEIGHT - 64;
-					break;
-				}
 				data->rays.height = wall_height;
-				data->rays.width = WINDOW_WIDTH;
-				ddaline(data->player.x, data->player.y, target_x, target_y, data, 0xabcdef);
+				data->rays.width = SCALE;
+				if (wall_height > WINDOW_HEIGHT - TILE_SIZE)
+					break;
 				ft_drawsquare
 				(
 					data,
-					(WINDOW_HEIGHT / 1.0) + ray,
+					(WINDOW_HEIGHT / 1.0) + ray * 1,
 					(WINDOW_HEIGHT / 2.0) - wall_height / 2
 				);
 				break ;
@@ -140,7 +141,7 @@ void	cast_rays_toward_player_fov(t_mlx_data *data)
 		ray += 1;
 		start_angle += STEP_ANGLE;
 	}
-	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
+	
 }
 
 void draw_map(t_mlx_data *data)

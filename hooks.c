@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:45:02 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 16:01:28 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 16:46:12 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,23 +72,31 @@ int rotate_player(int keycode,t_mlx_data *data)
 	else if (keycode == UP) 
 	{
 		update_window(data);
-		data->player.x += -sin(data->player.rotation_angle) * 10;
-		data->player.y += cos(data->player.rotation_angle) * 10;
-		int x = data->player.x / TILE_SIZE;
-		int y = data->player.y / TILE_SIZE;
-		if (map[y][x] == 1)
-			printf("colided\n");
+		float temp_x = data->player.x + -sin(data->player.rotation_angle) * 16;
+		float temp_y = data->player.y + cos(data->player.rotation_angle) * 16;
+		
+		int x = temp_x / TILE_SIZE;
+		int y = temp_y / TILE_SIZE;
+		if (!(map[y][x] == 1))
+		{
+			data->player.x += -sin(data->player.rotation_angle) * 16;
+			data->player.y += cos(data->player.rotation_angle) * 16;
+		}
 		render(data);
 	}
 	else if (keycode == BOTTOM)
 	{
-		update_window(data);;
-		data->player.x -= -sin(data->player.rotation_angle) * 10;
-		data->player.y -= cos(data->player.rotation_angle) * 10;
-		int x = data->player.x / TILE_SIZE;
-		int y = data->player.y / TILE_SIZE;
-		if (map[y][x] == 1)
-			printf("collided\n");
+		update_window(data);
+		float temp_x = data->player.x - -sin(data->player.rotation_angle) * 10;
+		float temp_y = data->player.y - cos(data->player.rotation_angle) * 10;
+		
+		int x = temp_x / TILE_SIZE;
+		int y = temp_y / TILE_SIZE;
+		if (!(map[y][x] == 1))
+		{
+			data->player.x -= -sin(data->player.rotation_angle) * 10;
+			data->player.y -= cos(data->player.rotation_angle) * 10;
+		}
 		render(data);
 	}
 	return (0);

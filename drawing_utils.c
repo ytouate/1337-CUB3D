@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 12:02:03 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 10:40:52 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/11 17:45:58 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void update_window(t_mlx_data *data)
 
 void init_mlx(t_mlx_data *mlx_data)
 {
+	
 	mlx_data->window = mlx_new_window(mlx_data->mlx_ptr, WINDOW_WIDTH,
 					WINDOW_HEIGHT, "Cub3D");
 	mlx_data->img = mlx_new_image(mlx_data->mlx_ptr, WINDOW_WIDTH,

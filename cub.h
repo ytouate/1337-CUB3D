@@ -6,7 +6,7 @@
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 11:19:16 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 15:30:23 by ytouate          ###   ########.fr       */
+/*   Updated: 2022/08/12 11:51:10 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 # define E  PI / 2
 # define S  PI
-# define W  3 * PI/2
+# define W  3 * PI / 2
 # define N  0 * PI
 
 # define A_KEY 0
@@ -50,12 +50,13 @@
 # define WINDOW_WIDTH (MAP_NUM_COLS * TILE_SIZE)
 # define WINDOW_HEIGHT (MAP_NUM_ROWS * TILE_SIZE)
 
-# define FOV (66 * (PI / 180.0))
+# define FOV (60 * (PI / 180.0))
 # define HALF_FOV FOV / 2
 
-# define NUM_RAYS 60
+# define NUM_RAYS WINDOW_WIDTH
 # define STEP_ANGLE FOV / NUM_RAYS
-# define SCALE 1.1
+# define SCALE TILE_SIZE
+
 typedef struct s_vector
 {
 	int				x;
@@ -64,10 +65,17 @@ typedef struct s_vector
 }t_vector;
 
 typedef struct s_rays {
+	double	ray_angle;
+	double	wall_hit_x;
+	double	wall_hit_y;
+	bool	wasHit_vertical;
+	bool	is_ray_facing_up;
+	bool	is_ray_facing_left;
+	bool	is_ray_facing_right;
+	bool	is_ray_facing_down;
 	double	step_angle;
 	double	width;
 	double	height;
-	double	start_angle;
 }t_rays;
 
 typedef struct s_player {
@@ -77,20 +85,6 @@ typedef struct s_player {
 	int		walk_direction; // -1 for back, +1 for fron
 	float	rotation_angle;
 }t_player;
-
-typedef struct mlx_data {
-	t_vector	*borders;
-	t_player	player;
-	t_rays		rays;
-	void		*mlx_ptr;
-	void		*window;
-	void		*img;
-	char		*addr;
-	char		**map;
-	int			bits_per_pixel;
-	int			line_size;
-	int			endian;
-}t_mlx_data;
 
 typedef struct map_data {
 	char 	**map;
@@ -103,6 +97,22 @@ typedef struct map_data {
 	int		floor_color[3];
 	int		ceilling_color[3];
 }t_map_data;
+
+typedef struct mlx_data {
+	t_vector	*borders;
+	t_player	player;
+	t_map_data	map_data;
+	t_rays		rays;
+	void		*mlx_ptr;
+	void		*window;
+	void		*img;
+	char		*addr;
+	char		**map;
+	int			bits_per_pixel;
+	int			line_size;
+	int			endian;
+}t_mlx_data;
+
 
 typedef struct fix_map
 {
