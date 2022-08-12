@@ -75,10 +75,12 @@ void show_map_data(t_map_data map_data)
 		printf("%d\t", map_data.ceilling_color[i]);
 	printf("\n");
 }
+
 int	main(int ac, char **av)
 {
 	t_mlx_data mlx_data;
 	t_map_data map_data;
+	t_mlx_data map;
 
 	map_data.map_name = av[1];
 	check_basic_requirements(ac, av);
@@ -88,7 +90,13 @@ int	main(int ac, char **av)
 	init_mlx(&mlx_data);
 	mlx_data.map = map_data.map;
 	render(&mlx_data);
-	show_map_data(map_data);
+	map.img = mlx_new_image(mlx_data.mlx_ptr, 300,
+					195);
+	map.addr = mlx_get_data_addr(map.img,
+				&map.bits_per_pixel, &map.line_size, &map.endian);
+	draw_map(&map);
+	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, map.img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
+	//show_map_data(map_data);
 	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data); 

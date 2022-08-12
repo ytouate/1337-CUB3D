@@ -174,11 +174,11 @@ void draw_map(t_mlx_data *data)
 				lstadd_front(&borders, temp);
 				drawsquare(data, x, y);
 			}
-			x += 64;
+			x += 15;
 			j++;
 		}
 		i++;
-		y += 64 ;
+		y += 15;
 	}
 	data->borders = borders;
 }
@@ -189,12 +189,12 @@ void drawsquare(t_mlx_data *data, int x, int y)
 	int j;
 
 	i = x;
-	while (i < x + TILE_SIZE)
+	while (i < x + 15)
 	{
 		j = y;
-		while (j < y + TILE_SIZE)
+		while (j < y + 15)
 		{
-			my_mlx_pixel_put(data, i, j, 0xababff);
+			my_mlx_pixel_put(data, i, j,  0x808080);
 			j++;
 		}
 		i++;
@@ -206,20 +206,20 @@ void ft_draw_player(t_mlx_data *data)
 {
 	ddaline(
 		data->player.x, data->player.y,
-		data->player.x - sin(data->player.rotation_angle) * 50,
-		data->player.y + cos(data->player.rotation_angle) * 50,
+		data->player.x - sin(data->player.rotation_angle) * 15,
+		data->player.y + cos(data->player.rotation_angle) *15,
 		data, 0xFF0000
 	);
 	ddaline(
 		data->player.x, data->player.y,
-		data->player.x - sin(data->player.rotation_angle - HALF_FOV) * 50,
-		data->player.y + cos(data->player.rotation_angle - HALF_FOV) * 50,
+		data->player.x - sin(data->player.rotation_angle - HALF_FOV) * 15,
+		data->player.y + cos(data->player.rotation_angle - HALF_FOV) *15,
 		data, 0xFF0000
 	);
 	ddaline(
 		data->player.x, data->player.y,
-		data->player.x - sin(data->player.rotation_angle + HALF_FOV) * 50,
-		data->player.y + cos(data->player.rotation_angle + HALF_FOV) * 50,
+		data->player.x - sin(data->player.rotation_angle + HALF_FOV) *15,
+		data->player.y + cos(data->player.rotation_angle + HALF_FOV) *15,
 		data, 0xFF0000
 	);
 }

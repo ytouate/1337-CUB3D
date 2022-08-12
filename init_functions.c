@@ -17,7 +17,6 @@ void init(t_mlx_data *mlx_data, t_map_data *map_data)
 	map_data_constructor(map_data);
 	mlx_data->player.x = WINDOW_WIDTH / 2;
 	mlx_data->player.y = WINDOW_HEIGHT / 2;
-
 	mlx_data->rays.width = TILE_SIZE; 
 	mlx_data->rays.height = TILE_SIZE;
 	mlx_data->mlx_ptr = mlx_init();

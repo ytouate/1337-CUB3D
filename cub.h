@@ -106,13 +106,14 @@ typedef struct mlx_data {
 	void		*mlx_ptr;
 	void		*window;
 	void		*img;
+	void		*img_map;
 	char		*addr;
+	char		*addr_map;
 	char		**map;
 	int			bits_per_pixel;
 	int			line_size;
 	int			endian;
 }t_mlx_data;
-
 
 typedef struct fix_map
 {
@@ -182,8 +183,8 @@ void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
 void		draw_map(t_mlx_data *data);
-void draw_player(float x, float y, t_mlx_data *data);
 void render(t_mlx_data *data);
 void ft_drawsquare(t_mlx_data *data, float x, float y);
 void draw_rectangle(float x, float y, float weight,  float width, float height, t_mlx_data *data);
+
 #endif
