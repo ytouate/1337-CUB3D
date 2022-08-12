@@ -204,7 +204,7 @@ void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
 	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
 	map_content_start = fill_map_data(temp_grid, map_data);
 	if (map_content_start == -1)
-		ft_error(UNEXPECTED_FLOW, "the elements are not valid");
+		ft_error(UNEXPECTED_FLOW, "the elements are not valid\n");
 	map_content_end = map_data->map_lines;
 	map_data->map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
 	i = 0;
