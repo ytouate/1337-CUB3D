@@ -43,7 +43,7 @@
 # define KEYPRESS 2
 # define KEYRELEASEMASK 2L
 
-# define TILE_SIZE 64
+# define TILE_SIZE 32
 # define MAP_NUM_ROWS 13
 # define MAP_NUM_COLS 20
 
@@ -98,6 +98,15 @@ typedef struct map_data {
 	int		ceilling_color[3];
 }t_map_data;
 
+typedef struct img_data{
+	void		*img;
+	char		*addr;
+	char		*addr_map;
+	int			endian;
+	int			bits_per_pixel;	
+	int			line_size;
+}t_img;
+
 typedef struct mlx_data {
 	t_vector	*borders;
 	t_player	player;
@@ -105,14 +114,10 @@ typedef struct mlx_data {
 	t_rays		rays;
 	void		*mlx_ptr;
 	void		*window;
-	void		*img;
-	void		*img_map;
-	char		*addr;
-	char		*addr_map;
 	char		**map;
-	int			bits_per_pixel;
-	int			line_size;
-	int			endian;
+	t_img		*main_img;
+	t_img		*map_img;
+
 }t_mlx_data;
 
 typedef struct fix_map
@@ -128,6 +133,8 @@ enum {
 	UP 		= 126,
 	BOTTOM 	= 125,
 };
+
+void	draw_player_of_map(t_mlx_data *data);
 void	cast_rays_toward_player_fov(t_mlx_data *data);
 void	lstadd_front(t_vector **lst, t_vector *new);
 bool got_collided(t_mlx_data *data);
@@ -139,7 +146,7 @@ void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int color);
 int	ft_error(int exit_code, char *fatal);
 void update_window(t_mlx_data *data);
 void init_mlx(t_mlx_data *mlx_data);
-void	my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
+void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 int count_map_lines(char *map_name);
 bool	get_map_rgb(char *line, t_map_data *map_data);
 bool	got_overflowed(int *rgb);
@@ -181,7 +188,6 @@ bool		get_texture_path(char *l, t_map_data *map_data);
 bool		is_valid_line(char *line);
 void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
-void		my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
 void		draw_map(t_mlx_data *data);
 void render(t_mlx_data *data);
 void ft_drawsquare(t_mlx_data *data, float x, float y);

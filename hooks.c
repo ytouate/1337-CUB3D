@@ -18,7 +18,8 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 	if (keycode == ESC)
 	{
 		mlx_clear_window(data->mlx_ptr, data->window);
-		mlx_destroy_image(data->mlx_ptr, data->img);
+		mlx_destroy_image(data->mlx_ptr, data->main_img->img);
+		mlx_destroy_image(data->mlx_ptr, data->map_img->img);
 		mlx_destroy_window(data->mlx_ptr, data->window);
 		exit(EXIT_SUCCESS);
 	}
@@ -31,6 +32,9 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->player.x += -sin(data->player.rotation_angle) * 10;
 		data->player.y += cos(data->player.rotation_angle) * 10;
 		render(data);
+		draw_map(data);
+		draw_player_of_map(data);
+		mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 	}
 	else if (A_KEY == keycode)
 	{
@@ -41,6 +45,9 @@ int	hook_into_key_events(int keycode, t_mlx_data *data)
 		data->player.x -= -sin(data->player.rotation_angle) * 10;
 		data->player.y -= cos(data->player.rotation_angle) * 10;
 		render(data);
+		draw_map(data);
+		draw_player_of_map(data);
+		mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 	}
 	return (0);
 }
@@ -62,12 +69,18 @@ int rotate_player(int keycode,t_mlx_data *data)
 		data->player.rotation_angle -= 0.1;
 		update_window(data);
 		render(data);
+		draw_map(data);
+		draw_player_of_map(data);
+		mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 	}
 	else if (keycode == RIGHT)
 	{
 		update_window(data);;
 		data->player.rotation_angle += 0.1;
 		render(data);
+		draw_map(data);
+		draw_player_of_map(data);
+		mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 	}
 	else if (keycode == UP) 
 	{
@@ -83,6 +96,9 @@ int rotate_player(int keycode,t_mlx_data *data)
 			data->player.y += cos(data->player.rotation_angle) * 16;
 		}
 		render(data);
+		draw_map(data);
+		draw_player_of_map(data);
+		mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 	}
 	else if (keycode == BOTTOM)
 	{
@@ -98,6 +114,9 @@ int rotate_player(int keycode,t_mlx_data *data)
 			data->player.y -= cos(data->player.rotation_angle) * 10;
 		}
 		render(data);
+		draw_map(data);
+		draw_player_of_map(data);
+		mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 	}
 	return (0);
 }

@@ -61,7 +61,7 @@ void render_map(t_mlx_data *data)
         }
         y += MAP_SCALE;
     }
-    mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
+    mlx_put_image_to_window(data->mlx_ptr, data->window, data->main_img->img, 0, 0);
 }
 
 // int move_player(int key, t_mlx_data *data){

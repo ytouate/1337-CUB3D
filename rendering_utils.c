@@ -46,7 +46,7 @@ void draw_ceiling_and_floor(t_mlx_data *data)
 		x = 0;
 		while (x < WINDOW_WIDTH)
 		{
-			my_mlx_pixel_put(data, x, y, 0xD3D3D3);
+			my_mlx_pixel_put(data->main_img, x, y, 0xD3D3D3);
 			x += 1;
 		}
 		y+=1;
@@ -56,7 +56,7 @@ void draw_ceiling_and_floor(t_mlx_data *data)
 		x = 0;
 		while(x < WINDOW_WIDTH)
 		{
-			my_mlx_pixel_put(data, x, y, 0x808080);
+			my_mlx_pixel_put(data->main_img, x, y, 0x808080);
 			x += 1;
 		}
 		y += 1;
@@ -69,7 +69,7 @@ void render(t_mlx_data *data) {
 	cast_rays_toward_player_fov(data);
 	// draw_map(data);
 	// ft_draw_player(data);
-	mlx_put_image_to_window(data->mlx_ptr, data->window, data->img, 0, 0);
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->main_img->img, 0, 0);
 	
 }
 
@@ -88,7 +88,7 @@ void ft_drawsquare(t_mlx_data *data, float x, float y)
 		j = y;
 		while (j < y + data->rays.height)
 		{
-			my_mlx_pixel_put(data, i, j, 0x656565);
+			my_mlx_pixel_put(data->main_img, i, j, 0x656565);
 			j++;
 		}
 		i++;
@@ -194,7 +194,7 @@ void drawsquare(t_mlx_data *data, int x, int y)
 		j = y;
 		while (j < y + 15)
 		{
-			my_mlx_pixel_put(data, i, j,  0x808080);
+			my_mlx_pixel_put(data->map_img, i, j,  0x808080);
 			j++;
 		}
 		i++;

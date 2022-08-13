@@ -76,26 +76,50 @@ void show_map_data(t_map_data map_data)
 	printf("\n");
 }
 
+void	draw_player_of_map(t_mlx_data *data)
+{
+	float	x;
+	float	y;
+	float	i;
+	float	j;
+
+	x = (300 * data->player.x) / WINDOW_WIDTH;
+	y = (195 * data->player.y) / WINDOW_HEIGHT;
+	i = x;
+	while (i < x + 5)
+	{
+		j = y;
+		while (j < y + 5)
+		{
+			my_mlx_pixel_put(data->map_img, i, j, 0x0000FF);
+			j++;
+		}
+		i++;
+	}
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx_data mlx_data;
 	t_map_data map_data;
-	t_mlx_data map;
 
 	map_data.map_name = av[1];
 	check_basic_requirements(ac, av);
 	init(&mlx_data, &map_data);
 	fill_map(&map_data, &mlx_data);
 	check_all_the_map(map_data);
+	mlx_data.main_img = malloc(sizeof(t_img));
+	mlx_data.map_img = malloc(sizeof(t_img));
 	init_mlx(&mlx_data);
 	mlx_data.map = map_data.map;
 	render(&mlx_data);
-	map.img = mlx_new_image(mlx_data.mlx_ptr, 300,
+	mlx_data.map_img->img = mlx_new_image(mlx_data.mlx_ptr, 300,
 					195);
-	map.addr = mlx_get_data_addr(map.img,
-				&map.bits_per_pixel, &map.line_size, &map.endian);
-	draw_map(&map);
-	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, map.img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
+	mlx_data.map_img->addr = mlx_get_data_addr(mlx_data.map_img->img ,
+				&mlx_data.map_img->bits_per_pixel, &mlx_data.map_img->line_size, &mlx_data.map_img->endian);
+	draw_map(&mlx_data);
+	draw_player_of_map(&mlx_data);
+	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 	//show_map_data(map_data);
 	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
 	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
