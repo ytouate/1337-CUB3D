@@ -32,7 +32,7 @@
 # define S_KEY 1
 # define D_KEY 2
 
-# define PI 3.141592653589793
+# define PI 3.14159265
 # define TWO_PI 6.28318530
 
 #define FUNCTION_FAILED 2
@@ -43,7 +43,7 @@
 # define KEYPRESS 2
 # define KEYRELEASEMASK 2L
 
-# define TILE_SIZE 32
+# define TILE_SIZE 64
 # define MAP_NUM_ROWS 13
 # define MAP_NUM_COLS 20
 
@@ -55,7 +55,7 @@
 
 # define NUM_RAYS WINDOW_WIDTH
 # define STEP_ANGLE FOV / NUM_RAYS
-# define SCALE TILE_SIZE
+# define SCALE 0.3
 
 typedef struct s_vector
 {
@@ -81,9 +81,12 @@ typedef struct s_rays {
 typedef struct s_player {
 	float	x;
 	float	y;
+	float	width;
+	float	height;
 	int		turn_direction; // -1 for left +1 for right;
 	int		walk_direction; // -1 for back, +1 for fron
 	float	rotation_angle;
+	
 }t_player;
 
 typedef struct map_data {
@@ -108,15 +111,16 @@ typedef struct img_data{
 }t_img;
 
 typedef struct mlx_data {
-	t_vector	*borders;
 	t_player	player;
 	t_map_data	map_data;
+	t_img		main_img;
+	t_img		*map_img;
 	t_rays		rays;
+	int			square_height;
+	int			square_width;
 	void		*mlx_ptr;
 	void		*window;
 	char		**map;
-	t_img		*main_img;
-	t_img		*map_img;
 
 }t_mlx_data;
 
@@ -159,16 +163,13 @@ void render(t_mlx_data *data);
 int	check_char(char c);
 void draw_map(t_mlx_data *data);
 void ft_draw_player(t_mlx_data *data);
-void drawsquare(t_mlx_data *data, int x, int y);
 void	skip_empty_lines(char **grid, int *n, int map_len);
 void check_map_texture(t_map_data map_data);
 char **convert_file_to_grid(char *file_name, int file_size);
 bool	get_texture_path(char *l, t_map_data *map_data);
 int count_spaces(char *line);
 int		check_map_borders(t_map_data map_data);
-int	hook_into_key_events(int keycode, t_mlx_data *data);
 int		ft_close(t_mlx_data *data);
-int rotate_player(int keycode,t_mlx_data *data);
 void init(t_mlx_data *mlx_data, t_map_data *map_data);
 void fill_map(t_map_data *map_data, t_mlx_data *mlx_data);
 void init_map_data(t_map_data *map_data);
@@ -190,7 +191,5 @@ void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		draw_map(t_mlx_data *data);
 void render(t_mlx_data *data);
-void ft_drawsquare(t_mlx_data *data, float x, float y);
-void draw_rectangle(float x, float y, float weight,  float width, float height, t_mlx_data *data);
 
 #endif

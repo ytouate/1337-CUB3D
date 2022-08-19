@@ -31,17 +31,6 @@ double	get_player_dir(char	c)
 	return (0);
 }
 
-bool got_collided(t_mlx_data *data)
-{
-	while (data->borders)
-	{
-		if ((data->borders->x > data->player.x || data->borders->y < data->player.x)
-			&& data->borders->y == data->player.y)
-			return (true);
-		data->borders = data->borders->next;
-	}
-	return (false);
-}
 void	free_grid(char **grid)
 {
 	int i;
@@ -98,31 +87,147 @@ void	draw_player_of_map(t_mlx_data *data)
 	}
 }
 
-int	main(int ac, char **av)
-{
-	t_mlx_data mlx_data;
-	t_map_data map_data;
+// int	main(int ac, char **av)
+// {
+// 	t_mlx_data mlx_data;
+// 	t_map_data map_data;
 
-	map_data.map_name = av[1];
-	check_basic_requirements(ac, av);
-	init(&mlx_data, &map_data);
-	fill_map(&map_data, &mlx_data);
-	check_all_the_map(map_data);
-	mlx_data.main_img = malloc(sizeof(t_img));
-	mlx_data.map_img = malloc(sizeof(t_img));
-	init_mlx(&mlx_data);
-	mlx_data.map = map_data.map;
-	render(&mlx_data);
-	mlx_data.map_img->img = mlx_new_image(mlx_data.mlx_ptr, 300,
-					195);
-	mlx_data.map_img->addr = mlx_get_data_addr(mlx_data.map_img->img ,
-				&mlx_data.map_img->bits_per_pixel, &mlx_data.map_img->line_size, &mlx_data.map_img->endian);
-	draw_map(&mlx_data);
-	draw_player_of_map(&mlx_data);
-	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
-	//show_map_data(map_data);
-	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
-	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
-	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data); 
-	mlx_loop(mlx_data.mlx_ptr);
+// 	map_data.map_name = av[1];
+// 	check_basic_requirements(ac, av);
+// 	init(&mlx_data, &map_data);
+// 	fill_map(&map_data, &mlx_data);
+// 	check_all_the_map(map_data);
+// 	init_mlx(&mlx_data);
+// 	mlx_data.map = map_data.map;
+// 	render(&mlx_data);
+// 	mlx_data.map_img->img = mlx_new_image(mlx_data.mlx_ptr, 300,
+// 					195);
+// 	mlx_data.map_img->addr = mlx_get_data_addr(mlx_data.map_img->img ,
+// 				&mlx_data.map_img->bits_per_pixel, &mlx_data.map_img->line_size, &mlx_data.map_img->endian);
+// 	draw_map(&mlx_data);
+// 	draw_player_of_map(&mlx_data);
+// 	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
+// 	//show_map_data(map_data);
+// 	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
+// 	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
+// 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data); 
+// 	mlx_loop(mlx_data.mlx_ptr);
+// }
+
+const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+};
+
+void init_window(t_mlx_data *data){
+
+	data->mlx_ptr = mlx_init();
+	data->window = mlx_new_window(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3D");
+	data->main_img.img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	data->main_img.addr = mlx_get_data_addr(data->main_img.img, &data->main_img.bits_per_pixel, &data->main_img.line_size, &data->main_img.endian);
+}
+
+int process_input(int keycode, t_mlx_data *data) {
+	
+	if (keycode == ESC) {
+		exit(EXIT_SUCCESS);
+	}
+	else if (keycode == UP) {
+		// move player forward
+	}
+	else if (keycode == BOTTOM) {
+		// move player backward
+	}
+	else if (keycode == LEFT) {
+		// turn the player left
+	}
+	else if (keycode == RIGHT) {
+		// turn the player right
+	}
+	return (0);
+}
+
+void draw_rectangle(t_mlx_data *data, float start_x, float start_y, int flag) {
+	float i;
+	float j;
+
+	j = start_x;
+	i = start_y;
+	while (j < start_x + data->square_width - 1)
+	{
+		i = start_y;
+		while (i < start_y + data->square_height - 1){
+			if (flag == 1)
+				my_mlx_pixel_put(&data->main_img, j, i, 0xFFF000);
+			else
+				my_mlx_pixel_put(data->map_img, j, i, 0xFFF000);
+			i++;
+		}
+		j++;
+	}
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->main_img.img, 0, 0);
+}
+
+void setup(t_mlx_data *data) {
+	// init and setup 
+	data->player.x = WINDOW_WIDTH / 2;
+	data->player.y = WINDOW_HEIGHT / 2;
+	data->player.height = 5;
+	data->player.width = 5;
+	data->player.turn_direction = 0;
+	data->player.walk_direction = 0;
+	data->player.rotation_angle = PI / 2;
+	data->square_height = 5;
+	data->square_width = 5;
+	data->square_height = TILE_SIZE;
+	data->square_width = TILE_SIZE;
+}
+
+void render_map(t_mlx_data *data)  {
+	int x;
+	int y;
+
+	y = 0;
+	data->square_height *= SCALE;
+	data->square_width *= SCALE;
+	while (y < WINDOW_HEIGHT){
+		x = 0;
+		while (x < WINDOW_WIDTH) {
+			if (map[(int) y / TILE_SIZE][(int) x / TILE_SIZE] == 1)
+				draw_rectangle(data, x * SCALE, y * SCALE, 1);
+			x += TILE_SIZE;
+		}
+		y += TILE_SIZE;
+	}
+}
+void ft_render(t_mlx_data *data) 
+{
+	// render every thing
+	render_map(data);
+	// render_player();
+	// render_rays();
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->main_img.img, 0, 0);
+}
+
+int main() {
+
+	t_mlx_data data;
+	init_window(&data);
+	setup(&data);
+	ft_render(&data);
+	// update(&data);
+	mlx_hook(data.window, KEYPRESS, KEYPRESSMASK, process_input, &data);
+	mlx_hook(data.window, KEYRELEASE, KEYRELEASEMASK, process_input, &data);
+	mlx_loop(data.mlx_ptr);
 }
