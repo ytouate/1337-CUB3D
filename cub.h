@@ -100,6 +100,7 @@ typedef struct map_data {
 	char	*south_texture;
 	char	*west_textrure;
 	char	*east_texture;
+	int		longest_line;
 	int		floor_color[3];
 	int		ceilling_color[3];
 }t_map_data;
@@ -124,7 +125,6 @@ typedef struct mlx_data {
 	int			square_width;
 	void		*mlx_ptr;
 	void		*window;
-
 }t_mlx_data;
 
 typedef struct fix_map
@@ -155,10 +155,11 @@ void update_window(t_mlx_data *data);
 void init_mlx(t_mlx_data *mlx_data);
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 int count_map_lines(char *map_name);
-bool	get_map_rgb(char *line, t_map_data *map_data);
+bool	get_map_rgb(char *line, t_mlx_data *data);
 bool	got_overflowed(int *rgb);
 int		check_file_extention(char *file);
 bool	is_valid_line(char *line);
+void init_map_data(t_mlx_data *data);
 void	check_all_the_map(t_map_data map_data);
 void	call_check_zeros(t_fix_map *map, int len);
 void	check_the_zeros(t_fix_map *map, int i, int j, int len);
@@ -169,14 +170,13 @@ void ft_draw_player(t_mlx_data *data);
 void	skip_empty_lines(char **grid, int *n, int map_len);
 void check_map_texture(t_map_data map_data);
 char **convert_file_to_grid(t_mlx_data *data);
-bool	get_texture_path(char *l, t_map_data *map_data);
+bool	get_texture_path(char *l, t_mlx_data *data);
 int count_spaces(char *line);
 int		check_map_borders(t_map_data map_data);
 int		ft_close(t_mlx_data *data);
-void init(t_mlx_data *mlx_data, t_map_data *map_data);
+void init(t_mlx_data *data);
 void fill_map(t_mlx_data *data);
-void init_map_data(t_map_data *map_data);
-int	fill_map_data(char **grid, t_map_data *map_data);
+int	fill_map_data(char **grid, t_mlx_data *data);
 void	fill_rgb_array(char *line, int *arr);
 bool is_number(char *s);
 bool	check_map_identifiers(char *line);
@@ -187,7 +187,6 @@ int			ft_error(int exit_code, char *fatal);
 int			count_map_lines(char *map_name);
 int			check_map_borders(t_map_data map_data);
 bool		got_overflowed(int *rgb);
-bool		get_texture_path(char *l, t_map_data *map_data);
 bool		is_valid_line(char *line);
 void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);

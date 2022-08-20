@@ -131,7 +131,7 @@ char	*fill_the_path(char *line)
 }
 
 // fill the first sex lines;
-int	fill_map_data(char **grid, t_map_data *map_data)
+int	fill_map_data(char **grid, t_mlx_data *data)
 {
 	int	i;
 	char *line;
@@ -149,32 +149,32 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 			if (!ft_strncmp("NO ", line, 3))
 			{
 				check[0] += 1;
-				map_data->north_texture = fill_the_path(line + spaces);
+				data->map_data.north_texture = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("SO ", line, 3))
 			{
 				check[1] += 1;
-				map_data->south_texture = fill_the_path(line + spaces);
+				data->map_data.south_texture = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("WE ", line, 3))
 			{
 				check[2] += 1;
-				map_data->west_textrure = fill_the_path(line + spaces);
+				data->map_data.west_textrure = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("EA ", line, 3))
 			{
 				check[3] += 1;
-				map_data->east_texture = fill_the_path(line + spaces);
+				data->map_data.east_texture = fill_the_path(line + spaces);
 			}
 			else if (!ft_strncmp("F ", line, 2))
 			{
 				check[4] += 1;
-				fill_rgb_array(line, map_data->floor_color);
+				fill_rgb_array(line, data->map_data.floor_color);
 			}
 			else if (!ft_strncmp("C ", line, 2))
 			{
 				check[5] += 1;
-				fill_rgb_array(line, map_data->ceilling_color);
+				fill_rgb_array(line, data->map_data.ceilling_color);
 			}
 			else
 			{
@@ -234,7 +234,7 @@ bool	got_overflowed(int *rgb)
 	return (false);
 }
 
-bool	get_map_rgb(char *line, t_map_data *map_data)
+bool	get_map_rgb(char *line, t_mlx_data *data)
 {
 	char	**color;
 	int		flag;
@@ -245,9 +245,9 @@ bool	get_map_rgb(char *line, t_map_data *map_data)
 		color = ft_split(line + 2, ',');
 		if (!(color[0] && color[1] && color[2]))
 			ft_error(1, "Invalid rgb format\n");
-		map_data->floor_color[0] = ft_atoi(color[0]);
-		map_data->floor_color[1] = ft_atoi(color[1]);
-		map_data->floor_color[2] = ft_atoi(color[2]);
+		data->map_data.floor_color[0] = ft_atoi(color[0]);
+		data->map_data.floor_color[1] = ft_atoi(color[1]);
+		data->map_data.floor_color[2] = ft_atoi(color[2]);
 		flag += 1;
 		return true;
 	}
@@ -256,9 +256,9 @@ bool	get_map_rgb(char *line, t_map_data *map_data)
 		color = ft_split(line + 2, ',');
 		if (!(color[0] && color[1] && color[2]))
 			ft_error(1, "Invalid rgb format\n");
-		map_data->ceilling_color[0] = ft_atoi(color[0]);
-		map_data->ceilling_color[1] = ft_atoi(color[1]);
-		map_data->ceilling_color[2] = ft_atoi(color[2]);
+		data->map_data.ceilling_color[0] = ft_atoi(color[0]);
+		data->map_data.ceilling_color[1] = ft_atoi(color[1]);
+		data->map_data.ceilling_color[2] = ft_atoi(color[2]);
 		flag += 1;
 		return true;
 	}
@@ -303,7 +303,7 @@ int count_spaces(char *line)
 	return (i);
 }
 
-bool	get_texture_path(char *l, t_map_data *map_data)
+bool	get_texture_path(char *l, t_mlx_data *data)
 {
 	char *line;
 	int		in_between_spaces;
@@ -312,26 +312,26 @@ bool	get_texture_path(char *l, t_map_data *map_data)
 	in_between_spaces = count_spaces(line);
 	if (!ft_strncmp(line, "NO ", 3))
 	{
-		map_data->north_texture = ft_strdup(line + in_between_spaces);
+		data->map_data.north_texture = ft_strdup(line + in_between_spaces);
 		return (true);
 	}
 	if (!ft_strncmp(line, "SO ", 3))
 	{
-		map_data->south_texture = ft_strdup(line + in_between_spaces);
+		data->map_data.south_texture = ft_strdup(line + in_between_spaces);
 		return (true);
 	}
 	if (!ft_strncmp(line, "WE ", 3))
 	{
-		map_data->west_textrure = ft_strdup(line + in_between_spaces);
+		data->map_data.west_textrure = ft_strdup(line + in_between_spaces);
 		return (true);
 	}
 	if (!ft_strncmp(line, "EA ", 3))
 	{
-		map_data->east_texture = ft_strdup(line + in_between_spaces);
+		data->map_data.east_texture = ft_strdup(line + in_between_spaces);
 		return (true);
 	}
 	// free(line);
-	if (get_map_rgb(line, map_data))
+	if (get_map_rgb(line, data))
 		return (true);
 	return (false);
 }
@@ -344,6 +344,7 @@ char **convert_file_to_grid(t_mlx_data *data)
 	int		flag = 0;
 
 	i = 0;
+	data->map_data.map_lines = count_map_lines(data->map_data.map_name);
 	map_fd = open(data->map_data.map_name, O_RDONLY);
 	if (map_fd == -1)
 		ft_error(2, "open failed\n");
@@ -351,6 +352,7 @@ char **convert_file_to_grid(t_mlx_data *data)
 	grid = malloc(sizeof(char *) * data->map_data.map_lines + 1);
 	if (!grid)
 		ft_error(2, "Malloc failed map-parse\n");
+	printf("%d \n", data->map_data.map_lines);
 	while (i < data->map_data.map_lines)
 	{
 		char *temp = get_next_line(map_fd);

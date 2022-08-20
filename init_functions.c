@@ -12,16 +12,16 @@
 
 #include "cub.h"
 
-void init(t_mlx_data *mlx_data, t_map_data *map_data)
+void init(t_mlx_data *data)
 {
-	map_data_constructor(map_data);
-	mlx_data->player.x = WINDOW_WIDTH / 2;
-	mlx_data->player.y = WINDOW_HEIGHT / 2;
-	mlx_data->mlx_ptr = mlx_init();
-	if (mlx_data == NULL)
+	map_data_constructor(&data->map_data);
+	data->player.x = WINDOW_WIDTH / 2;
+	data->player.y = WINDOW_HEIGHT / 2;
+	data->mlx_ptr = mlx_init();
+	if (data->mlx_ptr == NULL)
 		ft_error(FUNCTION_FAILED, "mlx_init() FAILED \n");
-	map_data->map_lines = count_map_lines(map_data->map_name);
-	if (map_data->map_lines == 0)
+	data->map_data.map_lines = count_map_lines(data->map_data.map_name);
+	if (data->map_data.map_lines == 0)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
 }
 
@@ -33,18 +33,18 @@ void init_map_data(t_mlx_data *data)
 	char *temp;
 
 	i = 0;
-	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
-	map_content_start = fill_map_data(temp_grid, map_data);
-	map_data->map = malloc(sizeof(char *) * map_data->map_lines - map_content_start + 1);
+	temp_grid = convert_file_to_grid(data);
+	map_content_start = fill_map_data(temp_grid, data);
+	data->map_data.map = malloc(sizeof(char *) * data->map_data.map_lines - map_content_start + 1);
 	while (temp_grid[map_content_start])
 	{
 		temp = ft_strtrim(temp_grid[map_content_start++], "\n");
-		map_data->map[i++] = temp;
+		data->map_data.map[i++] = temp;
 		free(temp);
 	}
-	map_data->map[i] = temp_grid[map_content_start];
+	data->map_data.map[i] = temp_grid[map_content_start];
 	free_grid(temp_grid);
-	map_data->map_lines = i;
+	data->map_data.map_lines = i;
 }
 
 // initialize the map_data for good practices

@@ -553,6 +553,8 @@ int main(int ac, char **av) {
 	check_basic_requirements(ac, av);
 	init_window(&data);
 	setup(&data);
+	data.map_data.map_name = av[1];
+	map_setup(&data);
 	ft_render(&data);
 	mlx_hook(data.window, KEYPRESS, KEYPRESSMASK, process_input, &data);
 	mlx_hook(data.window, KEYRELEASE, KEYRELEASEMASK, reset, &data);
