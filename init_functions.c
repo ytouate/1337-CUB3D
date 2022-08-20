@@ -25,7 +25,7 @@ void init(t_mlx_data *mlx_data, t_map_data *map_data)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
 }
 
-void init_map_data(t_map_data *map_data)
+void init_map_data(t_mlx_data *data)
 {
 	int map_content_start;
 	char **temp_grid;

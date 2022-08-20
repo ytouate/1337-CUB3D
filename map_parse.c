@@ -194,28 +194,28 @@ int	fill_map_data(char **grid, t_map_data *map_data)
 }
 
 // fill the map_data from the file
-void fill_map(t_map_data *map_data, t_mlx_data *mlx_data)
+void fill_map(t_mlx_data *data)
 {
 	char **temp_grid;
 	int	map_content_start;
 	int map_content_end;
 	int i;
 
-	temp_grid = convert_file_to_grid(map_data->map_name, map_data->map_lines);
-	map_content_start = fill_map_data(temp_grid, map_data);
+	temp_grid = convert_file_to_grid(data);
+	map_content_start = fill_map_data(temp_grid, data);
 	if (map_content_start == -1)
 		ft_error(UNEXPECTED_FLOW, "the elements are not valid\n");
-	map_content_end = map_data->map_lines;
-	map_data->map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
+	map_content_end = data->map_data.map_lines;
+	data->map_data.map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
 	i = 0;
 	while (temp_grid[map_content_start])
 	{
 		char *temp = ft_strtrim(temp_grid[map_content_start++], "\n");
-		map_data->map[i++] = ft_strdup(temp);
+		data->map_data.map[i++] = ft_strdup(temp);
 		free(temp);
 	}
-	map_data->map[i] = temp_grid[map_content_start];
-	map_data->map_lines = i;
+	data->map_data.map[i] = temp_grid[map_content_start];
+	data->map_data.map_lines = i;
 	free_grid(temp_grid);
 }
 
@@ -336,7 +336,7 @@ bool	get_texture_path(char *l, t_map_data *map_data)
 	return (false);
 }
 
-char **convert_file_to_grid(char *file_name, int file_size)
+char **convert_file_to_grid(t_mlx_data *data)
 {
 	char	**grid;
 	int		i;
@@ -344,14 +344,14 @@ char **convert_file_to_grid(char *file_name, int file_size)
 	int		flag = 0;
 
 	i = 0;
-	map_fd = open(file_name, O_RDONLY);
+	map_fd = open(data->map_data.map_name, O_RDONLY);
 	if (map_fd == -1)
 		ft_error(2, "open failed\n");
-	file_size += 1;
-	grid = malloc(sizeof(char *) * file_size + 1);
+	data->map_data.map_lines += 1;
+	grid = malloc(sizeof(char *) * data->map_data.map_lines + 1);
 	if (!grid)
 		ft_error(2, "Malloc failed map-parse\n");
-	while (i < file_size)
+	while (i < data->map_data.map_lines)
 	{
 		char *temp = get_next_line(map_fd);
 		if (!temp)

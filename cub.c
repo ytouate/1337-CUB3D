@@ -461,6 +461,7 @@ void clear_color_buffer(t_mlx_data *data, uint32_t color) {
 		}
 	}
 }
+
 void generate_3d_projection(t_mlx_data *data) {
 	for (int i = 0; i < NUM_RAYS; i++) {
 		float prep_distance = data->rays[i].distance * cos(data->rays[i].ray_angle - data->player.rotation_angle) ;
@@ -540,12 +541,17 @@ void update(t_mlx_data *data) {
 	data->main_img.addr = mlx_get_data_addr(data->main_img.img, &data->main_img.bits_per_pixel, &data->main_img.line_size, &data->main_img.endian);
 	// cast_all_rays(data);
 }
-int main() {
+
+void map_setup(t_mlx_data *data)
+{
+	fill_map(data);
+}
+int main(int ac, char **av) {
 
 	t_mlx_data data;
 
+	check_basic_requirements(ac, av);
 	init_window(&data);
-	
 	setup(&data);
 	ft_render(&data);
 	mlx_hook(data.window, KEYPRESS, KEYPRESSMASK, process_input, &data);

@@ -124,7 +124,6 @@ typedef struct mlx_data {
 	int			square_width;
 	void		*mlx_ptr;
 	void		*window;
-	char		**map;
 
 }t_mlx_data;
 
@@ -169,13 +168,13 @@ void draw_map(t_mlx_data *data);
 void ft_draw_player(t_mlx_data *data);
 void	skip_empty_lines(char **grid, int *n, int map_len);
 void check_map_texture(t_map_data map_data);
-char **convert_file_to_grid(char *file_name, int file_size);
+char **convert_file_to_grid(t_mlx_data *data);
 bool	get_texture_path(char *l, t_map_data *map_data);
 int count_spaces(char *line);
 int		check_map_borders(t_map_data map_data);
 int		ft_close(t_mlx_data *data);
 void init(t_mlx_data *mlx_data, t_map_data *map_data);
-void fill_map(t_map_data *map_data, t_mlx_data *mlx_data);
+void fill_map(t_mlx_data *data);
 void init_map_data(t_map_data *map_data);
 int	fill_map_data(char **grid, t_map_data *map_data);
 void	fill_rgb_array(char *line, int *arr);
@@ -187,7 +186,6 @@ int			count_spaces(char *line);
 int			ft_error(int exit_code, char *fatal);
 int			count_map_lines(char *map_name);
 int			check_map_borders(t_map_data map_data);
-char		**convert_file_to_grid(char *file_name, int file_size);
 bool		got_overflowed(int *rgb);
 bool		get_texture_path(char *l, t_map_data *map_data);
 bool		is_valid_line(char *line);
