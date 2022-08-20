@@ -21,6 +21,10 @@
 # include <math.h>
 # include "mlx.h"
 # include "Libft/libft.h"
+# include <float.h>
+
+#define MAIN_MAP 1
+#define MINI_MAP 0
 
 # define E  PI / 2
 # define S  PI
@@ -50,12 +54,12 @@
 # define WINDOW_WIDTH (MAP_NUM_COLS * TILE_SIZE)
 # define WINDOW_HEIGHT (MAP_NUM_ROWS * TILE_SIZE)
 
-# define FOV (60 * (PI / 180.0))
+# define FOV 60 * (PI / 180)
 # define HALF_FOV FOV / 2
 
 # define NUM_RAYS WINDOW_WIDTH
 # define STEP_ANGLE FOV / NUM_RAYS
-# define SCALE 0.3
+# define SCALE 1.0
 
 typedef struct s_vector
 {
@@ -65,17 +69,16 @@ typedef struct s_vector
 }t_vector;
 
 typedef struct s_rays {
-	double	ray_angle;
-	double	wall_hit_x;
-	double	wall_hit_y;
-	bool	wasHit_vertical;
+	float	ray_angle;
+	float	wall_hit_x;
+	float	wall_hit_y;
+	float	distance;
+	bool	was_hit_vertical;
 	bool	is_ray_facing_up;
 	bool	is_ray_facing_left;
 	bool	is_ray_facing_right;
 	bool	is_ray_facing_down;
-	double	step_angle;
-	double	width;
-	double	height;
+	int		wall_hit_content;
 }t_rays;
 
 typedef struct s_player {
@@ -115,7 +118,7 @@ typedef struct mlx_data {
 	t_map_data	map_data;
 	t_img		main_img;
 	t_img		*map_img;
-	t_rays		rays;
+	t_rays		rays[NUM_RAYS];
 	int			square_height;
 	int			square_width;
 	void		*mlx_ptr;
@@ -191,5 +194,7 @@ void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		draw_map(t_mlx_data *data);
 void render(t_mlx_data *data);
-
+void render_player(t_mlx_data *data);
+void ft_render(t_mlx_data *data);
+void update(t_mlx_data *data);
 #endif
