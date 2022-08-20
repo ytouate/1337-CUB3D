@@ -134,6 +134,9 @@ void init_window(t_mlx_data *data){
 
 	data->mlx_ptr = mlx_init();
 	data->window = mlx_new_window(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3D");
+	data->map_img = malloc(sizeof(t_img));
+	data->map_img->img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH * SCALE ,WINDOW_HEIGHT * SCALE);
+	data->map_img->addr = mlx_get_data_addr(data->map_img->img, &data->map_img->bits_per_pixel, &data->map_img->line_size, &data->map_img->endian);
 	data->main_img.img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->main_img.addr = mlx_get_data_addr(data->main_img.img, &data->main_img.bits_per_pixel, &data->main_img.line_size, &data->main_img.endian);
 }
@@ -230,6 +233,10 @@ void draw_rectangle(t_mlx_data *data, float start_x, float start_y, int flag, in
 
 void setup(t_mlx_data *data) {
 	// init and setup 
+	data->color_buffer = NULL;
+	data->color_buffer = malloc(sizeof(uint32_t) * (WINDOW_HEIGHT * WINDOW_WIDTH));
+	if (data->color_buffer == NULL)
+		ft_error(FUNCTION_FAILED, "malloc failed in setup() \n");
 	data->player.x = WINDOW_WIDTH / 2;
 	data->player.y = WINDOW_HEIGHT / 2;
 	data->player.height = 1;
@@ -266,7 +273,7 @@ void render_map(t_mlx_data *data)  {
 					data,
 					x * SCALE,
 					y * SCALE,
-					MAIN_MAP,
+					MINI_MAP,
 					0x00FF00,
 					TILE_SIZE * SCALE,
 					TILE_SIZE * SCALE
@@ -284,7 +291,7 @@ void render_player(t_mlx_data *data) {
 		data,
 		SCALE * data->player.x,
 		SCALE * data->player.y,
-		MAIN_MAP,
+		MINI_MAP,
 		0xFF0000,
 		1 * SCALE,
 		1 * SCALE
@@ -391,7 +398,6 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
 
     float nextVertTouchX = xintercept;
     float nextVertTouchY = yintercept;
-
     // Increment xstep and ystep until we find a wall
     while (nextVertTouchX >= 0 && nextVertTouchX <= WINDOW_WIDTH && nextVertTouchY >= 0 && nextVertTouchY <= WINDOW_HEIGHT) {
         float xToCheck = nextVertTouchX + (isRayFacingLeft ? -1 : 0);
@@ -437,128 +443,8 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
     data->rays[stripId].is_ray_facing_left = isRayFacingLeft;
     data->rays[stripId].is_ray_facing_right = isRayFacingRight;
 }
-// void cast_ray(t_mlx_data *data, float ray_angle, int strip_id) {
-	
-// 	ray_angle = normalize_angle(ray_angle);
-
-// 	bool is_ray_facing_down = ray_angle > 0 && ray_angle < PI;
-// 	bool is_ray_facing_up = !is_ray_facing_down;
-
-// 	bool is_ray_facing_right = ray_angle < 0.5 * PI || ray_angle > 1.5 * PI;
-// 	bool is_ray_facing_left = !is_ray_facing_right;
-
-// 	float xintercept;
-// 	float yintercept;
-
-// 	float xstep;
-// 	float ystep;
-
-// 	bool found_horz_wall_hit = false;
-// 	float horz_wall_hit_x = 0;
-// 	float horz_wall_hit_y = 0;
-// 	int horz_wall_content = 0;
-
-// 	yintercept = floor(data->player.y / TILE_SIZE) * TILE_SIZE;
-// 	yintercept += is_ray_facing_down ? TILE_SIZE : 0;
-
-// 	xintercept = data->player.x + (yintercept - data->player.y) / tan(ray_angle);
-
-// 	ystep = TILE_SIZE;
-// 	ystep *= is_ray_facing_up ? -1 : 1;
-
-// 	xstep = TILE_SIZE / tan(ray_angle);
-// 	xstep *= (is_ray_facing_left && xstep  > 0) ? -1 : 1;
-// 	xstep *= (is_ray_facing_right && xstep < 0) ? -1 : 1;
-
-// 	float next_horz_touch_x = xintercept;
-// 	float next_horz_touch_y = yintercept;
-
-// 	while (next_horz_touch_x >= 0 && next_horz_touch_x <= WINDOW_WIDTH && next_horz_touch_y >= 0 && next_horz_touch_y <= WINDOW_HEIGHT ) {
-// 		float x_to_check = next_horz_touch_x;
-// 		float y_to_check = next_horz_touch_y + (is_ray_facing_up ? -1 : 0);
-
-// 		if (map_has_wall_at(x_to_check, y_to_check))
-// 		{
-// 			horz_wall_hit_x = next_horz_touch_x;
-// 			horz_wall_hit_y = next_horz_touch_y;
-// 			horz_wall_content = map[(int)floor(y_to_check / TILE_SIZE)][(int)floor(x_to_check / TILE_SIZE)];
-// 			found_horz_wall_hit = true;
-// 			break;
-// 		}
-// 		else
-// 		{
-// 			next_horz_touch_x += xstep;
-// 			next_horz_touch_y += ystep;
-// 		}
-// 	}
-
-// 	// verticel ray-grid intersection code
-// 	int found_ver_wall_hit = false;
-// 	float ver_wall_hit_x = 0;
-// 	float ver_wall_hit_y = 0;
-// 	int ver_wall_content = 0;
-
-// 	xintercept = floor(data->player.x / TILE_SIZE) * TILE_SIZE;
-// 	xintercept += is_ray_facing_right ? TILE_SIZE : 0;
-
-// 	yintercept = data->player.y + (xintercept - data->player.x) * tan(ray_angle);
-
-// 	xstep = TILE_SIZE;
-// 	xstep = is_ray_facing_left ? -1 : 1;
-
-// 	ystep = TILE_SIZE * tan(ray_angle);
-// 	ystep *= (is_ray_facing_up && ystep > 0) ? -1 : 1;
-// 	ystep *= (is_ray_facing_down && ystep < 0) ? -1 : 1;
-
-// 	float next_ver_touch_x = xintercept;
-// 	float next_ver_touch_y = yintercept;
-
-// 	while (next_ver_touch_x >= 0 && next_ver_touch_x <= WINDOW_WIDTH && next_ver_touch_y >= 0 && next_ver_touch_y <= WINDOW_HEIGHT ) {
-// 		float x_to_check = next_ver_touch_x + (is_ray_facing_left ? -1 : 0);
-// 		float y_to_check = next_ver_touch_y;
-
-// 		if (map_has_wall_at(x_to_check, y_to_check))
-// 		{
-// 			ver_wall_hit_x = next_ver_touch_x;
-// 			ver_wall_hit_y = next_ver_touch_y;
-// 			ver_wall_content = map[(int)floor(y_to_check / TILE_SIZE)][(int)floor(x_to_check / TILE_SIZE)];
-// 			found_ver_wall_hit = true;
-// 			break;
-// 		}
-// 		else
-// 		{
-// 			next_ver_touch_x += xstep;
-// 			next_ver_touch_y += ystep;
-// 		}
-// 	}
-// 	// calculate the distance
-// 	float horz_hit_distance = found_horz_wall_hit ? distance_between_points(data->player.x, data->player.y, horz_wall_hit_x, horz_wall_hit_y) : FLT_MAX;
-// 	float ver_hit_distance = found_ver_wall_hit ? distance_between_points(data->player.x, data->player.y, ver_wall_hit_x, ver_wall_hit_y) : FLT_MAX;
-
-// 	if (ver_hit_distance < horz_hit_distance) {
-// 		data->rays[strip_id].distance = ver_hit_distance;
-// 		data->rays[strip_id].wall_hit_x = ver_wall_hit_x;
-// 		data->rays[strip_id].wall_hit_y = ver_wall_hit_y;
-// 		data->rays[strip_id].wall_hit_content = ver_wall_content;
-// 		data->rays[strip_id].was_hit_vertical = true;
-// 	}
-// 	else {
-// 		data->rays[strip_id].distance = 		horz_hit_distance;
-// 		data->rays[strip_id].wall_hit_x = 		horz_wall_hit_x;
-// 		data->rays[strip_id].wall_hit_y = 		horz_wall_hit_y;
-// 		data->rays[strip_id].wall_hit_content = horz_wall_content;
-// 		data->rays[strip_id].was_hit_vertical = false;
-// 	}
-// 	data->rays[strip_id].ray_angle = ray_angle;
-// 	data->rays[strip_id].is_ray_facing_down = is_ray_facing_down;
-// 	data->rays[strip_id].is_ray_facing_up = is_ray_facing_up;
-// 	data->rays[strip_id].is_ray_facing_right = is_ray_facing_right;
-// 	data->rays[strip_id].is_ray_facing_left = is_ray_facing_left;
-
-// }
 	
 void cast_all_rays(t_mlx_data *data) {
-	printf("%f \n", data->player.rotation_angle);
 	float ray_angle = data->player.rotation_angle - (FOV / 2);
 
 	for (int strip_id = 0; strip_id < NUM_RAYS; strip_id++) {
@@ -566,13 +452,64 @@ void cast_all_rays(t_mlx_data *data) {
 		ray_angle += (FOV / NUM_RAYS);
 	}
 }
+
+
+void clear_color_buffer(t_mlx_data *data, uint32_t color) {
+	for (int x = 0; x < WINDOW_WIDTH; x++){
+		for (int y = 0; y < WINDOW_HEIGHT; y++) {
+			data->color_buffer[(WINDOW_WIDTH * y) + x] = color;
+		}
+	}
+}
+void generate_3d_projection(t_mlx_data *data) {
+	for (int i = 0; i < NUM_RAYS; i++) {
+		float prep_distance = data->rays[i].distance * cos(data->rays[i].ray_angle - data->player.rotation_angle) ;
+		float distance_proj_plan = (WINDOW_WIDTH / 2) / tan(FOV / 2);
+		float projected_wall_height = (TILE_SIZE / prep_distance) * distance_proj_plan;
+		int wall_strip_height = (int)projected_wall_height;
+		int wall_top_pixel = (WINDOW_HEIGHT / 2) - (wall_strip_height / 2);
+		if (wall_top_pixel < 0) {
+			wall_top_pixel = 0;
+		}
+		int wall_bottom_pixel = (WINDOW_HEIGHT / 2) + (wall_strip_height / 2);
+		if (wall_bottom_pixel > WINDOW_HEIGHT)  {
+			wall_bottom_pixel = WINDOW_HEIGHT;
+		}
+		for (int j = wall_top_pixel; j < wall_bottom_pixel; j++) {
+			if (data->rays[i].was_hit_vertical)
+				my_mlx_pixel_put(&data->main_img, i, j, 0xFFFFFF);
+			else
+				my_mlx_pixel_put(&data->main_img, i, j, 0xFFCCCC);
+		}
+	}
+
+}
+
+void render_ceiling_and_floor(t_mlx_data *data) {
+
+	int i;
+	for (i = 0; i < WINDOW_HEIGHT / 2; i++) {
+		for (int j = 0; j < WINDOW_WIDTH; j++) {
+			my_mlx_pixel_put(&data->main_img, j, i, 0xD3D3D3);
+		}
+	}
+	for (int k = i; k < WINDOW_HEIGHT; k++) {
+		for (int j = 0; j < WINDOW_WIDTH; j++) {
+			my_mlx_pixel_put(&data->main_img, j, k, 0xb3b1b4);
+		}
+	}
+}
 void ft_render(t_mlx_data *data) 
 {
 	// render everything
+	// clear the color buffer
 	cast_all_rays(data);
-	render_map(data);
-	render_rays(data);
-	render_player(data);
+	// render_map(data);
+	// render_rays(data);
+	// render_player(data);
+	render_ceiling_and_floor(data);
+	generate_3d_projection(data);
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img, 0, 0);
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->main_img.img, 0, 0);
 }
 

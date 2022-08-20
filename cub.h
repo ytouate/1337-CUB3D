@@ -59,7 +59,7 @@
 
 # define NUM_RAYS WINDOW_WIDTH
 # define STEP_ANGLE FOV / NUM_RAYS
-# define SCALE 1.0
+# define SCALE 0.3
 
 typedef struct s_vector
 {
@@ -119,6 +119,7 @@ typedef struct mlx_data {
 	t_img		main_img;
 	t_img		*map_img;
 	t_rays		rays[NUM_RAYS];
+	uint32_t *color_buffer;
 	int			square_height;
 	int			square_width;
 	void		*mlx_ptr;
