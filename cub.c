@@ -546,6 +546,7 @@ int reset(int keycode, t_mlx_data *data) {
 		// turn the player right
 		data->player.turn_direction = 0;
 	}
+	process_input(keycode, data);
 	return (0);
 }
 
@@ -563,6 +564,11 @@ void map_setup(t_mlx_data *data)
 {
 	fill_map(data);
 }
+int handle_keys(t_mlx_data *data) {
+	mlx_hook(data->window, KEYPRESS, KEYPRESSMASK, process_input, data);
+	mlx_hook(data->window, KEYRELEASE, KEYRELEASEMASK, reset, data);
+	return (0);
+}
 int main(int ac, char **av) {
 
 	t_mlx_data data;
@@ -573,7 +579,6 @@ int main(int ac, char **av) {
 	data.map_data.map_name = av[1];
 	map_setup(&data);
 	ft_render(&data);
-	mlx_hook(data.window, KEYPRESS, KEYPRESSMASK, process_input, &data);
-	mlx_hook(data.window, KEYRELEASE, KEYRELEASEMASK, reset, &data);
+	mlx_loop_hook(data.mlx_ptr, handle_keys, &data);
 	mlx_loop(data.mlx_ptr);
 }
