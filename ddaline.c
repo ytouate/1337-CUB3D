@@ -12,7 +12,7 @@
 
 #include "cub.h"
 
-void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int color)
+void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, int color)
 {
 	float	len; 
 	int		dx;
@@ -39,7 +39,12 @@ void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int color)
 		sy = y + yinc * h;
 		h++;
 		if (sx > 0 && sx < 1920 && sy > 0 && sy < 1080)
-			my_mlx_pixel_put(&data->main_img, sx, sy, color);
+		{
+			if (flag == MAIN_MAP)
+				my_mlx_pixel_put(&data->main_img, sx, sy, color);
+			else
+				my_mlx_pixel_put(&data->map_img, sx, sy, color);
+		}
 	}
 }
 

@@ -26,9 +26,9 @@ void update_window(t_mlx_data *data)
 	data->main_img.img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->main_img.addr = mlx_get_data_addr(data->main_img.img,
 	&data->main_img.bits_per_pixel, &data->main_img.line_size, &data->main_img.endian);
-	data->map_img->img = mlx_new_image(data->mlx_ptr, 300, 195);
-	data->map_img->addr = mlx_get_data_addr(data->map_img->img,
-	&data->map_img->bits_per_pixel, &data->map_img->line_size, &data->map_img->endian);
+	data->map_img.img = mlx_new_image(data->mlx_ptr, 300, 195);
+	data->map_img.addr = mlx_get_data_addr(data->map_img.img,
+	&data->map_img.bits_per_pixel, &data->map_img.line_size, &data->map_img.endian);
 }
 
 void init_mlx(t_mlx_data *mlx_data)

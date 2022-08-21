@@ -59,7 +59,7 @@
 
 # define NUM_RAYS WINDOW_WIDTH
 # define STEP_ANGLE FOV / NUM_RAYS
-# define SCALE 0.3
+# define SCALE 0.2
 
 typedef struct s_vector
 {
@@ -118,7 +118,7 @@ typedef struct mlx_data {
 	t_player	player;
 	t_map_data	map_data;
 	t_img		main_img;
-	t_img		*map_img;
+	t_img		map_img;
 	t_rays		rays[NUM_RAYS];
 	uint32_t *color_buffer;
 	int			square_height;
@@ -149,7 +149,7 @@ void	check_basic_requirements(int ac, char **av);
 void	map_data_constructor(t_map_data *map_data);
 void show_map_data(t_map_data map_data);
 void	free_grid(char **grid);
-void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int color);
+void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, int color);
 int	ft_error(int exit_code, char *fatal);
 void update_window(t_mlx_data *data);
 void init_mlx(t_mlx_data *mlx_data);
@@ -195,4 +195,5 @@ void render(t_mlx_data *data);
 void render_player(t_mlx_data *data);
 void ft_render(t_mlx_data *data);
 void update(t_mlx_data *data);
+void get_player_pos(t_mlx_data *data);
 #endif
