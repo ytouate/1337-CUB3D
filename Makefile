@@ -38,7 +38,7 @@ all: $(NAME)
 
 $(NAME): $(O_FILES)
 	cd Libft && make && make bonus && cd ..
-	$(CC) $(CFLAGS) ./Libft/libft.a -lmlx -framework OpenGL -framework AppKit $(O_FILES) -o $(NAME)
+	$(CC) $(CFLAGS) ./Libft/libft.a -lmlx -framework OpenGL  -framework AppKit $(O_FILES) -o $(NAME)
 
 clean:
 	rm -f *.o

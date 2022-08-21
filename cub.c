@@ -80,7 +80,7 @@ void	draw_player_of_map(t_mlx_data *data)
 		j = y;
 		while (j < y + 5)
 		{
-			my_mlx_pixel_put(data->map_img, i, j, 0x0000FF);
+			my_mlx_pixel_put(&data->map_img, i, j, 0x0000FF);
 			j++;
 		}
 		i++;
@@ -100,13 +100,13 @@ void	draw_player_of_map(t_mlx_data *data)
 // 	init_mlx(&mlx_data);
 // 	mlx_data.map = map_data.map;
 // 	render(&mlx_data);
-// 	mlx_data.map_img->img = mlx_new_image(mlx_data.mlx_ptr, 300,
+// 	mlx_data.map_img.img = mlx_new_image(mlx_data.mlx_ptr, 300,
 // 					195);
-// 	mlx_data.map_img->addr = mlx_get_data_addr(mlx_data.map_img->img ,
-// 				&mlx_data.map_img->bits_per_pixel, &mlx_data.map_img->line_size, &mlx_data.map_img->endian);
+// 	mlx_data.map_img.addr = mlx_get_data_addr(mlx_data.map_img.img ,
+// 				&mlx_data.map_img.bits_per_pixel, &mlx_data.map_img.line_size, &mlx_data.map_img.endian);
 // 	draw_map(&mlx_data);
 // 	draw_player_of_map(&mlx_data);
-// 	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.map_img->img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
+// 	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.map_img.img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
 // 	//show_map_data(map_data);
 // 	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
 // 	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
@@ -134,9 +134,8 @@ void init_window(t_mlx_data *data){
 
 	data->mlx_ptr = mlx_init();
 	data->window = mlx_new_window(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3D");
-	data->map_img = malloc(sizeof(t_img));
-	data->map_img->img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH * SCALE ,WINDOW_HEIGHT * SCALE);
-	data->map_img->addr = mlx_get_data_addr(data->map_img->img, &data->map_img->bits_per_pixel, &data->map_img->line_size, &data->map_img->endian);
+	data->map_img.img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH * SCALE ,WINDOW_HEIGHT * SCALE);
+	data->map_img.addr = mlx_get_data_addr(data->map_img.img, &data->map_img.bits_per_pixel, &data->map_img.line_size, &data->map_img.endian);
 	data->main_img.img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->main_img.addr = mlx_get_data_addr(data->main_img.img, &data->main_img.bits_per_pixel, &data->main_img.line_size, &data->main_img.endian);
 }
@@ -147,7 +146,7 @@ void rotate_player(t_mlx_data *data) {
 	ft_render(data);
 }
 
-bool map_has_wall_at(float x, float y) {
+bool map_has_wall_at(t_mlx_data *data, float x, float y) {
 	int x_index;
 	int y_index;
 
@@ -169,7 +168,7 @@ void move_player(t_mlx_data *data) {
 	new_x = data->player.x + cos(data->player.rotation_angle) * move_step;
 	new_y = data->player.y + sin(data->player.rotation_angle) * move_step;
 	
-	if (!map_has_wall_at(new_x, new_y))
+	if (!map_has_wall_at(data, new_x, new_y))
 	{
 		update(data);
 		data->player.x = new_x;
@@ -223,7 +222,7 @@ void draw_rectangle(t_mlx_data *data, float start_x, float start_y, int flag, in
 			if (flag == MAIN_MAP)
 				my_mlx_pixel_put(&data->main_img, j, i, color);
 			else
-				my_mlx_pixel_put(data->map_img, j, i, color);
+				my_mlx_pixel_put(&data->map_img, j, i, color);
 			i++;
 		}
 		j++;
@@ -246,7 +245,7 @@ void setup(t_mlx_data *data) {
 	data->player.rotation_angle = PI / 2;
 }
 
-void render_rays(t_mlx_data *data)  {
+void render_rays(t_mlx_data *data, int flag)  {
 	for (int i = 0; i < NUM_RAYS; i++) {
 		ddaline(
 			SCALE * data->player.x,
@@ -254,6 +253,7 @@ void render_rays(t_mlx_data *data)  {
 			SCALE * data->rays[i].wall_hit_x,
 			SCALE * data->rays[i].wall_hit_y,
 			data,
+			flag,
 			0xFF0000
 		);
 	}
@@ -302,6 +302,7 @@ void render_player(t_mlx_data *data) {
 		SCALE * (data->player.x + cos(data->player.rotation_angle) * 40),
 		SCALE * (data->player.y + sin(data->player.rotation_angle) * 40),
 		data,
+		MINI_MAP,
 		0xFF0000
 	);
 }
@@ -360,7 +361,7 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
         float xToCheck = nextHorzTouchX;
         float yToCheck = nextHorzTouchY + (isRayFacingUp ? -1 : 0);
         
-        if (map_has_wall_at(xToCheck, yToCheck)) {
+        if (map_has_wall_at(data, xToCheck, yToCheck)) {
             // found a wall hit
             horzWallHitX = nextHorzTouchX;
             horzWallHitY = nextHorzTouchY;
@@ -403,7 +404,7 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
         float xToCheck = nextVertTouchX + (isRayFacingLeft ? -1 : 0);
         float yToCheck = nextVertTouchY;
         
-        if (map_has_wall_at(xToCheck, yToCheck)) {
+        if (map_has_wall_at(data, xToCheck, yToCheck)) {
             // found a wall hit
             vertWallHitX = nextVertTouchX;
             vertWallHitY = nextVertTouchY;
@@ -468,7 +469,7 @@ void generate_3d_projection(t_mlx_data *data) {
 	int		y;
 	int ofsetx;
 
-	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./Flag_of_Morocco.xpm", &x, &y);
+	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./hjrifi.xpm", &x, &y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_size, &img.endian);
 	for (int i = 0; i < NUM_RAYS; i++) {
 		float prep_distance = data->rays[i].distance * cos(data->rays[i].ray_angle - data->player.rotation_angle) ;
@@ -489,7 +490,7 @@ void generate_3d_projection(t_mlx_data *data) {
 			ofsetx = (int)data->rays[i].wall_hit_x % TILE_SIZE;
 		for (int j = wall_top_pixel; j < wall_bottom_pixel; j++) {
 				char	*dst;
-				int  ofsety = (j - wall_top_pixel) * ((float)64 / wall_strip_height);
+				int  ofsety = (j - wall_top_pixel) * ((float)y / wall_strip_height);
 
 				dst = data->main_img.addr + (j * data->main_img.line_size + i * (data->main_img.bits_per_pixel / 8));
 				unsigned int e = *(unsigned int*)(img.addr + img.line_size * ofsety + ofsetx * (img.bits_per_pixel / 8));
@@ -517,16 +518,30 @@ void ft_render(t_mlx_data *data)
 {
 	// render everything
 	// clear the color buffer
+	// get_player_pos(data);
 	cast_all_rays(data);
-	// render_map(data);
-	// render_rays(data);
-	// render_player(data);
+	render_map(data);
+	render_rays(data, MINI_MAP);
+	render_player(data);
 	render_ceiling_and_floor(data);
 	generate_3d_projection(data);
-	mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img->img, 0, 0);
 	mlx_put_image_to_window(data->mlx_ptr, data->window, data->main_img.img, 0, 0);
+	mlx_put_image_to_window(data->mlx_ptr, data->window, data->map_img.img, 0, 0);
 }
 
+void get_player_pos(t_mlx_data *data) {
+	for (int i = 0; i < WINDOW_HEIGHT; i++) {
+		for (int j = 0; j < WINDOW_WIDTH; j++) {
+			if (data->map_data.map[i][j] == 'N' || data->map_data.map[i][j] == 'W'
+				|| data->map_data.map[i][j] == 'S' || data->map_data.map[i][j] == 'E') {
+				data->player.x = j * 8;
+				data->player.y = i * 8;
+				data->player.rotation_angle = get_player_dir(data->map_data.map[i][j]);
+				return ;
+			}
+		}
+	}
+}
 int reset(int keycode, t_mlx_data *data) {
 	if (keycode == UP) {
 		// move player forward
@@ -552,6 +567,8 @@ void update(t_mlx_data *data) {
 	mlx_clear_window(data->mlx_ptr, data->window);
 	data->main_img.img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->main_img.addr = mlx_get_data_addr(data->main_img.img, &data->main_img.bits_per_pixel, &data->main_img.line_size, &data->main_img.endian);
+	data->map_img.img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH * SCALE, WINDOW_HEIGHT * SCALE);
+	data->map_img.addr = mlx_get_data_addr(data->map_img.img, &data->map_img.bits_per_pixel, &data->map_img.line_size, &data->map_img.endian);
 	// cast_all_rays(data);
 }
 
