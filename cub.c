@@ -463,6 +463,13 @@ void clear_color_buffer(t_mlx_data *data, uint32_t color) {
 }
 
 void generate_3d_projection(t_mlx_data *data) {
+	t_img img;
+	int		x;
+	int		y;
+	int ofsetx;
+
+	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./Flag_of_Morocco.xpm", &x, &y);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_size, &img.endian);
 	for (int i = 0; i < NUM_RAYS; i++) {
 		float prep_distance = data->rays[i].distance * cos(data->rays[i].ray_angle - data->player.rotation_angle) ;
 		float distance_proj_plan = (WINDOW_WIDTH / 2) / tan(FOV / 2);
@@ -476,11 +483,17 @@ void generate_3d_projection(t_mlx_data *data) {
 		if (wall_bottom_pixel > WINDOW_HEIGHT)  {
 			wall_bottom_pixel = WINDOW_HEIGHT;
 		}
+		if (data->rays[i].was_hit_vertical)
+			ofsetx = (int)data->rays[i].wall_hit_y % TILE_SIZE;
+		else
+			ofsetx = (int)data->rays[i].wall_hit_x % TILE_SIZE;
 		for (int j = wall_top_pixel; j < wall_bottom_pixel; j++) {
-			if (data->rays[i].was_hit_vertical)
-				my_mlx_pixel_put(&data->main_img, i, j, 0xFFFFFF);
-			else
-				my_mlx_pixel_put(&data->main_img, i, j, 0xFFCCCC);
+				char	*dst;
+				int  ofsety = (j - wall_top_pixel) * ((float)64 / wall_strip_height);
+
+				dst = data->main_img.addr + (j * data->main_img.line_size + i * (data->main_img.bits_per_pixel / 8));
+				unsigned int e = *(unsigned int*)(img.addr + img.line_size * ofsety + ofsetx * (img.bits_per_pixel / 8));
+				*(unsigned int*)dst =  e;
 		}
 	}
 
