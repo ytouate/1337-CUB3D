@@ -455,12 +455,12 @@ void generate_3d_projection(t_mlx_data *data) {
 	int		y;
 	int ofsetx;
 
-	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./hjrifi.xpm", &x, &y);
-	south.img = mlx_xpm_file_to_image(data->mlx_ptr, "./texture.xpm", &x, &y);
+	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/wood.xpm", &x, &y);
+	south.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/colorstone", &x, &y);
 	south.addr = mlx_get_data_addr(south.img, &south.bits_per_pixel, &south.line_size, &south.endian);
-	oust.img = mlx_xpm_file_to_image(data->mlx_ptr, "./download.xpm", &x, &y);
+	oust.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/redbrick.xpm", &x, &y);
 	oust.addr =  mlx_get_data_addr(oust.img, &oust.bits_per_pixel, &oust.line_size, &oust.endian);
-	est.img = mlx_xpm_file_to_image(data->mlx_ptr, "./Flag_of_Morocco.xpm", &x, &y);
+	est.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/greystone.xpm", &x, &y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_size, &img.endian);
 	est.addr = mlx_get_data_addr(est.img, &est.bits_per_pixel, &est.line_size, &est.endian);
 	for (int i = 0; i < NUM_RAYS; i++) {
@@ -480,6 +480,15 @@ void generate_3d_projection(t_mlx_data *data) {
 			ofsetx = (int)data->rays[i].wall_hit_y % TILE_SIZE;
 		else
 			ofsetx = (int)data->rays[i].wall_hit_x % TILE_SIZE;
+		int flag;
+		if (!(data->rays[i].was_hit_vertical) && data->rays[i].is_ray_facing_up)
+			flag = 0;
+		else if (data->rays[i].was_hit_vertical && data->rays[i].is_ray_facing_left)
+			flag = 1;
+		else if (data->rays[i].is_ray_facing_right && data->rays[i].was_hit_vertical)
+			flag = 2;
+		else 
+			flag = 3;
 		for (int j = wall_top_pixel; j < wall_bottom_pixel; j++) {
 				char	*dst;
 				int		e;
@@ -487,29 +496,28 @@ void generate_3d_projection(t_mlx_data *data) {
 				int  ofsety =distance * ((float)y / wall_strip_height);
 
 				dst = data->main_img.addr + (j * data->main_img.line_size + i * (data->main_img.bits_per_pixel / 8));
-				if (data->rays[i].ray_angle > 5.49779  || data->rays[i].ray_angle <= 0.785398)
+				if (flag == 0)
 				{
 					e = *(int*)(img.addr + img.line_size * ofsety + ofsetx * (img.bits_per_pixel / 8));
 					*(int*)dst =  e;
 				}
-				else if (data->rays[i].ray_angle > 0.785398 && data->rays[i].ray_angle <= 2.35619)
+				else if (flag == 1)
 				{
 					e = *(int*)(est.addr + est.line_size * ofsety + ofsetx * (est.bits_per_pixel / 8));
 					*(int*)dst =  e;
 				}
-				else if (data->rays[i].ray_angle >  2.35619 && data->rays[i].ray_angle <= 3.92699)
+				else if (flag == 2)
 				{
 					e = *(int*)(south.addr + south.line_size * ofsety + ofsetx * (south.bits_per_pixel / 8));
 					*(int*)dst = e;
 				}
-				else
+				else if (flag == 3)
 				{
 					e = *(int*)(oust.addr + oust.line_size * ofsety + ofsetx * (oust.bits_per_pixel / 8));
 					*(int*)dst = e;
 				}
 		}
 	}
-
 }
 
 int	create_rgb(int r, int g, int b)
