@@ -448,12 +448,21 @@ void clear_color_buffer(t_mlx_data *data, uint32_t color) {
 
 void generate_3d_projection(t_mlx_data *data) {
 	t_img img;
+	t_img est;
+	t_img south;
+	t_img oust;
 	int		x;
 	int		y;
 	int ofsetx;
 
 	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./hjrifi.xpm", &x, &y);
+	south.img = mlx_xpm_file_to_image(data->mlx_ptr, "./texture.xpm", &x, &y);
+	south.addr = mlx_get_data_addr(south.img, &south.bits_per_pixel, &south.line_size, &south.endian);
+	oust.img = mlx_xpm_file_to_image(data->mlx_ptr, "./download.xpm", &x, &y);
+	oust.addr =  mlx_get_data_addr(oust.img, &oust.bits_per_pixel, &oust.line_size, &oust.endian);
+	est.img = mlx_xpm_file_to_image(data->mlx_ptr, "./Flag_of_Morocco.xpm", &x, &y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_size, &img.endian);
+	est.addr = mlx_get_data_addr(est.img, &est.bits_per_pixel, &est.line_size, &est.endian);
 	for (int i = 0; i < NUM_RAYS; i++) {
 		float prep_distance = data->rays[i].distance * cos(data->rays[i].ray_angle - data->player.rotation_angle) ;
 		float distance_proj_plan = (WINDOW_WIDTH / 2) / tan(FOV / 2);
@@ -473,12 +482,31 @@ void generate_3d_projection(t_mlx_data *data) {
 			ofsetx = (int)data->rays[i].wall_hit_x % TILE_SIZE;
 		for (int j = wall_top_pixel; j < wall_bottom_pixel; j++) {
 				char	*dst;
+				int		e;
 				int distance = j + (wall_strip_height / 2) - (WINDOW_HEIGHT / 2);
 				int  ofsety =distance * ((float)y / wall_strip_height);
 
 				dst = data->main_img.addr + (j * data->main_img.line_size + i * (data->main_img.bits_per_pixel / 8));
-				unsigned int e = *(unsigned int*)(img.addr + img.line_size * ofsety + ofsetx * (img.bits_per_pixel / 8));
-				*(unsigned int*)dst =  e;
+				if (data->rays[i].ray_angle > 5.49779  || data->rays[i].ray_angle <= 0.785398)
+				{
+					e = *(int*)(img.addr + img.line_size * ofsety + ofsetx * (img.bits_per_pixel / 8));
+					*(int*)dst =  e;
+				}
+				else if (data->rays[i].ray_angle > 0.785398 && data->rays[i].ray_angle <= 2.35619)
+				{
+					e = *(int*)(est.addr + est.line_size * ofsety + ofsetx * (est.bits_per_pixel / 8));
+					*(int*)dst =  e;
+				}
+				else if (data->rays[i].ray_angle >  2.35619 && data->rays[i].ray_angle <= 3.92699)
+				{
+					e = *(int*)(south.addr + south.line_size * ofsety + ofsetx * (south.bits_per_pixel / 8));
+					*(int*)dst = e;
+				}
+				else
+				{
+					e = *(int*)(oust.addr + oust.line_size * ofsety + ofsetx * (oust.bits_per_pixel / 8));
+					*(int*)dst = e;
+				}
 		}
 	}
 
