@@ -352,7 +352,6 @@ char **convert_file_to_grid(t_mlx_data *data)
 	grid = malloc(sizeof(char *) * data->map_data.map_lines + 1);
 	if (!grid)
 		ft_error(2, "Malloc failed map-parse\n");
-	printf("%d \n", data->map_data.map_lines);
 	while (i < data->map_data.map_lines)
 	{
 		char *temp = get_next_line(map_fd);

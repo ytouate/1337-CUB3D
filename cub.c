@@ -120,10 +120,10 @@ const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+    {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1},
+    {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -164,7 +164,7 @@ void move_player(t_mlx_data *data) {
 	float move_step;
 
 	
-	move_step = data->player.walk_direction * 16;
+	move_step = data->player.walk_direction * 12;
 	new_x = data->player.x + cos(data->player.rotation_angle) * move_step;
 	new_y = data->player.y + sin(data->player.rotation_angle) * move_step;
 	
@@ -179,33 +179,16 @@ void move_player(t_mlx_data *data) {
 }
 
 int process_input(int keycode, t_mlx_data *data) {
-	
-	
-	if (keycode == ESC) {
+	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
-	}
-	else if (keycode == UP) {
-		// move player forward
+	else if (keycode == UP)
 		data->player.walk_direction = +1;
-		move_player(data);
-	}
-	else if (keycode == BOTTOM) {
-		// move player backward
+	else if (keycode == BOTTOM)
 		data->player.walk_direction = -1;
-		move_player(data);
-	}
-	else if (keycode == LEFT) {
-		// turn the player left
+	else if (keycode == A_KEY)
 		data->player.turn_direction = -1;
-		// move_player(data);
-		rotate_player(data);
-	}
-	else if (keycode == RIGHT) {
-		// turn the player right
+	else if (keycode == D_KEY)
 		data->player.turn_direction = +1;
-		// move_player(data);
-		rotate_player(data);
-	}
 	return (0);
 }
 
@@ -227,7 +210,6 @@ void draw_rectangle(t_mlx_data *data, float start_x, float start_y, int flag, in
 		}
 		j++;
 	}
-	// mlx_put_image_to_window(data->mlx_ptr, data->window, data->main_img.img, 0, 0);
 }
 
 void setup(t_mlx_data *data) {
@@ -408,6 +390,7 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
             // found a wall hit
             vertWallHitX = nextVertTouchX;
             vertWallHitY = nextVertTouchY;
+
             vertWallContent = map[(int)floor(yToCheck / TILE_SIZE)][(int)floor(xToCheck / TILE_SIZE)];
             foundVertWallHit = true;
             break;
@@ -469,7 +452,7 @@ void generate_3d_projection(t_mlx_data *data) {
 	int		y;
 	int ofsetx;
 
-	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./texture.xpm", &x, &y);
+	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./hjrifi.xpm", &x, &y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_size, &img.endian);
 	for (int i = 0; i < NUM_RAYS; i++) {
 		float prep_distance = data->rays[i].distance * cos(data->rays[i].ray_angle - data->player.rotation_angle) ;
@@ -490,7 +473,8 @@ void generate_3d_projection(t_mlx_data *data) {
 			ofsetx = (int)data->rays[i].wall_hit_x % TILE_SIZE;
 		for (int j = wall_top_pixel; j < wall_bottom_pixel; j++) {
 				char	*dst;
-				int  ofsety = (j - wall_top_pixel) * ((float)y / wall_strip_height);
+				int distance = j + (wall_strip_height / 2) - (WINDOW_HEIGHT / 2);
+				int  ofsety =distance * ((float)y / wall_strip_height);
 
 				dst = data->main_img.addr + (j * data->main_img.line_size + i * (data->main_img.bits_per_pixel / 8));
 				unsigned int e = *(unsigned int*)(img.addr + img.line_size * ofsety + ofsetx * (img.bits_per_pixel / 8));
@@ -551,6 +535,7 @@ void get_player_pos(t_mlx_data *data) {
 		}
 	}
 }
+
 int reset(int keycode, t_mlx_data *data) {
 	if (keycode == UP) {
 		// move player forward
@@ -560,15 +545,14 @@ int reset(int keycode, t_mlx_data *data) {
 		// move player backward
 		data->player.walk_direction = 0;
 	}
-	else if (keycode == LEFT) {
+	else if (keycode == A_KEY) {
 		// turn the player left
 		data->player.turn_direction = 0;
 	}
-	else if (keycode == RIGHT) {
+	else if (keycode == D_KEY) {
 		// turn the player right
 		data->player.turn_direction = 0;
 	}
-	process_input(keycode, data);
 	return (0);
 }
 
@@ -585,12 +569,19 @@ void update(t_mlx_data *data) {
 void map_setup(t_mlx_data *data)
 {
 	fill_map(data);
+	// check_all_the_map(data->map_data);
 }
 int handle_keys(t_mlx_data *data) {
-	mlx_hook(data->window, KEYPRESS, KEYPRESSMASK, process_input, data);
-	mlx_hook(data->window, KEYRELEASE, KEYRELEASEMASK, reset, data);
+	
+	if (data->player.walk_direction == 1 || data->player.walk_direction == -1) {
+		move_player(data);
+	}
+	if (data->player.turn_direction == 1 || data->player.turn_direction == -1){
+		rotate_player(data);
+	}
 	return (0);
 }
+
 int main(int ac, char **av) {
 
 	t_mlx_data data;
@@ -601,6 +592,9 @@ int main(int ac, char **av) {
 	data.map_data.map_name = av[1];
 	map_setup(&data);
 	ft_render(&data);
+	mlx_hook(data.window, 17, 0, ft_close, &data);
+	mlx_hook(data.window, KEYPRESS, KEYPRESSMASK, process_input, &data);
+	mlx_hook(data.window, KEYRELEASE, KEYRELEASEMASK, reset, &data);
 	mlx_loop_hook(data.mlx_ptr, handle_keys, &data);
 	mlx_loop(data.mlx_ptr);
 }
