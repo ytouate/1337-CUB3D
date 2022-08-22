@@ -48,17 +48,13 @@
 # define KEYRELEASEMASK 2L
 
 # define TILE_SIZE 64
-# define MAP_NUM_ROWS 13
-# define MAP_NUM_COLS 20
 
-# define WINDOW_WIDTH (MAP_NUM_COLS * TILE_SIZE)
-# define WINDOW_HEIGHT (MAP_NUM_ROWS * TILE_SIZE)
 
+# define MOVE_STEP 8
+# define TURN_SPEED 0.05
 # define FOV 60 * (PI / 180)
 # define HALF_FOV FOV / 2
 
-# define NUM_RAYS WINDOW_WIDTH
-# define STEP_ANGLE FOV / NUM_RAYS
 # define SCALE 0.2
 
 typedef struct s_vector
@@ -110,7 +106,8 @@ typedef struct img_data{
 	char		*addr;
 	char		*addr_map;
 	int			endian;
-	int			bits_per_pixel;	
+	int			bits_per_pixel;
+
 	int			line_size;
 }t_img;
 
@@ -119,8 +116,10 @@ typedef struct mlx_data {
 	t_map_data	map_data;
 	t_img		main_img;
 	t_img		map_img;
-	t_rays		rays[NUM_RAYS];
-	uint32_t *color_buffer;
+	t_rays		*rays;
+	int			tile_size;
+	int			window_width;
+	int			window_height;
 	int			square_height;
 	int			square_width;
 	void		*mlx_ptr;
@@ -160,7 +159,6 @@ bool	got_overflowed(int *rgb);
 int		check_file_extention(char *file);
 bool	is_valid_line(char *line);
 void init_map_data(t_mlx_data *data);
-void	check_all_the_map(t_map_data map_data);
 void	call_check_zeros(t_fix_map *map, int len);
 void	check_the_zeros(t_fix_map *map, int i, int j, int len);
 void render(t_mlx_data *data);
@@ -196,4 +194,5 @@ void render_player(t_mlx_data *data);
 void ft_render(t_mlx_data *data);
 void update(t_mlx_data *data);
 void get_player_pos(t_mlx_data *data);
+void	check_all_the_map(t_map_data *map_data);
 #endif

@@ -76,21 +76,21 @@ void	call_check_zeros(t_fix_map *map, int len)
 }
 
 //this function for fill the map with lens
-void	check_all_the_map(t_map_data map_data)
+void	check_all_the_map(t_map_data *map_data)
 {
 	t_fix_map	*map_with_len;
-	map_data.longest_line = 0;
+	map_data->longest_line = 0;
 	int			i;
 
 	i = 0;
-	map_with_len = malloc(sizeof(t_fix_map) * map_data.map_lines);
-	while (map_data.map[i])
+	map_with_len = malloc(sizeof(t_fix_map) * map_data->map_lines);
+	while (map_data->map[i])
 	{
-		map_with_len[i].len = ft_strlen(map_data.map[i]);
-		if (map_with_len[i].len > map_data.longest_line)
-			map_data.longest_line = map_with_len[i].len;
-		map_with_len[i].line_of_map = map_data.map[i];
+		map_with_len[i].len = ft_strlen(map_data->map[i]);
+		if (map_with_len[i].len > map_data->longest_line)
+			map_data->longest_line = map_with_len[i].len;
+		map_with_len[i].line_of_map = map_data->map[i];
 		i++;
 	}
-	call_check_zeros(map_with_len, map_data.map_lines);
+	call_check_zeros(map_with_len, map_data->map_lines);
 }

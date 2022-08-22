@@ -15,8 +15,6 @@
 void init(t_mlx_data *data)
 {
 	map_data_constructor(&data->map_data);
-	data->player.x = WINDOW_WIDTH / 2;
-	data->player.y = WINDOW_HEIGHT / 2;
 	data->mlx_ptr = mlx_init();
 	if (data->mlx_ptr == NULL)
 		ft_error(FUNCTION_FAILED, "mlx_init() FAILED \n");
