@@ -50,8 +50,8 @@
 # define TILE_SIZE 64
 
 
-# define MOVE_STEP 8
-# define TURN_SPEED 0.05
+# define MOVE_STEP 12
+# define TURN_SPEED 0.1
 # define FOV 60 * (PI / 180)
 # define HALF_FOV FOV / 2
 

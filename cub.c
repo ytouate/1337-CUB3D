@@ -126,15 +126,19 @@ void rotate_player(t_mlx_data *data) {
 	ft_render(data);
 }
 
-bool map_has_wall_at(t_mlx_data *data, float x, float y) {
+int map_has_wall_at(t_mlx_data *data, float x, float y) {
 	int x_index;
 	int y_index;
-
 	if (x < 0 || x > data->window_width || y < 0 ||  y > data->window_height) {
 		return (true);
 	}
 	x_index = floor(x / TILE_SIZE);
 	y_index = floor(y / TILE_SIZE);
+	if (y_index < 0 ||  y_index >= data->map_data.map_lines)
+		return (true);
+	if (data->map_data.map[y_index] && (x_index < 0 ||  x_index > (int)ft_strlen(data->map_data.map[y_index])))
+		return (true);
+
 	return (data->map_data.map[y_index][x_index] == '1');
 }
 
@@ -227,7 +231,7 @@ void render_map(t_mlx_data *data)  {
 	while (data->map_data.map[i]){
 		x = 0;
 		j = 0;
-		while (j < ft_strlen(data->map_data.map[i]))
+		while (j < (int)ft_strlen(data->map_data.map[i]))
 		{
 			if (data->map_data.map[i][j] == '1')
 			{
@@ -325,13 +329,27 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
     while (nextHorzTouchX >= 0 && nextHorzTouchX <= data->window_width && nextHorzTouchY >= 0 && nextHorzTouchY <= data->window_height) {
         float xToCheck = nextHorzTouchX;
         float yToCheck = nextHorzTouchY + (isRayFacingUp ? -1 : 0);
-        
+		int flag = 0;
         if (map_has_wall_at(data, xToCheck, yToCheck)) {
             // found a wall hit
             horzWallHitX = nextHorzTouchX;
             horzWallHitY = nextHorzTouchY;
-            horzWallContent = data->map_data.map[(int)floor(yToCheck / TILE_SIZE)][(int)floor(xToCheck / TILE_SIZE)];
-            foundHorzWallHit = true;
+			int temp_x = floor(yToCheck / TILE_SIZE);
+			int temp_y = floor(xToCheck / TILE_SIZE);
+			if (temp_y >= data->map_data.map_lines || temp_y < 0)
+				flag = 1;
+			else if (temp_x < 0 || temp_x >= (int)ft_strlen(data->map_data.map[temp_y]))
+				flag = 1;
+			if (flag)
+			{
+				horzWallContent = '1';
+				foundHorzWallHit = true;
+			}
+			else {
+				horzWallContent = data->map_data.map[temp_y][temp_x];
+            	foundHorzWallHit = true;
+			}
+            
             break;
         } else {
             nextHorzTouchX += xstep;
@@ -538,7 +556,7 @@ void ft_render(t_mlx_data *data)
 
 void get_player_pos(t_mlx_data *data) {
 	for (int i = 0; data->map_data.map[i]; i++) {
-		for (int j = 0; j < ft_strlen(data->map_data.map[i]); j++) {
+		for (int j = 0; j < (int)ft_strlen(data->map_data.map[i]); j++) {
 			if (data->map_data.map[i][j] == 'N' || data->map_data.map[i][j] == 'W'
 				|| data->map_data.map[i][j] == 'S' || data->map_data.map[i][j] == 'E') {
 				data->player.x = j * TILE_SIZE;
@@ -590,6 +608,7 @@ int handle_keys(t_mlx_data *data) {
 
 int mouse_hook(int button, int x, int y, t_mlx_data *data) {
 
+	(void)data;
 	printf("%d\n", button);
 	printf("%d\n", x);
 	printf("%d\n", y);

@@ -14,7 +14,7 @@ NAME = cub3D
 
 CC = gcc -fsanitize=address -g
 
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 FILES = \
 	./cub.c									\
