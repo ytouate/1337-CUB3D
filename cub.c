@@ -180,7 +180,7 @@ void draw_rectangle(t_mlx_data *data, float start_x, float start_y, int flag, in
 
 	j = start_x;
 	i = start_y;
-	while (j < start_x + width )
+	while (j < start_x + width)
 	{
 		i = start_y;
 		while (i < start_y + height) {
@@ -389,11 +389,25 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
         
         if (map_has_wall_at(data, xToCheck, yToCheck)) {
             // found a wall hit
+			int flag = 0;
             vertWallHitX = nextVertTouchX;
             vertWallHitY = nextVertTouchY;
-
-            vertWallContent = data->map_data.map[(int)floor(yToCheck / TILE_SIZE)][(int)floor(xToCheck / TILE_SIZE)];
-            foundVertWallHit = true;
+			int temp_x = floor(yToCheck / TILE_SIZE);
+			int temp_y = floor(xToCheck / TILE_SIZE);
+			if (temp_y >= data->map_data.map_lines || temp_y < 0)
+				flag = 1;
+			else if (temp_x < 0 || temp_x > (int)ft_strlen(data->map_data.map[temp_y]))
+				flag = 1;
+			if (flag)
+			{
+				vertWallContent = '1';
+            	foundVertWallHit = true;
+			}
+			else {
+				vertWallContent = data->map_data.map[temp_y][temp_x];
+            	foundVertWallHit = true;
+			}
+            
             break;
         } else {
             nextVertTouchX += xstep;
@@ -541,9 +555,6 @@ void render_ceiling_and_floor(t_mlx_data *data) {
 }
 void ft_render(t_mlx_data *data) 
 {
-	// render everything
-	// clear the color buffer
-	// get_player_pos(data);
 	cast_all_rays(data);
 	render_map(data);
 	render_rays(data, MINI_MAP);
