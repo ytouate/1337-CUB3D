@@ -80,7 +80,7 @@ int	ft_strchr_gnl(const char *s, int c)
 	return (0);
 }
 
-int	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
