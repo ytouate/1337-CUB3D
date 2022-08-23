@@ -54,6 +54,3 @@ re: fclean all
 
 run:
 	./cub3D a.cub
-
-libft:
-	cd Libft && make && cd ..

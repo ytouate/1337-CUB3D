@@ -13,8 +13,8 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#include "../Libft/libft.h"
-#define BUFFER_SIZE 1
+# include "../Libft/libft.h"
+# define BUFFER_SIZE 1
 # include<stdio.h> 
 # include <fcntl.h> 
 # include <stdlib.h>

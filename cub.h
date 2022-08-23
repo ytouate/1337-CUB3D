@@ -82,14 +82,13 @@ typedef struct s_player {
 	float	y;
 	float	width;
 	float	height;
-	int		turn_direction; // -1 for left +1 for right;
-	int		walk_direction; // -1 for back, +1 for fron
+	int		turn_direction;
+	int		walk_direction;
 	float	rotation_angle;
-	
 }t_player;
 
 typedef struct map_data {
-	char 	**map;
+	char	**map;
 	char	*map_name;
 	int		map_lines;
 	char	*north_texture;
@@ -100,6 +99,15 @@ typedef struct map_data {
 	int		floor_color[3];
 	int		ceilling_color[3];
 }t_map_data;
+
+typedef struct s_square
+{
+	float	start_x;
+	float	start_y;
+	int		color;
+	int		width;
+	int		height;
+}t_square;
 
 typedef struct img_data{
 	void		*img;
