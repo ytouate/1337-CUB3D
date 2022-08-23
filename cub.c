@@ -338,7 +338,7 @@ void cast_ray(t_mlx_data *data, float rayAngle, int stripId) {
 			int temp_y = floor(xToCheck / TILE_SIZE);
 			if (temp_y >= data->map_data.map_lines || temp_y < 0)
 				flag = 1;
-			else if (temp_x < 0 || temp_x >= (int)ft_strlen(data->map_data.map[temp_y]))
+			else if (temp_x < 0 || temp_x > (int)ft_strlen(data->map_data.map[temp_y]))
 				flag = 1;
 			if (flag)
 			{
@@ -570,8 +570,8 @@ void get_player_pos(t_mlx_data *data) {
 		for (int j = 0; j < (int)ft_strlen(data->map_data.map[i]); j++) {
 			if (data->map_data.map[i][j] == 'N' || data->map_data.map[i][j] == 'W'
 				|| data->map_data.map[i][j] == 'S' || data->map_data.map[i][j] == 'E') {
-				data->player.x = j * TILE_SIZE;
-				data->player.y = i * TILE_SIZE;
+				data->player.x = j * TILE_SIZE + 1;
+				data->player.y = i * TILE_SIZE + 1;
 				data->map_data.map[i][j] = '0';
 				data->player.rotation_angle = get_player_dir(data->map_data.map[i][j]);
 				return ;
