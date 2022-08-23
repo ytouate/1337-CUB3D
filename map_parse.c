@@ -69,13 +69,23 @@ void	count_commas(char *line)
 void	fill_rgb_array(char *line, int *arr)
 {
 	char **temp;
-	int spaces;
+	//int spaces;
 	int i;
+	char	*str;
 
+	temp = malloc(sizeof(char*));
+	i = 0;
+	str = ft_strdup(line + 1);
+	while (str[i] == ' ')
+		i++;
+	temp[0] = str;
+	str = ft_strdup(temp[0] + i);
+	free(temp[0]);
+	free(temp);
 	i = -1;
-	spaces = count_spaces(line);
-	count_commas(line);
-	temp = ft_split(line + spaces, ',');
+	//spaces = count_spaces(line);
+	count_commas(str);
+	temp = ft_split(str, ',');
 	if (temp[0] && temp[1] && temp[2])
 	{
 		if (is_number(temp[0]) && is_number(temp[1]) && is_number(temp[2]))
@@ -93,44 +103,97 @@ void	fill_rgb_array(char *line, int *arr)
 	else
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
 }
-//check if there a characters after space in line;
-void	check_line(char *line, int i)
-{
-	while (line[i])
-	{
-		if (line[i] != ' ')
-			ft_error(UNEXPECTED_FLOW, "INVALID MAP");
-		i++;
-	}
-}
+
 //fill the textures;
 char	*fill_the_path(char *line)
 {
 	int		i;
 	char	*s;
 	int		j;
+	char	*str;
 
-	s = ft_strdup("");
+	i = 0;
+	str = ft_strdup(line + 2);
+	while (str[i] == ' ')
+		i++;
+	s = str;
+	str = ft_strdup(s + i);
+	free(s);
 	i = 0;
 	j = 0;
-	while (line[i])
+	while (str[i])
 	{
 		i++;
-		if (line[i] == ' ' && line[i - 1] != '\\')
+		if (str[i] == ' ' && str[i - 1] != '\\')
 			break ;
 	}
 	s = malloc(sizeof(char) * i + 1);
 	while (j < i)
 	{
-		s[j] = line[j];
+		s[j] = str[j];
 		j++;
 	}
+	free(str);
 	s[j] = '\0';
-	check_line(line, i);
 	return (s);
 }
 
+void	the_first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
+{
+	if (!ft_strncmp("NO ", line + spaces, 3))
+	{
+		check[0] += 1;
+		data->map_data.north_texture = fill_the_path(line + spaces);
+	}
+	else if (!ft_strncmp("SO ", line + spaces, 3))
+	{
+		check[1] += 1;
+		data->map_data.south_texture = fill_the_path(line + spaces);
+	}
+	else if (!ft_strncmp("WE ", line + spaces, 3))
+	{
+		check[2] += 1;
+		data->map_data.west_textrure = fill_the_path(line + spaces);
+	}
+}
+
+void	the_second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
+{
+	if (!ft_strncmp("EA ", line + spaces, 3))
+	{
+		check[3] += 1;
+		data->map_data.east_texture = fill_the_path(line + spaces);
+	}
+	else if (!ft_strncmp("F ", line + spaces, 2))
+	{
+		check[4] += 1;
+		fill_rgb_array(line + spaces, data->map_data.floor_color);
+	}
+	else if (!ft_strncmp("C ", line + spaces, 2))
+	{
+		check[5] += 1;
+		fill_rgb_array(line + spaces, data->map_data.ceilling_color);
+	}
+}
 // fill the first sex lines;
+int	check_the_array(int *check, int i)
+{
+	int j;
+
+	j = 0;
+	while (j < 6)
+	{
+		if (check[j] != 1)
+		{
+			free(check);
+			return (-1);
+		}
+		j++;
+	}
+	free(check);
+	return (i);
+}
+
 int	fill_map_data(char **grid, t_mlx_data *data)
 {
 	int	i;
@@ -146,47 +209,13 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 		if (is_valid_line(grid[i])){
 			line = ft_strtrim(grid[i], "\n\t");
 			spaces = count_spaces(line);
-			if (!ft_strncmp("NO ", line, 3))
+			if (ft_isalpha(line[spaces]))
 			{
-				check[0] += 1;
-				data->map_data.north_texture = fill_the_path(line + spaces);
-			}
-			else if (!ft_strncmp("SO ", line, 3))
-			{
-				check[1] += 1;
-				data->map_data.south_texture = fill_the_path(line + spaces);
-			}
-			else if (!ft_strncmp("WE ", line, 3))
-			{
-				check[2] += 1;
-				data->map_data.west_textrure = fill_the_path(line + spaces);
-			}
-			else if (!ft_strncmp("EA ", line, 3))
-			{
-				check[3] += 1;
-				data->map_data.east_texture = fill_the_path(line + spaces);
-			}
-			else if (!ft_strncmp("F ", line, 2))
-			{
-				check[4] += 1;
-				fill_rgb_array(line, data->map_data.floor_color);
-			}
-			else if (!ft_strncmp("C ", line, 2))
-			{
-				check[5] += 1;
-				fill_rgb_array(line, data->map_data.ceilling_color);
+				the_first_conditions(data, line, spaces, check);
+				the_second_conditions(data, line, spaces, check);
 			}
 			else
-			{
-				int j = 0;
-				while (j < 6)
-				{
-					if (check[j] != 1)
-						return (-1);
-					j++;
-				}
-				return (i);
-			}
+				return(check_the_array(check, i));
 		}
 		i++;
 	}
@@ -296,62 +325,19 @@ int count_spaces(char *line)
 {
 	int i;
 	i = 0;
-	while (line[i] && line[i] != ' ')
-		i++;
+
 	while (line[i] && (line[i] == ' ' || line[i] == '\n' || line[i] == '\t'))
 		i++;
 	return (i);
 }
 
-bool	get_texture_path(char *l, t_mlx_data *data)
+void	fill_the_grid_with_map_lines(char **grid, t_mlx_data *data, int map_fd)
 {
-	char *line;
-	int		in_between_spaces;
-
-	line = ft_strtrim(l, " \t");
-	in_between_spaces = count_spaces(line);
-	if (!ft_strncmp(line, "NO ", 3))
-	{
-		data->map_data.north_texture = ft_strdup(line + in_between_spaces);
-		return (true);
-	}
-	if (!ft_strncmp(line, "SO ", 3))
-	{
-		data->map_data.south_texture = ft_strdup(line + in_between_spaces);
-		return (true);
-	}
-	if (!ft_strncmp(line, "WE ", 3))
-	{
-		data->map_data.west_textrure = ft_strdup(line + in_between_spaces);
-		return (true);
-	}
-	if (!ft_strncmp(line, "EA ", 3))
-	{
-		data->map_data.east_texture = ft_strdup(line + in_between_spaces);
-		return (true);
-	}
-	// free(line);
-	if (get_map_rgb(line, data))
-		return (true);
-	return (false);
-}
-
-char **convert_file_to_grid(t_mlx_data *data)
-{
-	char	**grid;
 	int		i;
-	int		map_fd;
-	int		flag = 0;
+	int		flag;
 
 	i = 0;
-	data->map_data.map_lines = count_map_lines(data->map_data.map_name);
-	map_fd = open(data->map_data.map_name, O_RDONLY);
-	if (map_fd == -1)
-		ft_error(2, "open failed\n");
-	data->map_data.map_lines += 1;
-	grid = malloc(sizeof(char *) * data->map_data.map_lines + 1);
-	if (!grid)
-		ft_error(2, "Malloc failed map-parse\n");
+	flag = 0;
 	while (i < data->map_data.map_lines)
 	{
 		char *temp = get_next_line(map_fd);
@@ -366,6 +352,24 @@ char **convert_file_to_grid(t_mlx_data *data)
 		free(temp);
 	}
 	grid[i] = NULL;
+}
+
+char **convert_file_to_grid(t_mlx_data *data)
+{
+	char	**grid;
+	int		i;
+	int		map_fd;
+
+	i = 0;
+	data->map_data.map_lines = count_map_lines(data->map_data.map_name);
+	map_fd = open(data->map_data.map_name, O_RDONLY);
+	if (map_fd == -1)
+		ft_error(2, "open failed\n");
+	data->map_data.map_lines += 1;
+	grid = malloc(sizeof(char *) * data->map_data.map_lines + 1);
+	if (!grid)
+		ft_error(2, "Malloc failed map-parse\n");
+	fill_the_grid_with_map_lines(grid, data, map_fd);
 	close(map_fd);
 	return (grid);
 }

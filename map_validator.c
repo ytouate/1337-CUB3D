@@ -36,13 +36,13 @@ int	check_char(char c)
 void	check_the_zeros(t_fix_map *map, int i, int j, int len)
 {
 	if (i == 0 || j == 0 || i == len - 1 || j == map[i].len - 1)
-		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+		ft_error(6, "INVALID MAP\n");
 	if (j > map[i - 1].len || j > map[i + 1].len)
-		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+		ft_error(7, "INVALID MAP\n");
 	if (map[i].line_of_map[j + 1] == ' ' || map[i].line_of_map[j - 1] == ' ' )
-		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+		ft_error(8, "INVALID MAP\n");
 	if (map[i - 1].line_of_map[j] == ' ' || map[i + 1].line_of_map[j] == ' ' )
-		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+		ft_error(9, "INVALID MAP\n");
 }
 
 // checks if the map is surrounded by zeros;
@@ -58,11 +58,11 @@ void	call_check_zeros(t_fix_map *map, int len)
 	{
 		j = 0;
 		if (map[i].len == 0 && i < len - 1 && map[i + 1].len > 0)
-			ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+			ft_error(3, "INVALID MAP\n");
 		while (map[i].line_of_map[j])
 		{
 			if (check_char(map[i].line_of_map[j]) == 0)
-				ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+				ft_error(4, "INVALID MAP\n");
 			if (map[i].line_of_map[j] == '0' || ft_isalpha(map[i].line_of_map[j]))
 				check_the_zeros(map, i, j, len);
 			if (ft_isalpha(map[i].line_of_map[j]))
@@ -72,7 +72,7 @@ void	call_check_zeros(t_fix_map *map, int len)
 		i++;
 	}
 	if (flag != 1)
-		ft_error(UNEXPECTED_FLOW, "INVALID MAP\n");
+		ft_error(5, "INVALID MAP\n");
 }
 
 //this function for fill the map with lens
