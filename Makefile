@@ -12,7 +12,7 @@
 
 NAME = cub3D
 
-CC = gcc -fsanitize=address -g
+CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -30,7 +30,6 @@ FILES = \
 	./rendering_utils.c						\
 	./hooks.c								\
 	./init_functions.c						\
-	./raycasting.c
 
 O_FILES = $(FILES:.c=.o)
 
@@ -43,6 +42,7 @@ $(NAME): $(O_FILES)
 clean:
 	rm -f *.o
 	cd Libft && make clean && cd ..
+	cd get_next_line/ && rm -rf *.o
 
 fclean:
 	rm -f *.o

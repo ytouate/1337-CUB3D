@@ -14,7 +14,8 @@
 
 bool	is_valid_line(char *line)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	while (line[i])
 	{
@@ -33,21 +34,21 @@ void	skip_empty_lines(char **grid, int *n, int map_len)
 	while (grid[*n])
 	{
 		if (is_valid_line(grid[*n]))
-			return;
+			return ;
 		*n += 1;
 	}
 }
 
 // returns true if the file passed to it ends with .cub
-int		check_file_extention(char *file)
+int	check_file_extention(char *file)
 {
-	int last;
-	int len;
+	int	last;
+	int	len;
 
 	len = ft_strlen(file);
 	last = len - 1;
 	if (len > 4)
-		return (file[last] == 'b' && file[last - 1] == 'u' &&
-			file[last - 2] == 'c' && file[last - 3] == '.');
+		return (file[last] == 'b' && file[last - 1] == 'u'
+			&& file[last - 2] == 'c' && file[last - 3] == '.');
 	return (false);
 }

@@ -12,7 +12,7 @@
 
 #include "cub.h"
 
-void init(t_mlx_data *data)
+void	init(t_mlx_data *data)
 {
 	map_data_constructor(&data->map_data);
 	data->mlx_ptr = mlx_init();
@@ -23,17 +23,18 @@ void init(t_mlx_data *data)
 		ft_error(UNEXPECTED_FLOW, "Empty Map\n");
 }
 
-void init_map_data(t_mlx_data *data)
+void	init_map_data(t_mlx_data *data)
 {
-	int map_content_start;
-	char **temp_grid;
-	int i;
-	char *temp;
+	int		map_content_start;
+	char	**temp_grid;
+	int		i;
+	char	*temp;
 
 	i = 0;
 	temp_grid = convert_file_to_grid(data);
 	map_content_start = fill_map_data(temp_grid, data);
-	data->map_data.map = malloc(sizeof(char *) * data->map_data.map_lines - map_content_start + 1);
+	data->map_data.map = malloc(sizeof(char *) * data->map_data.map_lines
+			- map_content_start + 1);
 	while (temp_grid[map_content_start])
 	{
 		temp = ft_strtrim(temp_grid[map_content_start++], "\n");
@@ -56,4 +57,3 @@ void	map_data_constructor(t_map_data *map_data)
 	ft_memset(map_data->ceilling_color, -1, 3 * sizeof(int));
 	ft_memset(map_data->floor_color, -1, 3 * sizeof(int));
 }
-

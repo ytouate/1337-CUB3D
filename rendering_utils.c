@@ -10,8 +10,4 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub.h"
-
-// extern const int map[MAP_NUM_ROWS][MAP_NUM_COLS];
-
-
+#include "cub.h"
