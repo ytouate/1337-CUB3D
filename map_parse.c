@@ -10,10 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub.h"
+#include "cub.h"
 
+/* 
+	**checks if there is a map file-name
+	**in the av and checks if the file name is valid
+*/
 
-// checks if there is a map file-name in the av and checks if the file name is valid
 void	check_basic_requirements(int ac, char **av)
 {
 	if (ac != 2)
@@ -32,12 +35,12 @@ bool	check_map_identifiers(char *line)
 }
 
 // checks if all the string contains digits
-bool is_number(char *s)
+bool	is_number(char *s)
 {
-	int i;
+	int	i;
+	int	len;
+
 	i = 0;
-	int len;
-	
 	s = ft_strtrim(s, " ");
 	len = ft_strlen(s);
 	while (i < len)
@@ -51,41 +54,26 @@ bool is_number(char *s)
 //count the commas in rgb;
 void	count_commas(char *line)
 {
-	int i;
+	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
 	while (line[i])
 	{
-		if(line[i] == ',')
+		if (line[i] == ',')
 			j++;
 		i++;
 	}
 	if (j != 2)
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
 }
-// fills the rgb array and checks if the colors are valid;
-void	fill_rgb_array(char *line, int *arr)
-{
-	char **temp;
-	//int spaces;
-	int i;
-	char	*str;
 
-	temp = malloc(sizeof(char*));
-	i = 0;
-	str = ft_strdup(line + 1);
-	while (str[i] == ' ')
-		i++;
-	temp[0] = str;
-	str = ft_strdup(temp[0] + i);
-	free(temp[0]);
-	free(temp);
+void	convert_to_int(char **temp, int *arr)
+{
+	int		i;
+
 	i = -1;
-	//spaces = count_spaces(line);
-	count_commas(str);
-	temp = ft_split(str, ',');
 	if (temp[0] && temp[1] && temp[2])
 	{
 		if (is_number(temp[0]) && is_number(temp[1]) && is_number(temp[2]))
@@ -94,7 +82,7 @@ void	fill_rgb_array(char *line, int *arr)
 			arr[1] = ft_atoi(temp[1]);
 			arr[2] = ft_atoi(temp[2]);
 			while (++i < 3)
-				if (arr[i] > 255  || arr[i] < 0)
+				if (arr[i] > 255 || arr[i] < 0)
 					ft_error(UNEXPECTED_FLOW, "RGB OVERFLOW OR UNDERFLOW\n");
 		}
 		else
@@ -102,6 +90,43 @@ void	fill_rgb_array(char *line, int *arr)
 	}
 	else
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
+}
+// fills the rgb array and checks if the colors are valid;
+void	fill_rgb_array(char *line, int *arr)
+{
+	char	**temp;
+	int		i;
+	char	*str;
+
+	temp = malloc (sizeof(char *));
+	i = 0;
+	str = ft_strdup(line + 1);
+	while (str[i] == ' ')
+		i++;
+	temp[0] = str;
+	str = ft_strdup(temp[0] + i);
+	free(temp[0]);
+	free(temp);
+	count_commas(str);
+	temp = ft_split(str, ',');
+	convert_to_int(temp, arr);
+}
+
+char	*get_path(int i, char *str)
+{
+	char		*s;
+	int			j;
+
+	j = 0;
+	s = malloc(sizeof(char) * i + 1);
+	while (j < i)
+	{
+		s[j] = str[j];
+		j++;
+	}
+	free(str);
+	s[j] = '\0';
+	return (s);
 }
 
 //fill the textures;
@@ -127,18 +152,10 @@ char	*fill_the_path(char *line)
 		if (str[i] == ' ' && str[i - 1] != '\\')
 			break ;
 	}
-	s = malloc(sizeof(char) * i + 1);
-	while (j < i)
-	{
-		s[j] = str[j];
-		j++;
-	}
-	free(str);
-	s[j] = '\0';
-	return (s);
+	return (get_path(i, str));
 }
 
-void	the_first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
+void	first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 {
 	if (!ft_strncmp("NO ", line + spaces, 3))
 	{
@@ -157,7 +174,7 @@ void	the_first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 	}
 }
 
-void	the_second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
+void	second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 {
 	if (!ft_strncmp("EA ", line + spaces, 3))
 	{
@@ -175,10 +192,11 @@ void	the_second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 		fill_rgb_array(line + spaces, data->map_data.ceilling_color);
 	}
 }
+
 // fill the first sex lines;
 int	check_the_array(int *check, int i)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	while (j < 6)
@@ -196,9 +214,9 @@ int	check_the_array(int *check, int i)
 
 int	fill_map_data(char **grid, t_mlx_data *data)
 {
-	int	i;
-	char *line;
-	int spaces;
+	int		i;
+	char	*line;
+	int		spaces;
 	int		*check;
 
 	i = 0;
@@ -206,16 +224,17 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 	ft_memset(check, 0, sizeof(int) * 6);
 	while (grid[i])
 	{
-		if (is_valid_line(grid[i])){
+		if (is_valid_line(grid[i]))
+		{
 			line = ft_strtrim(grid[i], "\n\t");
 			spaces = count_spaces(line);
 			if (ft_isalpha(line[spaces]))
 			{
-				the_first_conditions(data, line, spaces, check);
-				the_second_conditions(data, line, spaces, check);
+				first_conditions(data, line, spaces, check);
+				second_conditions(data, line, spaces, check);
 			}
 			else
-				return(check_the_array(check, i));
+				return (check_the_array(check, i));
 		}
 		i++;
 	}
@@ -223,23 +242,25 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 }
 
 // fill the map_data from the file
-void fill_map(t_mlx_data *data)
+void	fill_map(t_mlx_data *data)
 {
-	char **temp_grid;
-	int	map_content_start;
-	int map_content_end;
-	int i;
+	char	**temp_grid;
+	int		map_content_start;
+	int		map_content_end;
+	int		i;
+	char	*temp;
 
 	temp_grid = convert_file_to_grid(data);
 	map_content_start = fill_map_data(temp_grid, data);
 	if (map_content_start == -1)
 		ft_error(UNEXPECTED_FLOW, "the elements are not valid\n");
 	map_content_end = data->map_data.map_lines;
-	data->map_data.map = malloc(sizeof(char *) * map_content_end - map_content_start + 1);
+	data->map_data.map = ft_calloc(sizeof(char *),
+			map_content_end - map_content_start + 1);
 	i = 0;
 	while (temp_grid[map_content_start])
 	{
-		char *temp = ft_strtrim(temp_grid[map_content_start++], "\n");
+		temp = ft_strtrim(temp_grid[map_content_start++], "\n");
 		data->map_data.map[i++] = ft_strdup(temp);
 		free(temp);
 	}
@@ -253,6 +274,7 @@ bool	got_overflowed(int *rgb)
 
 {
 	int	i;
+
 	i = 0;
 	while (i < 3)
 	{
@@ -263,48 +285,17 @@ bool	got_overflowed(int *rgb)
 	return (false);
 }
 
-bool	get_map_rgb(char *line, t_mlx_data *data)
-{
-	char	**color;
-	int		flag;
-
-	flag = 0;
-	if (!ft_strncmp(line, "F ", 2))
-	{
-		color = ft_split(line + 2, ',');
-		if (!(color[0] && color[1] && color[2]))
-			ft_error(1, "Invalid rgb format\n");
-		data->map_data.floor_color[0] = ft_atoi(color[0]);
-		data->map_data.floor_color[1] = ft_atoi(color[1]);
-		data->map_data.floor_color[2] = ft_atoi(color[2]);
-		flag += 1;
-		return true;
-	}
-	if (!ft_strncmp(line, "C ", 2))
-	{
-		color = ft_split(line + 2, ',');
-		if (!(color[0] && color[1] && color[2]))
-			ft_error(1, "Invalid rgb format\n");
-		data->map_data.ceilling_color[0] = ft_atoi(color[0]);
-		data->map_data.ceilling_color[1] = ft_atoi(color[1]);
-		data->map_data.ceilling_color[2] = ft_atoi(color[2]);
-		flag += 1;
-		return true;
-	}
-	return (false);
-}
-
 // skips the empty new lines at the top of the file
 // and counts the rest
-int count_map_lines(char *map_name)
+int		count_map_lines(char *map_name)
 {
-    int		count;
-    int		i;
-    int		map_fd;
+	int		count;
+	int		i;
+	int		map_fd;
 	char	*temp;
 
-    i = 0;
-    count = 0;
+	i = 0;
+	count = 0;
 	map_fd = open(map_name, O_RDONLY, 0644);
 	if (map_fd == -1)
 		ft_error(1, "Map not found\n");
@@ -312,7 +303,7 @@ int count_map_lines(char *map_name)
 	{
 		temp = get_next_line(map_fd);
 		if (temp == NULL)
-			break;
+			break ;
 		if (is_valid_line(temp) || count > 0)
 			count++;
 		free(temp);
@@ -321,28 +312,29 @@ int count_map_lines(char *map_name)
 	return (count);
 }
 
-int count_spaces(char *line)
+int	count_spaces(char *line)
 {
-	int i;
-	i = 0;
+	int	i;
 
+	i = 0;
 	while (line[i] && (line[i] == ' ' || line[i] == '\n' || line[i] == '\t'))
 		i++;
 	return (i);
 }
 
-void	fill_the_grid_with_map_lines(char **grid, t_mlx_data *data, int map_fd)
+void	fill_grid_with_map_lines(char **grid, t_mlx_data *data, int map_fd)
 {
 	int		i;
 	int		flag;
+	char	*temp;
 
 	i = 0;
 	flag = 0;
 	while (i < data->map_data.map_lines)
 	{
-		char *temp = get_next_line(map_fd);
+		temp = get_next_line(map_fd);
 		if (!temp)
-			break;
+			break ;
 		if (is_valid_line(temp) || flag > 0)
 		{
 			flag += 1;
@@ -354,7 +346,7 @@ void	fill_the_grid_with_map_lines(char **grid, t_mlx_data *data, int map_fd)
 	grid[i] = NULL;
 }
 
-char **convert_file_to_grid(t_mlx_data *data)
+char	**convert_file_to_grid(t_mlx_data *data)
 {
 	char	**grid;
 	int		i;
@@ -369,16 +361,19 @@ char **convert_file_to_grid(t_mlx_data *data)
 	grid = malloc(sizeof(char *) * data->map_data.map_lines + 1);
 	if (!grid)
 		ft_error(2, "Malloc failed map-parse\n");
-	fill_the_grid_with_map_lines(grid, data, map_fd);
+	fill_grid_with_map_lines(grid, data, map_fd);
 	close(map_fd);
 	return (grid);
 }
 
 // checks if all the map texture is there
-void check_map_texture(t_map_data map_data)
+void	check_map_texture(t_map_data map_data)
 {
-	if ((!(map_data.north_texture && map_data.south_texture
-		&& map_data.east_texture && map_data.west_textrure)))
-			ft_error(1, "Invalid map texture\n");
+	if ((!(map_data.north_texture
+				&& map_data.south_texture
+				&& map_data.east_texture
+				&& map_data.west_textrure)))
+	{
+		ft_error(1, "Invalid map texture\n");
+	}
 }
-

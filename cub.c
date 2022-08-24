@@ -18,7 +18,7 @@ void	lstadd_front(t_vector **lst, t_vector *new)
 	*lst = new;
 }
 
-double	get_player_dir(char	c)
+double	get_player_dir(char c)
 {
 	if (c == 'N')
 		return (N);
@@ -33,82 +33,13 @@ double	get_player_dir(char	c)
 
 void	free_grid(char **grid)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	while (grid[i])
 		free(grid[i++]);
 	free(grid);
 }
-
-void print_grid(char **s){
-	int i = 0;
-	while (s[i])
-		printf("%s\n", s[i++]);
-}
-
-void show_map_data(t_map_data map_data)
-{
-	printf("======================the map======================\n");
-	print_grid(map_data.map);
-	printf("the textures\n");
-	printf("%s\n", map_data.north_texture);
-	printf("%s\n", map_data.south_texture);
-	printf("%s\n", map_data.west_textrure);
-	printf("%s\n", map_data.east_texture);
-	printf("the floor colors\n");
-	for (int i = 0; i < 3; i++)
-		printf("%d\t", map_data.floor_color[i]);
-	printf("\n");
-	printf("the ceiling colors\n");
-	for (int i = 0; i < 3; i++)
-		printf("%d\t", map_data.ceilling_color[i]);
-	printf("\n");
-}
-
-
-
-// int	main(int ac, char **av)
-// {
-// 	t_mlx_data mlx_data;
-// 	t_map_data map_data;
-
-// 	map_data.map_name = av[1];
-// 	check_basic_requirements(ac, av);
-// 	init(&mlx_data, &map_data);
-// 	fill_map(&map_data, &mlx_data);
-// 	check_all_the_map(map_data);
-// 	init_mlx(&mlx_data);
-// 	mlx_data.map = map_data.map;
-// 	render(&mlx_data);
-// 	mlx_data.map_img.img = mlx_new_image(mlx_data.mlx_ptr, 300,
-// 					195);
-// 	mlx_data.map_img.addr = mlx_get_data_addr(mlx_data.map_img.img ,
-// 				&mlx_data.map_img.bits_per_pixel, &mlx_data.map_img.line_size, &mlx_data.map_img.endian);
-// 	draw_map(&mlx_data);
-// 	draw_player_of_map(&mlx_data);
-// 	mlx_put_image_to_window(mlx_data.mlx_ptr, mlx_data.window, mlx_data.map_img.img,WINDOW_WIDTH - 300,WINDOW_HEIGHT - 200);
-// 	//show_map_data(map_data);
-// 	mlx_hook(mlx_data.window, KEYPRESS, KEYPRESSMASK, hook_into_key_events, &mlx_data);
-// 	mlx_hook(mlx_data.window, KEYRELEASE, KEYRELEASEMASK, rotate_player, &mlx_data);
-// 	mlx_hook(mlx_data.window, 17, 0, ft_close, &mlx_data); 
-// 	mlx_loop(mlx_data.mlx_ptr);
-// }
-
-// const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
-//     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-//     {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-// };
 
 void	init_window(t_mlx_data *data)
 {
@@ -148,16 +79,16 @@ int	map_has_wall_at(t_mlx_data *data, float x, float y)
 	{
 		return (true);
 	}
-	x_index = floor(x / TILE_SIZE);
-	y_index = floor(y / TILE_SIZE);
+	x_index = floor(x / data->tile_size);
+	y_index = floor(y / data->tile_size);
 	if (y_index < 0 || y_index >= data->map_data.map_lines)
 		return (true);
 	if (data->map_data.map[y_index]
 		&& (x_index < 0
 			|| x_index > (int)ft_strlen(data->map_data.map[y_index])))
 		return (true);
-
-	return (data->map_data.map[y_index][x_index] == '1');
+	return (data->map_data.map[y_index][x_index] != '0'
+		&& !ft_isalpha(data->map_data.map[y_index][x_index]));
 }
 
 void move_player(t_mlx_data *data)
@@ -217,8 +148,12 @@ void	draw_rectangle(t_mlx_data *data, t_square square, int flag)
 void	setup(t_mlx_data *data)
 {
 	get_player_pos(data);
-	data->window_height = data->map_data.map_lines * TILE_SIZE;
-	data->window_width = data->map_data.longest_line * TILE_SIZE;
+	data->window_height = data->map_data.map_lines * data->tile_size;
+	data->window_width = data->map_data.longest_line * data->tile_size;
+	// if (data->window_width > 2560)
+		// data->window_width = 2560;
+	// if (data->window_height > 1440)
+		// data->window_height = 1440;
 	data->rays = malloc(sizeof(t_rays) * data->window_width);
 	data->player.turn_direction = 0;
 	data->player.walk_direction = 0;
@@ -274,14 +209,14 @@ void	render_map(t_mlx_data *data)
 		{
 			if (data->map_data.map[i][j] == '1')
 			{
-				draw_rectangle(data, init_square(x, y, TILE_SIZE, 0x00FF00),
+				draw_rectangle(data, init_square(x, y, data->tile_size, 0x00FF00),
 					MINI_MAP
 					);
 			}
-			x += TILE_SIZE;
+			x += data->tile_size;
 		}
 		i++;
-		y += TILE_SIZE;
+		y += data->tile_size;
 	}
 }
 
@@ -313,209 +248,168 @@ float	distance_between_points(float x1, float y1, float x2, float y2)
 
 void	cast_ray(t_mlx_data *data, float ray_angle, int stripId)
 {
-	int		is_ray_facing_down;
-	int		is_ray_facing_up;
-	int		is_ray_facing_right;
-	int		is_ray_facing_left;
-	float	xintercept;
-	float	yintercept;
-	float	xstep;
-	float	ystep;
-	int		found_horz_wall_hit;
-	float	horz_wall_hit_x;
-	float	horz_wall_hit_y;
-	int		horz_wall_content;
-	float next_horz_touch_x;
-	float next_horz_touch_y;
-	float x_to_check;
-	float y_to_check;
-	int flag;
-	int temp_x;
-	int temp_y;
+	t_raycast	vars;
+
 	ray_angle = normalize_angle(ray_angle);
-	is_ray_facing_down = ray_angle > 0 && ray_angle < PI;
-	is_ray_facing_up = !is_ray_facing_down;
-	is_ray_facing_right = ray_angle < 0.5 * PI || ray_angle > 1.5 * PI;
-	is_ray_facing_left = !is_ray_facing_right;
-	///////////////////////////////////////////
-	// HORIZONTAL RAY-GRID INTERSECTION CODE
-	///////////////////////////////////////////
-	found_horz_wall_hit = false;
-	horz_wall_hit_x = 0;
-	horz_wall_hit_y = 0;
-	horz_wall_content = 0;
-
-	// Find the y-coordinate of the closest horizontal grid intersection
-	yintercept = floor(data->player.y / TILE_SIZE) * TILE_SIZE;
-	if (is_ray_facing_down)
-		yintercept += TILE_SIZE;
-
-	// Find the x-coordinate of the closest horizontal grid intersection
-	xintercept = data->player.x
-		+ (yintercept - data->player.y) / tan(ray_angle);
-
-	// Calculate the increment xstep and ystep
-	ystep = TILE_SIZE;
-	if (is_ray_facing_up)
-		ystep *= -1;
-	xstep = TILE_SIZE / tan(ray_angle);
-	if (is_ray_facing_left && xstep > 0)
-		xstep *= -1;
-	if (is_ray_facing_right && xstep < 0)
-		xstep *= -1;
-	next_horz_touch_x = xintercept;
-	next_horz_touch_y = yintercept;
-
-	// Increment xstep and ystep until we find a wall
-	while (next_horz_touch_x >= 0 && next_horz_touch_x <= data->window_width && next_horz_touch_y >= 0 && next_horz_touch_y <= data->window_height)
+	vars.is_ray_facing_down = (ray_angle > 0 && ray_angle < PI);
+	vars.is_ray_facing_up = !vars.is_ray_facing_down;
+	vars.is_ray_facing_right = (ray_angle < 0.5 * PI || ray_angle > 1.5 * PI);
+	vars.is_ray_facing_left = !vars.is_ray_facing_right;
+	vars.found_horz_wall_hit = false;
+	vars.horz_wall_hit_x = 0;
+	vars.horz_wall_hit_y = 0;
+	vars.horz_wall_content = 0;
+	vars.yintercept = floor(data->player.y / data->tile_size) * data->tile_size;
+	if (vars.is_ray_facing_down)
+		vars.yintercept += data->tile_size;
+	vars.xintercept = data->player.x
+		+ (vars.yintercept - data->player.y) / tan(ray_angle);
+	vars.ystep = data->tile_size;
+	if (vars.is_ray_facing_up)
+		vars.ystep *= -1;
+	vars.xstep = data->tile_size / tan(ray_angle);
+	if (vars.is_ray_facing_left && vars.xstep > 0)
+		vars.xstep *= -1;
+	if (vars.is_ray_facing_right && vars.xstep < 0)
+		vars.xstep *= -1;
+	vars.next_horz_touch_x = vars.xintercept;
+	vars.next_horz_touch_y = vars.yintercept;
+	while (vars.next_horz_touch_x >= 0
+		&& vars.next_horz_touch_x <= data->window_width
+		&& vars.next_horz_touch_y >= 0
+		&& vars.next_horz_touch_y <= data->window_height)
 	{
-		x_to_check = next_horz_touch_x;
-		y_to_check = next_horz_touch_y;
-		if (is_ray_facing_up)
-			y_to_check += -1;
-		flag = 0;
-		if (map_has_wall_at(data, x_to_check, y_to_check))
+		vars.x_to_check = vars.next_horz_touch_x;
+		vars.y_to_check = vars.next_horz_touch_y;
+		if (vars.is_ray_facing_up)
+			vars.y_to_check += -1;
+		vars.flag = 0;
+		if (map_has_wall_at(data, vars.x_to_check, vars.y_to_check))
 		{
-			// found a wall hit
-			horz_wall_hit_x = next_horz_touch_x;
-			horz_wall_hit_y = next_horz_touch_y;
-			temp_x = floor(y_to_check / TILE_SIZE);
-			temp_y = floor(x_to_check / TILE_SIZE);
-			if (temp_y >= data->map_data.map_lines || temp_y < 0)
-				flag = 1;
-			else if (temp_x < 0
-				|| temp_x > (int)ft_strlen(data->map_data.map[temp_y]))
-				flag = 1;
-			if (flag)
+			vars.horz_wall_hit_x = vars.next_horz_touch_x;
+			vars.horz_wall_hit_y = vars.next_horz_touch_y;
+			vars.temp_x = floor(vars.y_to_check / data->tile_size);
+			vars.temp_y = floor(vars.x_to_check / data->tile_size);
+			if (vars.temp_y >= data->map_data.map_lines || vars.temp_y < 0)
+				vars.flag = 1;
+			else if (vars.temp_x < 0
+				|| vars.temp_x
+				> (int)ft_strlen(data->map_data.map[vars.temp_y]))
+				vars.flag = 1;
+			if (vars.flag)
 			{
-				horz_wall_content = '1';
-				found_horz_wall_hit = true;
+				vars.horz_wall_content = '1';
+				vars.found_horz_wall_hit = true;
 			}
 			else
 			{
-				horz_wall_content = data->map_data.map[temp_y][temp_x];
-				found_horz_wall_hit = true;
+				vars.horz_wall_content
+					= data->map_data.map[vars.temp_y][vars.temp_x];
+				vars.found_horz_wall_hit = true;
 			}
 			break ;
 		}
 		else
 		{
-			next_horz_touch_x += xstep;
-			next_horz_touch_y += ystep;
+			vars.next_horz_touch_x += vars.xstep;
+			vars.next_horz_touch_y += vars.ystep;
 		}
 	}
-	///////////////////////////////////////////
-	// VERTICAL RAY-GRID INTERSECTION CODE
-	///////////////////////////////////////////
-	int		found_ver_wall_hit;
-	float	ver_wall_hit_x;
-	float	ver_wall_hit_y;
-	int		ver_wall_content;
-	float	next_ver_touch_x;
-	float	next_ver_touch_y;
-	found_ver_wall_hit = false;
-	ver_wall_hit_x = 0;
-	ver_wall_hit_y = 0;
-	ver_wall_content = 0;
-
-	// Find the x-coordinate of the closest horizontal grid intersection
-	xintercept = floor(data->player.x / TILE_SIZE) * TILE_SIZE;
-	if (is_ray_facing_right)
-		xintercept += TILE_SIZE;
-
-	// Find the y-coordinate of the closest horizontal grid intersection
-	yintercept = data->player.y
-		+ (xintercept - data->player.x) * tan(ray_angle);
-
-	// Calculate the increment xstep and ystep
-	xstep = TILE_SIZE;
-	if (is_ray_facing_left)
-		xstep *= -1;
-	ystep = TILE_SIZE * tan(ray_angle);
-	if (is_ray_facing_up && ystep > 0)
-		ystep *= -1;
-	if (is_ray_facing_down && ystep < 0)
-		ystep *= -1;
-
-	next_ver_touch_x = xintercept;
-	next_ver_touch_y = yintercept;
-	// Increment xstep and ystep until we find a wall
-	while (next_ver_touch_x >= 0 && next_ver_touch_x <= data->window_width && next_ver_touch_y >= 0 && next_ver_touch_y <= data->window_height) {
-		x_to_check = next_ver_touch_x + (is_ray_facing_left ? -1 : 0);
-		y_to_check = next_ver_touch_y;
-		if (map_has_wall_at(data, x_to_check, y_to_check))
+	vars.found_ver_wall_hit = false;
+	vars.ver_wall_hit_x = 0;
+	vars.ver_wall_hit_y = 0;
+	vars.ver_wall_content = 0;
+	vars.xintercept = floor(data->player.x / data->tile_size) * data->tile_size;
+	if (vars.is_ray_facing_right)
+		vars.xintercept += data->tile_size;
+	vars.yintercept = data->player.y
+		+ (vars.xintercept - data->player.x) * tan(ray_angle);
+	vars.xstep = data->tile_size;
+	if (vars.is_ray_facing_left)
+		vars.xstep *= -1;
+	vars.ystep = data->tile_size * tan(ray_angle);
+	if (vars.is_ray_facing_up && vars.ystep > 0)
+		vars.ystep *= -1;
+	if (vars.is_ray_facing_down && vars.ystep < 0)
+		vars.ystep *= -1;
+	vars.next_ver_touch_x = vars.xintercept;
+	vars.next_ver_touch_y = vars.yintercept;
+	while (vars.next_ver_touch_x >= 0
+		&& vars.next_ver_touch_x <= data->window_width
+		&& vars.next_ver_touch_y >= 0
+		&& vars.next_ver_touch_y <= data->window_height)
+	{
+		vars.x_to_check = vars.next_ver_touch_x;
+		if (vars.is_ray_facing_left)
+			vars.x_to_check += -1;
+		vars.y_to_check = vars.next_ver_touch_y;
+		if (map_has_wall_at(data, vars.x_to_check, vars.y_to_check))
 		{
-			// found a wall hit
-			flag = 0;
-			ver_wall_hit_x = next_ver_touch_x;
-			ver_wall_hit_y = next_ver_touch_y;
-			temp_x = floor(y_to_check / TILE_SIZE);
-			temp_y = floor(x_to_check / TILE_SIZE);
-			if (temp_y >= data->map_data.map_lines || temp_y < 0)
-				flag = 1;
-			else if (temp_x < 0
-				|| temp_x > (int)ft_strlen(data->map_data.map[temp_y]))
-				flag = 1;
-			if (flag)
+			vars.flag = 0;
+			vars.ver_wall_hit_x = vars.next_ver_touch_x;
+			vars.ver_wall_hit_y = vars.next_ver_touch_y;
+			vars.temp_x = floor(vars.y_to_check / data->tile_size);
+			vars.temp_y = floor(vars.x_to_check / data->tile_size);
+			if (vars.temp_y >= data->map_data.map_lines || vars.temp_y < 0)
+				vars.flag = 1;
+			else if (vars.temp_x < 0
+				|| vars.temp_x
+				> (int)ft_strlen(data->map_data.map[vars.temp_y]))
+				vars.flag = 1;
+			if (vars.flag)
 			{
-				ver_wall_content = '1';
-				found_ver_wall_hit = true;
+				vars.ver_wall_content = '1';
+				vars.found_ver_wall_hit = true;
 			}
 			else
 			{
-				ver_wall_content = data->map_data.map[temp_y][temp_x];
-				found_ver_wall_hit = true;
+				vars.ver_wall_content
+					= data->map_data.map[vars.temp_y][vars.temp_x];
+				vars.found_ver_wall_hit = true;
 			}
 			break ;
 		}
 		else
 		{
-			next_ver_touch_x += xstep;
-			next_ver_touch_y += ystep;
+			vars.next_ver_touch_x += vars.xstep;
+			vars.next_ver_touch_y += vars.ystep;
 		}
 	}
-
-	float horz_hit_distance;
-	float ver_hit_distance;
-
-
-	// Calculate both horizontal and vertical hit distances and choose the smallest one
-	if (found_horz_wall_hit)
-		horz_hit_distance = distance_between_points(data->player.x,
+	if (vars.found_horz_wall_hit)
+		vars.horz_hit_distance = distance_between_points(data->player.x,
 				data->player.y,
-				horz_wall_hit_x,
-				horz_wall_hit_y);
+				vars.horz_wall_hit_x,
+				vars.horz_wall_hit_y);
 	else
-		horz_hit_distance = FLT_MAX;
-	if (found_ver_wall_hit)
-		ver_hit_distance = distance_between_points(data->player.x,
+		vars.horz_hit_distance = FLT_MAX;
+	if (vars.found_ver_wall_hit)
+		vars.ver_hit_distance = distance_between_points(data->player.x,
 				data->player.y,
-				ver_wall_hit_x,
-				ver_wall_hit_y);
+				vars.ver_wall_hit_x,
+				vars.ver_wall_hit_y);
 	else
-		ver_hit_distance = FLT_MAX;
-
-	if (ver_hit_distance < horz_hit_distance)
+		vars.ver_hit_distance = FLT_MAX;
+	if (vars.ver_hit_distance < vars.horz_hit_distance)
 	{
-		data->rays[stripId].distance = ver_hit_distance;
-		data->rays[stripId].wall_hit_x = ver_wall_hit_x;
-		data->rays[stripId].wall_hit_y = ver_wall_hit_y;
-		data->rays[stripId].wall_hit_content = ver_wall_content;
+		data->rays[stripId].distance = vars.ver_hit_distance;
+		data->rays[stripId].wall_hit_x = vars.ver_wall_hit_x;
+		data->rays[stripId].wall_hit_y = vars.ver_wall_hit_y;
+		data->rays[stripId].wall_hit_content = vars.ver_wall_content;
 		data->rays[stripId].was_hit_vertical = true;
 	}
 	else
 	{
-		data->rays[stripId].distance = horz_hit_distance;
-		data->rays[stripId].wall_hit_x = horz_wall_hit_x;
-		data->rays[stripId].wall_hit_y = horz_wall_hit_y;
-		data->rays[stripId].wall_hit_content = horz_wall_content;
+		data->rays[stripId].distance = vars.horz_hit_distance;
+		data->rays[stripId].wall_hit_x = vars.horz_wall_hit_x;
+		data->rays[stripId].wall_hit_y = vars.horz_wall_hit_y;
+		data->rays[stripId].wall_hit_content = vars.horz_wall_content;
 		data->rays[stripId].was_hit_vertical = false;
 	}
 	data->rays[stripId].ray_angle = ray_angle;
-	data->rays[stripId].is_ray_facing_down = is_ray_facing_down;
-	data->rays[stripId].is_ray_facing_up = is_ray_facing_up;
-	data->rays[stripId].is_ray_facing_left = is_ray_facing_left;
-	data->rays[stripId].is_ray_facing_right = is_ray_facing_right;
+	data->rays[stripId].is_ray_facing_down = vars.is_ray_facing_down;
+	data->rays[stripId].is_ray_facing_up = vars.is_ray_facing_up;
+	data->rays[stripId].is_ray_facing_left = vars.is_ray_facing_left;
+	data->rays[stripId].is_ray_facing_right = vars.is_ray_facing_right;
 }
 
 void	cast_all_rays(t_mlx_data *data)
@@ -525,7 +419,6 @@ void	cast_all_rays(t_mlx_data *data)
 
 	strip_id = 0;
 	ray_angle = data->player.rotation_angle - (FOV / 2);
-
 	while (strip_id < data->window_width)
 	{
 		cast_ray(data, ray_angle, strip_id);
@@ -534,71 +427,131 @@ void	cast_all_rays(t_mlx_data *data)
 	}
 }
 
-// not normed
-void generate_3d_projection(t_mlx_data *data) {
-	t_img img;
-	t_img est;
-	t_img south;
-	t_img oust;
-	int		x;
-	int		y;
-	int ofsetx;
+void	check_the_textures(t_dir_img d_t)
+{
+	if (d_t.east.img == NULL || d_t.north.img == NULL)
+		ft_error(UNEXPECTED_FLOW, "wrong path!!");
+	if (d_t.west.img == NULL || d_t.south.img = NULL)
+		ft_error(UNEXPECTED_FLOW, "wrong path!!");
+}
 
-	img.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/wood.xpm", &x, &y);
+void	init_textures(t_dir_img *d_t, t_mlx_data data)
+{
+	d_t->north.img = mlx_xpm_file_to_image(data.mlx_ptr,
+			data.map_data.north_texture, &d_t->north.x, &d_t->north.y);
+	d_t->south.img = mlx_xpm_file_to_image(data.mlx_ptr,
+			data.map_data.south_texture, &d_t->south.x, &d_t->south.y);
+	d_t->east.img = mlx_xpm_file_to_image(data.mlx_ptr,
+			data.map_data.east_texture, &d_t->east.x, &d_t->east.y);
+	d_t->west.img = mlx_xpm_file_to_image(data.mlx_ptr,
+			data.map_data.west_textrure, &d_t->west.x, &d_t->west.y);
+	check_the_textures(*d_t);
+	d_t->north.addr = mlx_get_data_addr(d_t->north.img, 
+			&d_t->north.bits_per_pixel,
+			&d_t->north.line_size, &d_t->north.endian);
+	d_t->south.addr = mlx_get_data_addr(d_t->south.img, 
+			&d_t->south.bits_per_pixel,
+			&d_t->south.line_size, &d_t->south.endian);
+	d_t->east.addr = mlx_get_data_addr(d_t->east.img, 
+			&d_t->east.bits_per_pixel,
+			&d_t->east.line_size, &d_t->east.endian);
+	d_t->west.addr = mlx_get_data_addr(d_t->west.img, 
+			&d_t->west.bits_per_pixel,
+			&d_t->west.line_size, &d_t->west.endian);
+}
 
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_size, &img.endian);
-	south.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/colorstone", &x, &y);
-	south.addr = mlx_get_data_addr(south.img, &south.bits_per_pixel, &south.line_size, &south.endian);
-	oust.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/redbrick.xpm", &x, &y);
-	oust.addr =  mlx_get_data_addr(oust.img, &oust.bits_per_pixel, &oust.line_size, &oust.endian);
-	est.img = mlx_xpm_file_to_image(data->mlx_ptr, "./textures/greystone.xpm", &x, &y);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_size, &img.endian);
-	est.addr = mlx_get_data_addr(est.img, &est.bits_per_pixel, &est.line_size, &est.endian);
-	for (int i = 0; i < data->window_width; i++) {
-		float prep_distance = data->rays[i].distance * cos(data->rays[i].ray_angle - data->player.rotation_angle) ;
-		float distance_proj_plan = (data->window_width / 2) / tan(FOV / 2);
-		float projected_wall_height = (TILE_SIZE / prep_distance) * distance_proj_plan;
-		int wall_strip_height = (int)projected_wall_height;
-		int wall_top_pixel = (data->window_height / 2) - (wall_strip_height / 2);
-		if (wall_top_pixel < 0) {
-			wall_top_pixel = 0;
-		}
-		int wall_bottom_pixel = (data->window_height / 2) + (wall_strip_height / 2);
-		if (wall_bottom_pixel > data->window_height)  {
-			wall_bottom_pixel = data->window_height;
-		}
-	
-		if (data->rays[i].was_hit_vertical)
-			ofsetx = (int)data->rays[i].wall_hit_y % TILE_SIZE;
-		else
-			ofsetx = (int)data->rays[i].wall_hit_x % TILE_SIZE;
-		for (int j = wall_top_pixel; j < wall_bottom_pixel; j++) {
-				char	*dst;
-				int		e;
-				int distance = j + (wall_strip_height / 2) - (data->window_height / 2);
-				int  ofsety =distance * ((float)y / wall_strip_height);
+void	init_numbers(t_mlx_data *data, t_numb_u *number_util, int i)
+{
+	number_util->prep_distance = data->rays[i].distance
+		* cos(data->rays[i].ray_angle - data->player.rotation_angle);
+	number_util->distance_proj_plan = (data->window_width / 2) / tan(FOV / 2);
+	number_util->projected_wall_height = (data->tile_size
+			/ number_util->prep_distance) * number_util->distance_proj_plan;
+	number_util->wall_strip_height = (int)number_util->projected_wall_height;
+	number_util->wall_top_pixel = (data->window_height / 2)
+		- (number_util->wall_strip_height / 2);
+	if (number_util->wall_top_pixel < 0)
+		number_util->wall_top_pixel = 0;
+	number_util->wall_bottom_pixel = (data->window_height / 2) 
+		+ (number_util->wall_strip_height / 2);
+	if (number_util->wall_bottom_pixel > data->window_height)
+		number_util->wall_bottom_pixel = data->window_height;
+	if (data->rays[i].was_hit_vertical)
+		number_util->ofsetx = (int)data->rays[i].wall_hit_y % data->tile_size;
+	else
+		number_util->ofsetx = (int)data->rays[i].wall_hit_x % data->tile_size;
+}
 
-				dst = data->main_img.addr + (j * data->main_img.line_size + i * (data->main_img.bits_per_pixel / 8));
-				if (!(data->rays[i].was_hit_vertical) && data->rays[i].is_ray_facing_up)
-				{
-					e = *(int*)(img.addr + img.line_size * ofsety + ofsetx * (img.bits_per_pixel / 8));
-					*(int*)dst =  e;
-				}
-				else if (data->rays[i].was_hit_vertical && data->rays[i].is_ray_facing_left)
-				{
-					e = *(int*)(est.addr + est.line_size * ofsety + ofsetx * (est.bits_per_pixel / 8));
-					*(int*)dst =  e;
-				}
-				else if (data->rays[i].is_ray_facing_right && data->rays[i].was_hit_vertical)
-				{
-					e = *(int*)(south.addr + south.line_size * ofsety + ofsetx * (south.bits_per_pixel / 8));
-					*(int*)dst = e;
-				}
-				else
-				{
-					e = *(int*)(oust.addr + oust.line_size * ofsety + ofsetx * (oust.bits_per_pixel / 8));
-					*(int*)dst = e;
-				}
+void	hit_vertical(t_mlx_data *data, int i, t_numb_u number_util
+						, t_dir_img d_t)
+{
+	if (data->rays[i].was_hit_vertical && data->rays[i].is_ray_facing_left)
+	{
+		number_util.ofsety = number_util.distance * ((float)d_t.west.y
+				/ number_util.wall_strip_height);
+		number_util.e = *(int *)(d_t.west.addr + d_t.west.line_size *
+				number_util.ofsety + number_util.ofsetx
+				* (d_t.west.bits_per_pixel / 8));
+		*(int *)number_util.dst = number_util.e;
+	}
+	else if (data->rays[i].is_ray_facing_right
+		&& data->rays[i].was_hit_vertical)
+	{
+		number_util.ofsety = number_util.distance
+			* ((float)d_t.east.y / number_util.wall_strip_height);
+		number_util.e = *(int *)(d_t.east.addr + d_t.east.line_size
+				* number_util.ofsety + number_util.ofsetx
+				* (d_t.east.bits_per_pixel / 8));
+		*(int *)number_util.dst = number_util.e;
+	}
+}
+
+void	hit_horizontal(t_mlx_data *data, int i, t_numb_u number_util, t_dir_img d_t)
+{
+	if (!(data->rays[i].was_hit_vertical) && data->rays[i].is_ray_facing_up)
+	{
+		number_util.ofsety = number_util.distance
+			* ((float)d_t.north.y / number_util.wall_strip_height);
+		number_util.e = *(int *)(d_t.north.addr + d_t.north.line_size
+				* number_util.ofsety + number_util.ofsetx
+				* (d_t.north.bits_per_pixel / 8));
+		*(int *)number_util.dst = number_util.e;
+	}
+	else
+	{
+		number_util.ofsety = number_util.distance
+			* ((float)d_t.south.y / number_util.wall_strip_height);
+		number_util.e = *(int *)(d_t.south.addr + d_t.south.line_size
+				* number_util.ofsety + number_util.ofsetx
+				* (d_t.south.bits_per_pixel / 8));
+		*(int *)number_util.dst = number_util.e;
+	}
+}
+
+void	generate_3d_projection(t_mlx_data *data)
+{
+	t_dir_img	d_t;
+	t_numb_u	number_util;
+	int			i;
+	int			j;
+
+	i = -1;
+	init_textures(&d_t, *data);
+	while (++i < data->window_width)
+	{
+		init_numbers(data, &number_util, i);
+		j = number_util.wall_top_pixel - 1;
+		while (++j < number_util.wall_bottom_pixel)
+		{
+			number_util.distance = j + (number_util.wall_strip_height / 2)
+				- (data->window_height / 2);
+			number_util.dst = data->main_img.addr;
+			number_util.dst += (j * data->main_img.line_size
+					+ i * (data->main_img.bits_per_pixel / 8));
+			if (data->rays[i].was_hit_vertical)
+				hit_vertical(data, i, number_util, d_t);
+			else
+				hit_horizontal(data, i, number_util, d_t);
 		}
 	}
 }
@@ -612,7 +565,6 @@ void	render_ceiling(t_mlx_data *data)
 {
 	int	i;
 	int	j;
-
 
 	i = 0;
 	while (i < data->window_height / 2)
@@ -665,7 +617,7 @@ void	render_ceiling_and_floor(t_mlx_data *data)
 	render_floor(data);
 }
 
-void ft_render(t_mlx_data *data)
+int ft_render(t_mlx_data *data)
 {
 	cast_all_rays(data);
 	render_map(data);
@@ -683,6 +635,7 @@ void ft_render(t_mlx_data *data)
 		data->window,
 		data->map_img.img,
 		0, 0);
+	return (0);
 }
 
 bool	is_there_a_player(char c)
@@ -704,13 +657,12 @@ void	get_player_pos(t_mlx_data *data)
 		{
 			if (is_there_a_player(data->map_data.map[i][j]))
 			{
-				data->player.x = j * TILE_SIZE + 1;
-				data->player.y = i * TILE_SIZE + 1;
+				data->player.x = j * data->tile_size + 1;
+				data->player.y = i * data->tile_size + 1;
 				data->map_data.map[i][j] = '0';
 				data->player.rotation_angle
 					= get_player_dir(data->map_data.map[i][j]);
 				return ;
-
 			}
 			j++;
 		}
@@ -766,6 +718,7 @@ void	map_setup(t_mlx_data *data)
 
 int	handle_keys(t_mlx_data *data)
 {
+	// ft_render(data);
 	if (data->player.walk_direction == 1 || data->player.walk_direction == -1)
 		move_player(data);
 	if (data->player.turn_direction == 1 || data->player.turn_direction == -1)
@@ -777,6 +730,7 @@ int	main(int ac, char **av)
 {
 	t_mlx_data	data;
 
+	data.tile_size = 64;
 	check_basic_requirements(ac, av);
 	data.map_data.map_name = av[1];
 	map_setup(&data);

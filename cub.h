@@ -47,15 +47,57 @@
 # define KEYPRESS 2
 # define KEYRELEASEMASK 2L
 
-# define TILE_SIZE 64
-
-
 # define MOVE_STEP 12
 # define TURN_SPEED 0.1
 # define FOV 60 * (PI / 180)
 # define HALF_FOV FOV / 2
 
 # define SCALE 0.2
+
+typedef struct n_u
+{
+	float	prep_distance;
+	int		ofsetx;
+	float	distance_proj_plan;
+	float	projected_wall_height;
+	int		wall_strip_height;
+	int		wall_top_pixel;
+	int		wall_bottom_pixel;
+	char	*dst;
+	int		e;
+	int		distance;
+	int		ofsety;
+}t_numb_u;
+
+typedef struct raycast_s {
+	int		is_ray_facing_down;
+	int		is_ray_facing_up;
+	int		is_ray_facing_right;
+	int		is_ray_facing_left;
+	int		found_horz_wall_hit;
+	int		horz_wall_content;
+	int		flag;
+	int		temp_x;
+	int		temp_y;
+	float	xintercept;
+	float	yintercept;
+	float	xstep;
+	float	ystep;
+	float	horz_wall_hit_x;
+	float	horz_wall_hit_y;
+	float	next_horz_touch_x;
+	float	next_horz_touch_y;
+	float	x_to_check;
+	float	y_to_check;
+	int		found_ver_wall_hit;
+	float	ver_wall_hit_x;
+	float	ver_wall_hit_y;
+	int		ver_wall_content;
+	float	next_ver_touch_x;
+	float	next_ver_touch_y;
+	float	horz_hit_distance;
+	float	ver_hit_distance;
+}t_raycast;
 
 typedef struct s_vector
 {
@@ -113,11 +155,20 @@ typedef struct img_data{
 	void		*img;
 	char		*addr;
 	char		*addr_map;
+	int			x;
+	int			y;
 	int			endian;
 	int			bits_per_pixel;
-
 	int			line_size;
 }t_img;
+
+typedef struct  img_with_direction
+{
+	t_img	north;
+	t_img	south;
+	t_img	east;
+	t_img	west;
+}t_dir_img;
 
 typedef struct mlx_data {
 	t_player	player;
@@ -185,9 +236,9 @@ void fill_map(t_mlx_data *data);
 int	fill_map_data(char **grid, t_mlx_data *data);
 void	fill_rgb_array(char *line, int *arr);
 bool is_number(char *s);
-bool	check_map_identifiers(char *line);
-void print_grid(char **s);
-double	get_player_dir(char	c);
+bool		check_map_identifiers(char *line);
+void		print_grid(char **s);
+double		get_player_dir(char	c);
 int			count_spaces(char *line);
 int			ft_error(int exit_code, char *fatal);
 int			count_map_lines(char *map_name);
@@ -197,10 +248,11 @@ bool		is_valid_line(char *line);
 void		check_map_texture(t_map_data map_data);
 t_map_data	parse_map(char *map_name);
 void		draw_map(t_mlx_data *data);
-void render(t_mlx_data *data);
-void render_player(t_mlx_data *data);
-void ft_render(t_mlx_data *data);
-void update(t_mlx_data *data);
-void get_player_pos(t_mlx_data *data);
-void	check_all_the_map(t_map_data *map_data);
+void 		render(t_mlx_data *data);
+void 		ender_player(t_mlx_data *data);
+int 		ft_render(t_mlx_data *data);
+void		update(t_mlx_data *data);
+void		get_player_pos(t_mlx_data *data);
+void		check_all_the_map(t_map_data *map_data);
 #endif
+
