@@ -45,8 +45,8 @@ void	init_window(t_mlx_data *data)
 {
 	data->mlx_ptr = mlx_init();
 	data->window = mlx_new_window(data->mlx_ptr,
-			data->window_width,
-			data->window_height,
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT,
 			"Cub3D");
 	data->map_img.img = mlx_new_image(data->mlx_ptr,
 			data->window_width * SCALE,
@@ -55,8 +55,8 @@ void	init_window(t_mlx_data *data)
 			&data->map_img.bits_per_pixel,
 			&data->map_img.line_size, &data->map_img.endian);
 	data->main_img.img = mlx_new_image(data->mlx_ptr,
-			data->window_width,
-			data->window_height);
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT);
 	data->main_img.addr = mlx_get_data_addr(data->main_img.img,
 			&data->main_img.bits_per_pixel,
 			&data->main_img.line_size,
@@ -150,10 +150,6 @@ void	setup(t_mlx_data *data)
 	get_player_pos(data);
 	data->window_height = data->map_data.map_lines * data->tile_size;
 	data->window_width = data->map_data.longest_line * data->tile_size;
-	// if (data->window_width > 2560)
-		// data->window_width = 2560;
-	// if (data->window_height > 1440)
-		// data->window_height = 1440;
 	data->rays = malloc(sizeof(t_rays) * data->window_width);
 	data->player.turn_direction = 0;
 	data->player.walk_direction = 0;
@@ -729,7 +725,7 @@ int	main(int ac, char **av)
 	map_setup(&data);
 	setup(&data);
 	init_window(&data);
-	ft_render(&data);
+	// ft_render(&data);
 	mlx_hook(data.window, 17, 0, ft_close, &data);
 	mlx_hook(data.window, KEYPRESS, KEYPRESSMASK, process_input, &data);
 	mlx_hook(data.window, KEYRELEASE, KEYRELEASEMASK, reset, &data);
