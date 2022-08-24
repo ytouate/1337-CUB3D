@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
 int	check_char(char c)
 {
@@ -43,14 +43,12 @@ void	check_the_zeros(t_fix_map *map, int i, int j, int len)
 	if (map[i - 1].line_of_map[j] == ' ' || map[i + 1].line_of_map[j] == ' ' )
 		ft_error(9, "INVALID MAP\n");
 }
-//check the flag
 
 void	check_flag(int flag)
 {
 	if (flag != 1)
 		ft_error(5, "INVALID MAP\n");
 }
-// checks if the map is surrounded by zeros;
 
 void	call_check_zeros(t_fix_map *map, int len)
 {
@@ -81,7 +79,6 @@ void	call_check_zeros(t_fix_map *map, int len)
 	check_flag(flag);
 }
 
-//this function for fill the map with lens
 void	check_all_the_map(t_map_data *map_data)
 {
 	t_fix_map	*map_with_len;

@@ -10,15 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
-void	lstadd_front(t_vector **lst, t_vector *new)
-{
-	new ->next = *lst;
-	*lst = new;
-}
-
-double	get_player_dir(char c)
+float	get_player_dir(char c)
 {
 	if (c == 'N')
 		return (N);
@@ -48,14 +42,6 @@ void	init_window(t_mlx_data *data)
 			WINDOW_WIDTH,
 			WINDOW_HEIGHT,
 			"Cub3D");
-
-	data->map_img.img = mlx_new_image(data->mlx_ptr,
-			WINDOW_WIDTH * SCALE,
-			WINDOW_WIDTH * SCALE);
-	data->map_img.addr = mlx_get_data_addr(data->map_img.img,
-			&data->map_img.bits_per_pixel,
-			&data->map_img.line_size, &data->map_img.endian);
-
 	data->main_img.img = mlx_new_image(data->mlx_ptr,
 			WINDOW_WIDTH,
 			WINDOW_HEIGHT);
@@ -72,15 +58,13 @@ void	rotate_player(t_mlx_data *data)
 	ft_render(data);
 }
 
-int	map_has_wall_at(t_mlx_data *data, float x, float y)
+int		map_has_wall_at(t_mlx_data *data, float x, float y)
 {
 	int	x_index;
 	int	y_index;
 
 	if (x < 0 || x > data->window_width || y < 0 || y > data->window_height)
-	{
 		return (true);
-	}
 	x_index = floor(x / data->tile_size);
 	y_index = floor(y / data->tile_size);
 	if (y_index < 0 || y_index >= data->map_data.map_lines)
@@ -93,7 +77,7 @@ int	map_has_wall_at(t_mlx_data *data, float x, float y)
 		&& !ft_isalpha(data->map_data.map[y_index][x_index]));
 }
 
-void move_player(t_mlx_data *data)
+void	move_player(t_mlx_data *data)
 {
 	float	new_x;
 	float	new_y;
@@ -111,7 +95,7 @@ void move_player(t_mlx_data *data)
 	ft_render(data);
 }
 
-int process_input(int keycode, t_mlx_data *data) {
+int	process_input(int keycode, t_mlx_data *data) {
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
 	else if (keycode == UP)
@@ -125,28 +109,6 @@ int process_input(int keycode, t_mlx_data *data) {
 	return (0);
 }
 
-void	draw_rectangle(t_mlx_data *data, t_square square, int flag)
-{
-	float	i;
-	float	j;
-
-	j = square.start_x;
-	i = square.start_y;
-	while (j < square.start_x + square.width)
-	{
-		i = square.start_y;
-		while (i < square.start_y + square.height)
-		{
-			if (flag == MAIN_MAP)
-				my_mlx_pixel_put(&data->main_img, j, i, square.color);
-			else
-				my_mlx_pixel_put(&data->map_img, j, i, square.color);
-			i++;
-		}
-		j++;
-	}
-}
-
 void	setup(t_mlx_data *data)
 {
 	get_player_pos(data);
@@ -155,67 +117,6 @@ void	setup(t_mlx_data *data)
 	data->rays = malloc(sizeof(t_rays) * WINDOW_WIDTH);
 	data->player.turn_direction = 0;
 	data->player.walk_direction = 0;
-}
-
-void	render_rays(t_mlx_data *data, int flag)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->window_width)
-	{
-		ddaline(
-			SCALE * data->player.x,
-			SCALE * data->player.y,
-			SCALE * data->rays[i].wall_hit_x,
-			SCALE * data->rays[i].wall_hit_y,
-			data,
-			flag,
-			0xFF0000
-			);
-		i++;
-	}
-}
-
-t_square	init_square(float x, float y, int size, int color)
-{
-	t_square	square;
-
-	square.start_x = x * SCALE;
-	square.start_y = y * SCALE;
-	square.color = color;
-	square.width = size * SCALE;
-	square.height = size * SCALE;
-
-	return (square);
-}
-
-void	render_map(t_mlx_data *data)
-{
-	int	x;
-	int	y;
-	int	i;
-	int	j;
-
-	y = 0;
-	i = 0;
-	while (data->map_data.map[i])
-	{
-		x = 0;
-		j = -1;
-		while (data->map_data.map[i][++j])
-		{
-			if (data->map_data.map[i][j] == '1')
-			{
-				draw_rectangle(data, init_square(x, y, data->tile_size, 0x00FF00),
-					MINI_MAP
-					);
-			}
-			x += data->tile_size;
-		}
-		i++;
-		y += data->tile_size;
-	}
 }
 
 void	render_player(t_mlx_data *data)
@@ -504,7 +405,8 @@ void	hit_vertical(t_mlx_data *data, int i, t_numb_u number_util
 	}
 }
 
-void	hit_horizontal(t_mlx_data *data, int i, t_numb_u number_util, t_dir_img d_t)
+void	hit_horizontal(t_mlx_data *data, int i,
+	t_numb_u number_util, t_dir_img d_t)
 {
 	if (!(data->rays[i].was_hit_vertical) && data->rays[i].is_ray_facing_up)
 	{
@@ -546,15 +448,10 @@ void	generate_3d_projection(t_mlx_data *data)
 			number_util.dst = data->main_img.addr;
 			number_util.dst += (j * data->main_img.line_size
 					+ i * (data->main_img.bits_per_pixel / 8));
-			if (j < WINDOW_HEIGHT && i < WINDOW_WIDTH)
-			{
-				//my_mlx_pixel_put(&data->main_img, i, j, 0xFF00FF);
-				if (data->rays[i].was_hit_vertical)
-					hit_vertical(data, i, number_util, d_t);
-				else
-					hit_horizontal(data, i, number_util, d_t);
-			}
-			
+			if (data->rays[i].was_hit_vertical)
+				hit_vertical(data, i, number_util, d_t);
+			else
+				hit_horizontal(data, i, number_util, d_t);
 		}
 	}
 }
@@ -620,12 +517,9 @@ void	render_ceiling_and_floor(t_mlx_data *data)
 	render_floor(data);
 }
 
-int ft_render(t_mlx_data *data)
+int	ft_render(t_mlx_data *data)
 {
 	cast_all_rays(data);
-	// render_map(data);
-	// render_rays(data, MINI_MAP);
-	// render_player(data);
 	render_ceiling_and_floor(data);
 	generate_3d_projection(data);
 	mlx_put_image_to_window(
@@ -633,11 +527,6 @@ int ft_render(t_mlx_data *data)
 		data->window,
 		data->main_img.img,
 		0, 0);
-	// mlx_put_image_to_window(
-		// data->mlx_ptr,
-		// data->window,
-		// data->map_img.img,
-		// 0, 0);
 	return (0);
 }
 

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
 void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, int color)
 {

@@ -23,24 +23,28 @@
 # include "Libft/libft.h"
 # include <float.h>
 
-#define MAIN_MAP 1
-#define MINI_MAP 0
+# define MAIN_MAP 1
+# define MINI_MAP 0
 
-# define E  PI / 2
+# define RIGHT 124
+# define ESC 53
+# define LEFT 123
+# define UP 126
+# define BOTTOM 125
+# define PI 3.14159265
+# define TWO_PI 6.28318530
+# define E  1.57079632679
 # define S  PI
-# define W  3 * PI / 2
-# define N  0 * PI
+# define W 4.71238898038
+# define N  0
 
 # define A_KEY 0
 # define W_KEY 13
 # define S_KEY 1
 # define D_KEY 2
 
-# define PI 3.14159265
-# define TWO_PI 6.28318530
-
-#define FUNCTION_FAILED 2
-#define UNEXPECTED_FLOW 1
+# define FUNCTION_FAILED 2
+# define UNEXPECTED_FLOW 1
 
 # define KEYRELEASE 3
 # define KEYPRESSMASK 1L
@@ -49,9 +53,9 @@
 
 # define MOVE_STEP 12
 # define TURN_SPEED 0.1
-# define FOV 60 * (PI / 180)
-# define HALF_FOV FOV / 2
-# define SCALE 0.1
+# define FOV 1.0472
+# define HALF_FOV 30
+# define SCALE 0.2
 # define WINDOW_WIDTH 1000
 # define WINDOW_HEIGHT 1000
 
@@ -163,7 +167,7 @@ typedef struct img_data{
 	int			line_size;
 }t_img;
 
-typedef struct  img_with_direction
+typedef struct img_with_direction
 {
 	t_img	north;
 	t_img	south;
@@ -192,68 +196,39 @@ typedef struct fix_map
 	int		len;
 }t_fix_map;
 
-enum {
-	RIGHT 	= 124,
-	ESC 	= 53,
-	LEFT 	= 123,
-	UP 		= 126,
-	BOTTOM 	= 125,
-};
-
-void	draw_player_of_map(t_mlx_data *data);
-void	cast_rays_toward_player_fov(t_mlx_data *data);
-void	lstadd_front(t_vector **lst, t_vector *new);
-bool got_collided(t_mlx_data *data);
-void	check_basic_requirements(int ac, char **av);
-void	map_data_constructor(t_map_data *map_data);
-void show_map_data(t_map_data map_data);
-void	free_grid(char **grid);
-void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, int color);
-int	ft_error(int exit_code, char *fatal);
-void update_window(t_mlx_data *data);
-void init_mlx(t_mlx_data *mlx_data);
-void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
-int count_map_lines(char *map_name);
-bool	get_map_rgb(char *line, t_mlx_data *data);
-bool	got_overflowed(int *rgb);
-int		check_file_extention(char *file);
-bool	is_valid_line(char *line);
-void init_map_data(t_mlx_data *data);
-void	call_check_zeros(t_fix_map *map, int len);
-void	check_the_zeros(t_fix_map *map, int i, int j, int len);
-void render(t_mlx_data *data);
-int	check_char(char c);
-void draw_map(t_mlx_data *data);
-void ft_draw_player(t_mlx_data *data);
-void	skip_empty_lines(char **grid, int *n, int map_len);
-void check_map_texture(t_map_data map_data);
-char **convert_file_to_grid(t_mlx_data *data);
-bool	get_texture_path(char *l, t_mlx_data *data);
-int count_spaces(char *line);
-int		check_map_borders(t_map_data map_data);
-int		ft_close(t_mlx_data *data);
-void init(t_mlx_data *data);
-void fill_map(t_mlx_data *data);
-int	fill_map_data(char **grid, t_mlx_data *data);
-void	fill_rgb_array(char *line, int *arr);
-bool is_number(char *s);
-bool		check_map_identifiers(char *line);
-void		print_grid(char **s);
-double		get_player_dir(char	c);
-int			count_spaces(char *line);
-int			ft_error(int exit_code, char *fatal);
-int			count_map_lines(char *map_name);
-int			check_map_borders(t_map_data map_data);
-bool		got_overflowed(int *rgb);
-bool		is_valid_line(char *line);
+void		ddaline(float x, float y, float x1, float y1,
+				t_mlx_data *data, int flag, int color);
+void		check_basic_requirements(int ac, char **av);
+void		map_data_constructor(t_map_data *map_data);
+void		free_grid(char **grid);
+void		my_mlx_pixel_put(t_img *data, int x, int y, int color);
+void		skip_empty_lines(char **grid, int *n, int map_len);
 void		check_map_texture(t_map_data map_data);
-t_map_data	parse_map(char *map_name);
-void		draw_map(t_mlx_data *data);
-void 		render(t_mlx_data *data);
-void 		ender_player(t_mlx_data *data);
-int 		ft_render(t_mlx_data *data);
+void		call_check_zeros(t_fix_map *map, int len);
+void		check_the_zeros(t_fix_map *map, int i, int j, int len);
+void		fill_map(t_mlx_data *data);
+void		fill_rgb_array(char *line, int *arr);
 void		update(t_mlx_data *data);
 void		get_player_pos(t_mlx_data *data);
 void		check_all_the_map(t_map_data *map_data);
-#endif
 
+int			check_file_extention(char *file);
+int			check_char(char c);
+int			count_spaces(char *line);
+int			ft_error(int exit_code, char *fatal);
+int			count_map_lines(char *map_name);
+int			ft_close(t_mlx_data *data);
+int			fill_map_data(char **grid, t_mlx_data *data);
+int			ft_render(t_mlx_data *data);
+
+char		**convert_file_to_grid(t_mlx_data *data);
+
+bool		get_texture_path(char *l, t_mlx_data *data);
+bool		is_number(char *s);
+bool		is_valid_line(char *line);
+
+float		get_player_dir(char c);
+
+t_map_data	parse_map(char *map_name);
+
+#endif

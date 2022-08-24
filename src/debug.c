@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/11 10:45:02 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 16:46:12 by ytouate          ###   ########.fr       */
+/*   Created: 2022/07/22 11:37:43 by ytouate           #+#    #+#             */
+/*   Updated: 2022/07/30 10:49:22 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub.h"
+#include "../cub.h"
 
-int		ft_close(t_mlx_data *data)
+int	ft_error(int exit_code, char *fatal)
 {
-	mlx_destroy_window(data->mlx_ptr, data->window);
-	// free resources;
-	exit(EXIT_SUCCESS);
-	return(0);
+	ft_putstr_fd("Error\n", STDERR_FILENO);
+	ft_putstr_fd(fatal, STDERR_FILENO);
+	exit(exit_code);
 }

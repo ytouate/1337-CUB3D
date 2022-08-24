@@ -1,8 +1,5 @@
-// norming the code
-// sitiing the height and width of the window to be fixed
-// fixing the player getting out of screen in the edges
-// understand how the code works
-
-
-
-// 
+fixing all the parse errors
+    - checking for valid identifiers
+norming the cast_ray function
+seperate the function in seperate files
+cleaning all the memory leaks
