@@ -431,7 +431,7 @@ void	check_the_textures(t_dir_img d_t)
 {
 	if (d_t.east.img == NULL || d_t.north.img == NULL)
 		ft_error(UNEXPECTED_FLOW, "wrong path!!");
-	if (d_t.west.img == NULL || d_t.south.img = NULL)
+	if (d_t.west.img == NULL || d_t.south.img == NULL)
 		ft_error(UNEXPECTED_FLOW, "wrong path!!");
 }
 
