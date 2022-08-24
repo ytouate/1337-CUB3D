@@ -12,7 +12,7 @@
 
 NAME = cub3D
 
-CC = gcc
+CC = gcc #-fsanitize=address -g
 
 CFLAGS = -Wall -Wextra -Werror
 

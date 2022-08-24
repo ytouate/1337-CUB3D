@@ -69,25 +69,11 @@ void	count_commas(char *line)
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
 }
 
-// fills the rgb array and checks if the colors are valid;
-void	fill_rgb_array(char *line, int *arr)
+void	convert_to_int(char **temp, int *arr)
 {
-	char	**temp;
 	int		i;
-	char	*str;
 
-	temp = malloc (sizeof(char *));
-	i = 0;
-	str = ft_strdup(line + 1);
-	while (str[i] == ' ')
-		i++;
-	temp[0] = str;
-	str = ft_strdup(temp[0] + i);
-	free(temp[0]);
-	free(temp);
 	i = -1;
-	count_commas(str);
-	temp = ft_split(str, ',');
 	if (temp[0] && temp[1] && temp[2])
 	{
 		if (is_number(temp[0]) && is_number(temp[1]) && is_number(temp[2]))
@@ -104,6 +90,43 @@ void	fill_rgb_array(char *line, int *arr)
 	}
 	else
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
+}
+// fills the rgb array and checks if the colors are valid;
+void	fill_rgb_array(char *line, int *arr)
+{
+	char	**temp;
+	int		i;
+	char	*str;
+
+	temp = malloc (sizeof(char *));
+	i = 0;
+	str = ft_strdup(line + 1);
+	while (str[i] == ' ')
+		i++;
+	temp[0] = str;
+	str = ft_strdup(temp[0] + i);
+	free(temp[0]);
+	free(temp);
+	count_commas(str);
+	temp = ft_split(str, ',');
+	convert_to_int(temp, arr);
+}
+
+char	*get_path(int i, char *str)
+{
+	char		*s;
+	int			j;
+
+	j = 0;
+	s = malloc(sizeof(char) * i + 1);
+	while (j < i)
+	{
+		s[j] = str[j];
+		j++;
+	}
+	free(str);
+	s[j] = '\0';
+	return (s);
 }
 
 //fill the textures;
@@ -129,15 +152,7 @@ char	*fill_the_path(char *line)
 		if (str[i] == ' ' && str[i - 1] != '\\')
 			break ;
 	}
-	s = malloc(sizeof(char) * i + 1);
-	while (j < i)
-	{
-		s[j] = str[j];
-		j++;
-	}
-	free(str);
-	s[j] = '\0';
-	return (s);
+	return (get_path(i, str));
 }
 
 void	first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
@@ -302,7 +317,6 @@ int	count_spaces(char *line)
 	int	i;
 
 	i = 0;
-
 	while (line[i] && (line[i] == ' ' || line[i] == '\n' || line[i] == '\t'))
 		i++;
 	return (i);
