@@ -10,12 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../cub.h"
+#include "../cub.h"
 
-int		ft_close(t_mlx_data *data)
+int	ft_close(t_mlx_data *data)
 {
 	mlx_destroy_window(data->mlx_ptr, data->window);
-	// free resources;
 	exit(EXIT_SUCCESS);
 	return (0);
 }

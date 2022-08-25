@@ -30,7 +30,7 @@ bool	is_valid_line(char *line)
 void	skip_empty_lines(char **grid, int *n, int map_len)
 {
 	if (*n == map_len)
-		ft_error(1, "The map should be at the bottom of the file\n");
+		ft_error(1, "THE MAP MUST BE AT THE BOTTOM OF THE FILE\n");
 	while (grid[*n])
 	{
 		if (is_valid_line(grid[*n]))

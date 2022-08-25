@@ -104,13 +104,16 @@ typedef struct raycast_s {
 	float	ver_hit_distance;
 }t_raycast;
 
-typedef struct s_vector
-{
-	int				x;
-	int				y;
-	struct s_vector	*next;
-}t_vector;
-
+typedef struct img_data{
+	void		*img;
+	char		*addr;
+	char		*addr_map;
+	int			x;
+	int			y;
+	int			endian;
+	int			bits_per_pixel;
+	int			line_size;
+}t_img;
 typedef struct s_rays {
 	float	ray_angle;
 	float	wall_hit_x;
@@ -123,6 +126,13 @@ typedef struct s_rays {
 	bool	is_ray_facing_down;
 	int		wall_hit_content;
 }t_rays;
+
+typedef struct s_mini_map {
+	int		width;
+	int		height;
+	int		tile_size;
+	t_img	map_img;
+}t_mini_map;
 
 typedef struct s_player {
 	float	x;
@@ -156,16 +166,7 @@ typedef struct s_square
 	int		height;
 }t_square;
 
-typedef struct img_data{
-	void		*img;
-	char		*addr;
-	char		*addr_map;
-	int			x;
-	int			y;
-	int			endian;
-	int			bits_per_pixel;
-	int			line_size;
-}t_img;
+
 
 typedef struct img_with_direction
 {
@@ -179,7 +180,6 @@ typedef struct mlx_data {
 	t_player	player;
 	t_map_data	map_data;
 	t_img		main_img;
-	t_img		map_img;
 	t_rays		*rays;
 	int			tile_size;
 	int			window_width;

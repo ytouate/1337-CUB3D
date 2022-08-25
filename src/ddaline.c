@@ -23,7 +23,6 @@ void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, i
 	float	yinc;
 	int h;
 
-	
 	dx = x1 - x;
 	dy = y1 - y;
 	h = 0;
@@ -42,9 +41,6 @@ void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, i
 		{
 			if (flag == MAIN_MAP)
 				my_mlx_pixel_put(&data->main_img, sx, sy, color);
-			else
-				my_mlx_pixel_put(&data->map_img, sx, sy, color);
 		}
 	}
 }
-

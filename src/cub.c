@@ -58,7 +58,7 @@ void	rotate_player(t_mlx_data *data)
 	ft_render(data);
 }
 
-int		map_has_wall_at(t_mlx_data *data, float x, float y)
+int	map_has_wall_at(t_mlx_data *data, float x, float y)
 {
 	int	x_index;
 	int	y_index;
@@ -95,7 +95,8 @@ void	move_player(t_mlx_data *data)
 	ft_render(data);
 }
 
-int	process_input(int keycode, t_mlx_data *data) {
+int	process_input(int keycode, t_mlx_data *data)
+{
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
 	else if (keycode == UP)
@@ -145,19 +146,19 @@ float	distance_between_points(float x1, float y1, float x2, float y2)
 	return (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
-
 void	init_horz_data(t_mlx_data *data, double *ray_angle, t_raycast *vars)
 {
-	*ray_angle = normalize_angle(*ray_angle);
 	vars->is_ray_facing_down = (*ray_angle > 0 && *ray_angle < PI);
 	vars->is_ray_facing_up = !vars->is_ray_facing_down;
-	vars->is_ray_facing_right = (*ray_angle < 0.5 * PI || *ray_angle > 1.5 * PI);
+	vars->is_ray_facing_right = (*ray_angle < 0.5 * PI
+			|| *ray_angle > 1.5 * PI);
 	vars->is_ray_facing_left = !vars->is_ray_facing_right;
 	vars->found_horz_wall_hit = false;
 	vars->horz_wall_hit_x = 0;
 	vars->horz_wall_hit_y = 0;
 	vars->horz_wall_content = 0;
-	vars->yintercept = floor(data->player.y / data->tile_size) * data->tile_size;
+	vars->yintercept = floor(data->player.y / data->tile_size)
+		* data->tile_size;
 	if (vars->is_ray_facing_down)
 		vars->yintercept += data->tile_size;
 	vars->xintercept = data->player.x
@@ -198,6 +199,7 @@ void get_horz_ray_data(t_mlx_data *data, t_raycast *vars)
 		vars->found_horz_wall_hit = true;
 	}	
 }
+
 void horz_intercetion(t_mlx_data *data, t_raycast *vars)
 {
 	while (vars->next_horz_touch_x >= 0
@@ -229,7 +231,8 @@ void init_ver_data(t_mlx_data *data, t_raycast *vars, double *ray_angle)
 	vars->ver_wall_hit_x = 0;
 	vars->ver_wall_hit_y = 0;
 	vars->ver_wall_content = 0;
-	vars->xintercept = floor(data->player.x / data->tile_size) * data->tile_size;
+	vars->xintercept = floor(data->player.x / data->tile_size)
+		* data->tile_size;
 	if (vars->is_ray_facing_right)
 		vars->xintercept += data->tile_size;
 	vars->yintercept = data->player.y
@@ -314,11 +317,12 @@ void	get_closest_wall_hit(t_mlx_data *data, t_raycast *vars)
 		vars->ver_hit_distance = FLT_MAX;
 }
 
-void fill_ray_data(t_mlx_data *data, t_raycast *vars, int column, double ray_angle)
+void fill_ray_data(t_mlx_data *data,
+		t_raycast *vars, int column, double ray_angle)
 {
 	if (vars->ver_hit_distance < vars->horz_hit_distance)
 	{
-		data->rays[column].distance = 	vars->ver_hit_distance;
+		data->rays[column].distance = vars->ver_hit_distance;
 		data->rays[column].wall_hit_x = vars->ver_wall_hit_x;
 		data->rays[column].wall_hit_y = vars->ver_wall_hit_y;
 		data->rays[column].wall_hit_content = vars->ver_wall_content;
@@ -326,7 +330,7 @@ void fill_ray_data(t_mlx_data *data, t_raycast *vars, int column, double ray_ang
 	}
 	else
 	{
-		data->rays[column].distance = 	vars->horz_hit_distance;
+		data->rays[column].distance = vars->horz_hit_distance;
 		data->rays[column].wall_hit_x = vars->horz_wall_hit_x;
 		data->rays[column].wall_hit_y = vars->horz_wall_hit_y;
 		data->rays[column].wall_hit_content = vars->horz_wall_content;
@@ -334,7 +338,7 @@ void fill_ray_data(t_mlx_data *data, t_raycast *vars, int column, double ray_ang
 	}
 	data->rays[column].ray_angle = ray_angle;
 	data->rays[column].is_ray_facing_down = vars->is_ray_facing_down;
-	data->rays[column].is_ray_facing_up = 	vars->is_ray_facing_up;
+	data->rays[column].is_ray_facing_up = vars->is_ray_facing_up;
 	data->rays[column].is_ray_facing_left = vars->is_ray_facing_left;
 	data->rays[column].is_ray_facing_right = vars->is_ray_facing_right;
 }
@@ -343,13 +347,13 @@ void	cast_ray(t_mlx_data *data, double ray_angle, int column)
 {
 	t_raycast	vars;
 
+	ray_angle = normalize_angle(ray_angle);
 	init_horz_data(data, &ray_angle, &vars);
 	horz_intercetion(data, &vars);
 	init_ver_data(data, &vars, &ray_angle);
 	ver_intersection(data, &vars);
 	get_closest_wall_hit(data, &vars);
 	fill_ray_data(data, &vars, column, ray_angle);
-
 }
 
 void	cast_all_rays(t_mlx_data *data)
@@ -370,9 +374,9 @@ void	cast_all_rays(t_mlx_data *data)
 void	check_the_textures(t_dir_img d_t)
 {
 	if (d_t.east.img == NULL || d_t.north.img == NULL)
-		ft_error(UNEXPECTED_FLOW, "wrong path!!");
+		ft_error(UNEXPECTED_FLOW, "WRONG TEXTURE PATH\n");
 	if (d_t.west.img == NULL || d_t.south.img == NULL)
-		ft_error(UNEXPECTED_FLOW, "wrong path!!");
+		ft_error(UNEXPECTED_FLOW, "WRONG TEXTURE PATH\n");
 }
 
 void	init_textures(t_dir_img *d_t, t_mlx_data data)
@@ -386,16 +390,16 @@ void	init_textures(t_dir_img *d_t, t_mlx_data data)
 	d_t->west.img = mlx_xpm_file_to_image(data.mlx_ptr,
 			data.map_data.west_textrure, &d_t->west.x, &d_t->west.y);
 	check_the_textures(*d_t);
-	d_t->north.addr = mlx_get_data_addr(d_t->north.img, 
+	d_t->north.addr = mlx_get_data_addr(d_t->north.img,
 			&d_t->north.bits_per_pixel,
 			&d_t->north.line_size, &d_t->north.endian);
-	d_t->south.addr = mlx_get_data_addr(d_t->south.img, 
+	d_t->south.addr = mlx_get_data_addr(d_t->south.img,
 			&d_t->south.bits_per_pixel,
 			&d_t->south.line_size, &d_t->south.endian);
-	d_t->east.addr = mlx_get_data_addr(d_t->east.img, 
+	d_t->east.addr = mlx_get_data_addr(d_t->east.img,
 			&d_t->east.bits_per_pixel,
 			&d_t->east.line_size, &d_t->east.endian);
-	d_t->west.addr = mlx_get_data_addr(d_t->west.img, 
+	d_t->west.addr = mlx_get_data_addr(d_t->west.img,
 			&d_t->west.bits_per_pixel,
 			&d_t->west.line_size, &d_t->west.endian);
 }
@@ -630,17 +634,6 @@ void	update(t_mlx_data *data)
 			&data->main_img.line_size,
 			&data->main_img.endian
 			);
-	data->map_img.img = mlx_new_image(
-			data->mlx_ptr,
-			data->window_width * SCALE,
-			data->window_height * SCALE
-			);
-	data->map_img.addr = mlx_get_data_addr(
-			data->map_img.img,
-			&data->map_img.bits_per_pixel,
-			&data->map_img.line_size,
-			&data->map_img.endian
-			);
 }
 
 void	map_setup(t_mlx_data *data)
@@ -658,26 +651,9 @@ int	handle_keys(t_mlx_data *data)
 	return (0);
 }
 
-int mouse_hook(int button, int x, int y, t_mlx_data *data)
+void	move_player_with_mouse(int button, t_mlx_data *data)
 {
-	(void)y;
-	if (button == 1)
-	{
-		int mid = WINDOW_WIDTH / 2;
-		if (x > 0 && x < mid)
-		{
-			data->player.turn_direction = -1;
-			rotate_player(data);
-			data->player.turn_direction = 0;
-		}
-		else if ( x > mid && x < WINDOW_WIDTH)
-		{
-			data->player.turn_direction = +1;
-			rotate_player(data);
-			data->player.turn_direction = 0;
-		}
-	}
-	else if (button == 4)
+	if (button == 4)
 	{
 		data->player.walk_direction = -1;
 		move_player(data);
@@ -689,6 +665,30 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data)
 		move_player(data);
 		data->player.walk_direction = 0;
 	}
+}
+
+int	mouse_hook(int button, int x, int y, t_mlx_data *data)
+{
+	int	mid;
+
+	(void)y;
+	if (button == 1)
+	{
+		mid = WINDOW_WIDTH / 2;
+		if (x > 0 && x < mid)
+		{
+			data->player.turn_direction = -1;
+			rotate_player(data);
+			data->player.turn_direction = 0;
+		}
+		else if (x > mid && x < WINDOW_WIDTH)
+		{
+			data->player.turn_direction = +1;
+			rotate_player(data);
+			data->player.turn_direction = 0;
+		}
+	}
+	move_player_with_mouse(button, data);
 	return (0);
 }
 
