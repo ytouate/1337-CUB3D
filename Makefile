@@ -42,7 +42,7 @@ $(NAME): $(O_FILES)
 
 clean:
 	cd src && rm -f *.o
-	cd Libft && make clean && cd ..
+	cd Libft && make fclean && cd ..
 	cd get_next_line/ && rm -rf *.o
 
 fclean: clean
