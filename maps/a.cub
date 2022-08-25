@@ -1,4 +1,5 @@
-NO ./textures/redbrick.xpm     a
+NO ./textures/redbrick.xpm
+NO ./textures/redbrick.xpm 
 SO ./textures/colorstone.xpm
 WE ./textures/north.xpm 
 EA ./textures/wood.xpm
