@@ -636,6 +636,18 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data)
 			data->player.turn_direction = 0;
 		}
 	}
+	else if (button == 4)
+	{
+		data->player.walk_direction = -1;
+		move_player(data);
+		data->player.walk_direction = 0;
+	}
+	else if (button == 5)
+	{
+		data->player.walk_direction = 1;
+		move_player(data);
+		data->player.walk_direction = 0;
+	}
 	return (0);
 }
 
