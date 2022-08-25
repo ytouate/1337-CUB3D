@@ -664,7 +664,7 @@ int	handle_keys(t_mlx_data *data)
 
 void	move_player_with_mouse(int button, t_mlx_data *data)
 {
-	else if (button == 4)
+	if (button == 4)
 	{
 		data->player.walk_direction = -1;
 		move_player(data);
