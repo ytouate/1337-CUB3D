@@ -136,14 +136,14 @@ char	*get_path(int i, char *str)
 		s[j] = str[j];
 		j++;
 	}
+	s[j] = '\0';
 	while (str[j])
 	{
 		if (str[j] != ' ')
-			ft_error(UNEXPECTED_FLOW, "wrong path !!\n");
+			ft_error(UNEXPECTED_FLOW, "INVALID TEXTURE PATH\n");
 		j++;
 	}
 	free(str);
-	s[j] = '\0';
 	return (s);
 }
 
@@ -242,6 +242,14 @@ int	check_the_array(int *check, int i)
 	return (i);
 }
 
+void	norm(int spaces, int *check, t_mlx_data *data, char *line)
+{
+	check[6] = 0;
+	first_conditions(data, line, spaces, check);
+	second_conditions(data, line, spaces, check);
+	free(line);
+}
+
 int	fill_map_data(char **grid, t_mlx_data *data)
 {
 	int		i;
@@ -258,12 +266,7 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 			line = ft_strtrim(grid[i], "\n\t");
 			spaces = count_spaces(line);
 			if (ft_isalpha(line[spaces]))
-			{
-				check[6] = 0;
-				first_conditions(data, line, spaces, check);
-				second_conditions(data, line, spaces, check);
-				free(line);
-			}
+				norm(spaces, check, data, line);
 			else
 			{
 				free(line);

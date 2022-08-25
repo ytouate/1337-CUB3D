@@ -634,17 +634,6 @@ void	update(t_mlx_data *data)
 			&data->main_img.line_size,
 			&data->main_img.endian
 			);
-	data->map_img.img = mlx_new_image(
-			data->mlx_ptr,
-			data->window_width * SCALE,
-			data->window_height * SCALE
-			);
-	data->map_img.addr = mlx_get_data_addr(
-			data->map_img.img,
-			&data->map_img.bits_per_pixel,
-			&data->map_img.line_size,
-			&data->map_img.endian
-			);
 }
 
 void	map_setup(t_mlx_data *data)
