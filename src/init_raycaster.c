@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
 void	init_horz_data(t_mlx_data *data, double *ray_angle, t_raycast *vars)
 {
@@ -41,7 +41,7 @@ void	init_horz_data(t_mlx_data *data, double *ray_angle, t_raycast *vars)
 	vars->next_horz_touch_y = vars->yintercept;
 }
 
-void    init_ver_data(t_mlx_data *data, t_raycast *vars, double *ray_angle)
+void	init_ver_data(t_mlx_data *data, t_raycast *vars, double *ray_angle)
 {
 	vars->found_ver_wall_hit = false;
 	vars->ver_wall_hit_x = 0;
@@ -77,7 +77,7 @@ void	init_numbers(t_mlx_data *data, t_numb_u *number_util, int i)
 		- (number_util->wall_strip_height / 2);
 	if (number_util->wall_top_pixel < 0)
 		number_util->wall_top_pixel = 0;
-	number_util->wall_bottom_pixel = (WINDOW_HEIGHT / 2) 
+	number_util->wall_bottom_pixel = (WINDOW_HEIGHT / 2)
 		+ (number_util->wall_strip_height / 2);
 	if (number_util->wall_bottom_pixel > WINDOW_HEIGHT)
 		number_util->wall_bottom_pixel = WINDOW_HEIGHT;

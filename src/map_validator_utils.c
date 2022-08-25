@@ -26,7 +26,6 @@ bool	is_valid_line(char *line)
 	return (false);
 }
 
-// skips the gap between the map rgb/texture and the map content
 void	skip_empty_lines(char **grid, int *n, int map_len)
 {
 	if (*n == map_len)
@@ -39,7 +38,6 @@ void	skip_empty_lines(char **grid, int *n, int map_len)
 	}
 }
 
-// returns true if the file passed to it ends with .cub
 int	check_file_extention(char *file)
 {
 	int	last;

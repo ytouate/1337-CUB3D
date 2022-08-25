@@ -212,88 +212,135 @@ typedef struct fix_map
 	int		len;
 }t_fix_map;
 
-int	map_has_wall_at(t_mlx_data *data, float x, float y);
-void	setup(t_mlx_data *data);
-void	ddaline(t_line line, t_mlx_data *data);
-void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
-int	ft_error(int exit_code, char *fatal);
-int	ft_close(t_mlx_data *data);
-int	process_input(int keycode, t_mlx_data *data);
-int	mouse_hook(int button, int x, int y, t_mlx_data *data);
-void	move_player_with_mouse(int button, t_mlx_data *data);
-int	handle_keys(t_mlx_data *data);
-void	init(t_mlx_data *data);
-void	init_map_data(t_mlx_data *data);
-void	map_data_constructor(t_map_data *map_data);
-void	init_horz_data(t_mlx_data *data, double *ray_angle, t_raycast *vars);
-void    init_ver_data(t_mlx_data *data, t_raycast *vars, double *ray_angle);
-void	init_numbers(t_mlx_data *data, t_numb_u *number_util, int i);
-void	init_textures(t_dir_img *d_t, t_mlx_data data);
-void	count_commas(char *line);
-void	convert_to_int(char **temp, int *arr);
-void	fill_rgb_array(char *line, int *arr);
-char	*get_path(int i, char *str);
-char	*fill_the_path(char *line);
-void	first_conditions(t_mlx_data *data, char *line, int spaces, int *check);
-void	second_conditions(t_mlx_data *data, char *line, int spaces, int *check);
-void	norm(int spaces, int *check, t_mlx_data *data, char *line);
-int	check_the_array(int *check, int i);
-int	fill_map_data(char **grid, t_mlx_data *data);
-void	fill_map(t_mlx_data *data);
-int		count_map_lines(char *map_name);
-int	count_spaces(char *line);
-void	fill_grid_with_map_lines(char **grid, t_mlx_data *data, int map_fd);
-char	**convert_file_to_grid(t_mlx_data *data);
-void	check_map_texture(t_map_data map_data);
-bool	is_valid_line(char *line);
-void	skip_empty_lines(char **grid, int *n, int map_len);
-int	check_file_extention(char *file);
-void	check_the_zeros(t_fix_map *map, int i, int j, int len);
-void	check_flag(int flag);
-void	call_check_zeros(t_fix_map *map, int len);
-void	check_all_the_map(t_map_data *map_data);
-int	check_char(char c);
+int				map_has_wall_at(t_mlx_data *data, float x, float y);
+void			setup(t_mlx_data *data);
+void			ddaline(t_line line, t_mlx_data *data);
+void			my_mlx_pixel_put(t_img *data, int x, int y, int color);
+int				ft_error(int exit_code, char *fatal);
+int				ft_close(t_mlx_data *data);
+int				process_input(int keycode, t_mlx_data *data);
+int				mouse_hook(int button, int x, int y, t_mlx_data *data);
+void			move_player_with_mouse(int button, t_mlx_data *data);
+int				handle_keys(t_mlx_data *data);
+void			init(t_mlx_data *data);
+void			init_map_data(t_mlx_data *data);
+void			map_data_constructor(t_map_data *map_data);
+void			init_horz_data(t_mlx_data *data,
+					double *ray_angle, t_raycast *vars);
+void			init_ver_data(t_mlx_data *data,
+					t_raycast *vars, double *ray_angle);
+void			init_numbers(t_mlx_data *data, t_numb_u *number_util, int i);
+void			init_textures(t_dir_img *d_t, t_mlx_data data);
+void			count_commas(char *line);
+void			convert_to_int(char **temp, int *arr);
+void			fill_rgb_array(char *line, int *arr);
+char			*get_path(int i, char *str);
+char			*fill_the_path(char *line);
+void			first_conditions(t_mlx_data *data, char *line,
+					int spaces, int *check);
+void			second_conditions(t_mlx_data *data,
+					char *line, int spaces, int *check);
+void			norm(int spaces, int *check, t_mlx_data *data, char *line);
+int				check_the_array(int *check, int i);
+int				fill_map_data(char **grid, t_mlx_data *data);
+void			fill_map(t_mlx_data *data);
+int				count_map_lines(char *map_name);
+int				count_spaces(char *line);
+void			fill_grid_with_map_lines(char **grid,
+					t_mlx_data *data, int map_fd);
+char			**convert_file_to_grid(t_mlx_data *data);
+void			check_map_texture(t_map_data map_data);
+bool			is_valid_line(char *line);
+void			skip_empty_lines(char **grid, int *n, int map_len);
+int				check_file_extention(char *file);
+void			check_the_zeros(t_fix_map *map, int i, int j, int len);
+void			check_flag(int flag);
+void			call_check_zeros(t_fix_map *map, int len);
+void			check_all_the_map(t_map_data *map_data);
+int				check_char(char c);
+void			ddaline(t_line line, t_mlx_data *data);
+void			check_basic_requirements(int ac, char **av);
+void			map_data_constructor(t_map_data *map_data);
+void			free_grid(char **grid);
+void			my_mlx_pixel_put(t_img *data, int x, int y, int color);
+void			skip_empty_lines(char **grid, int *n, int map_len);
+void			check_map_texture(t_map_data map_data);
+void			call_check_zeros(t_fix_map *map, int len);
+void			check_the_zeros(t_fix_map *map, int i, int j, int len);
+void			fill_map(t_mlx_data *data);
+void			first_conditions(t_mlx_data *data,
+					char *line, int spaces, int *check);
+void			second_conditions(t_mlx_data *data,
+					char *line, int spaces, int *check);
+void			fill_rgb_array(char *line, int *arr);
+void			update(t_mlx_data *data);
+void			get_player_pos(t_mlx_data *data);
+void			check_all_the_map(t_map_data *map_data);
+void			fill_grid_with_map_lines(char **grid,
+					t_mlx_data *data, int map_fd);
+void			count_commas(char *line);
+void			convert_to_int(char **temp, int *arr);
 
-void	update(t_mlx_data *data);
-void	move_player(t_mlx_data *data);
+int				check_file_extention(char *file);
+int				check_char(char c);
+int				check_the_array(int *check, int i);
+int				count_spaces(char *line);
+int				ft_error(int exit_code, char *fatal);
+int				count_map_lines(char *map_name);
+int				ft_close(t_mlx_data *data);
+int				fill_map_data(char **grid, t_mlx_data *data);
+int				ft_render(t_mlx_data *data);
 
-void	rotate_player(t_mlx_data *data);
-bool	is_there_a_player(char c);
+char			**convert_file_to_grid(t_mlx_data *data);
+char			*fill_the_path(char *line);
 
-float	get_player_dir(char c);
+bool			get_texture_path(char *l, t_mlx_data *data);
+bool			is_number(char *s);
+bool			is_valid_line(char *line);
 
-void	free_grid(char **grid);
+float			get_player_dir(char c);
+t_map_data		parse_map(char *map_name);
 
-void	get_player_pos(t_mlx_data *data);
-int	reset(int keycode, t_mlx_data *data);
-void	map_setup(t_mlx_data *data);
-void	get_ver_ray_data(t_mlx_data *data, t_raycast *vars);
-void	horz_intercetion(t_mlx_data *data, t_raycast *vars);
-void	cast_all_rays(t_mlx_data *data);
-void	ver_intersection(t_mlx_data *data, t_raycast *vars);
-int	create_rgb(int r, int g, int b);
-void	check_the_textures(t_dir_img d_t);
+void			update(t_mlx_data *data);
+void			move_player(t_mlx_data *data);
 
-void	hit_vertical(t_mlx_data *data, int i, t_numb_u number_util
-						, t_dir_img d_t);
-int	ft_render(t_mlx_data *data);
-void	hit_horizontal(t_mlx_data *data, int i,
-	t_numb_u number_util, t_dir_img d_t);
-void	check_basic_requirements(int ac, char **av);
-void	generate_3d_projection(t_mlx_data *data);
-void	render_ceiling(t_mlx_data *data);
+void			rotate_player(t_mlx_data *data);
+bool			is_there_a_player(char c);
 
-void	render_floor(t_mlx_data *data);
+float			get_player_dir(char c);
 
-void	render_ceiling_and_floor(t_mlx_data *data);
-void	get_closest_wall_hit(t_mlx_data *data, t_raycast *vars);
+void			free_grid(char **grid);
 
-void	cast_ray(t_mlx_data *data, double ray_angle, int column);
-void	get_horz_ray_data(t_mlx_data *data, t_raycast *vars);
-void	init_window(t_mlx_data *data);
-void    fill_ray_data(t_mlx_data *data,
-		t_raycast *vars, int column, double ray_angle);
-		float	normalize_angle(float angle);
+void			get_player_pos(t_mlx_data *data);
+int				reset(int keycode, t_mlx_data *data);
+void			map_setup(t_mlx_data *data);
+void			get_ver_ray_data(t_mlx_data *data, t_raycast *vars);
+void			horz_intercetion(t_mlx_data *data, t_raycast *vars);
+void			cast_all_rays(t_mlx_data *data);
+void			ver_intersection(t_mlx_data *data, t_raycast *vars);
+int				create_rgb(int r, int g, int b);
+void			check_the_textures(t_dir_img d_t);
 
-float	distance_between_points(float x1, float y1, float x2, float y2);
+void			hit_vertical(t_mlx_data *data, int i, t_numb_u number_util,
+					t_dir_img d_t);
+int				ft_render(t_mlx_data *data);
+void			hit_horizontal(t_mlx_data *data, int i,
+					t_numb_u number_util, t_dir_img d_t);
+void			check_basic_requirements(int ac, char **av);
+void			generate_3d_projection(t_mlx_data *data);
+void			render_ceiling(t_mlx_data *data);
+
+void			render_floor(t_mlx_data *data);
+
+void			render_ceiling_and_floor(t_mlx_data *data);
+void			get_closest_wall_hit(t_mlx_data *data, t_raycast *vars);
+
+void			cast_ray(t_mlx_data *data, double ray_angle, int column);
+void			get_horz_ray_data(t_mlx_data *data, t_raycast *vars);
+void			init_window(t_mlx_data *data);
+void			fill_ray_data(t_mlx_data *data,
+					t_raycast *vars, int column, double ray_angle);
+float			normalize_angle(float angle);
+
+float			distance_between_points(float x1, float y1, float x2, float y2);
 #endif

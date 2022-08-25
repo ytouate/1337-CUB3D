@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
 void	check_the_textures(t_dir_img d_t)
 {
@@ -27,8 +27,8 @@ void	hit_vertical(t_mlx_data *data, int i, t_numb_u number_util
 	{
 		number_util.ofsety = number_util.distance * ((float)d_t.west.y
 				/ number_util.wall_strip_height);
-		number_util.e = *(int *)(d_t.west.addr + d_t.west.line_size *
-				number_util.ofsety + number_util.ofsetx
+		number_util.e = *(int *)(d_t.west.addr + d_t.west.line_size
+				* number_util.ofsety + number_util.ofsetx
 				* (d_t.west.bits_per_pixel / 8));
 		*(int *)number_util.dst = number_util.e;
 	}

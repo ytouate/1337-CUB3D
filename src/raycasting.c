@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
 void	horz_intercetion(t_mlx_data *data, t_raycast *vars)
 {

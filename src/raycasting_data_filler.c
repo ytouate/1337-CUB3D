@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
 void	get_ver_ray_data(t_mlx_data *data, t_raycast *vars)
 {
@@ -63,7 +63,7 @@ void	get_horz_ray_data(t_mlx_data *data, t_raycast *vars)
 	}	
 }
 
-void    fill_ray_data(t_mlx_data *data,
+void	fill_ray_data(t_mlx_data *data,
 		t_raycast *vars, int column, double ray_angle)
 {
 	if (vars->ver_hit_distance < vars->horz_hit_distance)

@@ -46,7 +46,6 @@ void	init_map_data(t_mlx_data *data)
 	data->map_data.map_lines = i;
 }
 
-// initialize the map_data for good practices
 void	map_data_constructor(t_map_data *map_data)
 {
 	map_data->north_texture = NULL;

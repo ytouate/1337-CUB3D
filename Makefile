@@ -17,10 +17,12 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 FILES = \
+	./src/parse_utils3.c 						\
+	./src/parse_utils2.c 						\
+	./src/parse_utils.c							\
 	./src/cub.c									\
 	./src/debug.c								\
 	./src/map_parse.c							\
-	./src/map_check.c							\
 	./src/drawing_utils.c						\
 	./src/ddaline.c								\
 	./src/map_validator.c						\
@@ -29,6 +31,16 @@ FILES = \
 	./src/init_functions.c						\
 	./get_next_line/get_next_line_utils.c		\
 	./get_next_line/get_next_line.c				\
+	./src/raycasting.c							\
+	./src/collosions.c							\
+	./src/raycasting_utils.c					\
+	./src/rendering_utils.c						\
+	./src/texture_utils.c						\
+	./src/random_utils.c						\
+	./src/raycasting_data_filler.c				\
+	./src/init_raycaster.c						\
+	./src/moving_utils.c						\
+	./src/mlx_utils.c							\
 
 O_FILES = $(FILES:.c=.o)
 
@@ -40,7 +52,7 @@ $(NAME): $(O_FILES)
 
 clean:
 	cd src && rm -f *.o
-	cd Libft && make clean && cd ..
+	cd Libft && make fclean && cd ..
 	cd get_next_line/ && rm -rf *.o
 
 fclean: clean
