@@ -374,9 +374,9 @@ void	cast_all_rays(t_mlx_data *data)
 void	check_the_textures(t_dir_img d_t)
 {
 	if (d_t.east.img == NULL || d_t.north.img == NULL)
-		ft_error(UNEXPECTED_FLOW, "wrong path!!");
+		ft_error(UNEXPECTED_FLOW, "WRONG TEXTURE PATH\n");
 	if (d_t.west.img == NULL || d_t.south.img == NULL)
-		ft_error(UNEXPECTED_FLOW, "wrong path!!");
+		ft_error(UNEXPECTED_FLOW, "WRONG TEXTURE PATH\n");
 }
 
 void	init_textures(t_dir_img *d_t, t_mlx_data data)

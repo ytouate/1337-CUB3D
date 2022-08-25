@@ -273,7 +273,7 @@ void	fill_map(t_mlx_data *data)
 	temp_grid = convert_file_to_grid(data);
 	map_content_start = fill_map_data(temp_grid, data);
 	if (map_content_start == -1)
-		ft_error(UNEXPECTED_FLOW, "the elements are not valid\n");
+		ft_error(UNEXPECTED_FLOW, "INVALID MAP IDENTIFIERS\n");
 	map_content_end = data->map_data.map_lines;
 	data->map_data.map = ft_calloc(sizeof(char *),
 			map_content_end - map_content_start + 1);
