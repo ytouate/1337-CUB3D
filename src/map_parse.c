@@ -178,18 +178,24 @@ void	first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 	if (!ft_strncmp("NO ", line + spaces, 3))
 	{
 		check[0] += 1;
+		if (check[0] > 1)
+			ft_error(UNEXPECTED_FLOW, "DUPLICATED TEXTURES\n");
 		check[6] += 1;
 		data->map_data.north_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("SO ", line + spaces, 3))
 	{
 		check[1] += 1;
+		if (check[1] > 1)
+			ft_error(UNEXPECTED_FLOW, "DUPLICATED TEXTURES\n");
 		check[6] += 1;
 		data->map_data.south_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("WE ", line + spaces, 3))
 	{
 		check[2] += 1;
+		if (check[2] > 1)
+			ft_error(UNEXPECTED_FLOW, "DUPLICATED TEXTURES\n");
 		check[6] += 1;
 		data->map_data.west_textrure = fill_the_path(line + spaces);
 	}
@@ -200,6 +206,8 @@ void	second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 	if (!ft_strncmp("EA ", line + spaces, 3))
 	{
 		check[3] += 1;
+		if (check[3] > 1)
+			ft_error(UNEXPECTED_FLOW, "DUPLICATED TEXTURES\n");
 		check[6] += 1;
 		data->map_data.east_texture = fill_the_path(line + spaces);
 	}
@@ -216,7 +224,7 @@ void	second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 		fill_rgb_array(line + spaces, data->map_data.ceilling_color);
 	}
 	else if (check[6] == 0)
-		ft_error(UNEXPECTED_FLOW, "invalid elements\n");
+		ft_error(UNEXPECTED_FLOW, "INVALID MAP IDENTIFIERS\n");
 }
 
 // fill the first sex lines;
