@@ -114,6 +114,24 @@ typedef struct img_data{
 	int			bits_per_pixel;
 	int			line_size;
 }t_img;
+
+typedef struct s_line {
+	float		x;
+	float		y;
+	float		x1;
+	float		y1;
+	int			flag;
+	int			color;
+	float		len;
+	int			dx;
+	int			dy;
+	float		sx;
+	float		sy;
+	float		xinc;
+	float		yinc;
+	int			h;
+}t_line;
+
 typedef struct s_rays {
 	float	ray_angle;
 	float	wall_hit_x;
@@ -166,8 +184,6 @@ typedef struct s_square
 	int		height;
 }t_square;
 
-
-
 typedef struct img_with_direction
 {
 	t_img	north;
@@ -196,8 +212,7 @@ typedef struct fix_map
 	int		len;
 }t_fix_map;
 
-void		ddaline(float x, float y, float x1, float y1,
-				t_mlx_data *data, int flag, int color);
+void		ddaline(t_line line, t_mlx_data *data);
 void		check_basic_requirements(int ac, char **av);
 void		map_data_constructor(t_map_data *map_data);
 void		free_grid(char **grid);

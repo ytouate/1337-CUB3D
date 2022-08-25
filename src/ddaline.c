@@ -12,35 +12,26 @@
 
 #include "../cub.h"
 
-void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, int color)
+void	ddaline(t_line line, t_mlx_data *data)
 {
-	float	len; 
-	int		dx;
-	int		dy;
-	float 	sx;
-	float 	sy;
-	float	xinc;
-	float	yinc;
-	int h;
-
-	dx = x1 - x;
-	dy = y1 - y;
-	h = 0;
-	if (abs(dx) > abs(dy))
-		len = abs(dx);
+	line.dx = line.x1 - line.x;
+	line.dy = line.y1 - line.y;
+	line.h = 0;
+	if (abs(line.dx) > abs(line.dy))
+		line.len = abs(line.dx);
 	else
-		len = abs(dy);
-	xinc = dx / len;
-	yinc = dy / len;
-	while (h <= len)
+		line.len = abs(line.dy);
+	line.xinc = line.dx / line.len;
+	line.yinc = line.dy / line.len;
+	while (line.h <= line.len)
 	{
-		sx = x + xinc * h;
-		sy = y + yinc * h;
-		h++;
-		if (sx > 0 && sx < 1920 && sy > 0 && sy < 1080)
+		line.sx = line.x + line.xinc * line.h;
+		line.sy = line.y + line.yinc * line.h;
+		line.h++;
+		if (line.sx > 0 && line.sx < 1920 && line.sy > 0 && line.sy < 1080)
 		{
-			if (flag == MAIN_MAP)
-				my_mlx_pixel_put(&data->main_img, sx, sy, color);
+			if (line.flag == MAIN_MAP)
+				my_mlx_pixel_put(&data->main_img, line.sx, line.sy, line.color);
 		}
 	}
 }
