@@ -390,16 +390,16 @@ void	init_textures(t_dir_img *d_t, t_mlx_data data)
 	d_t->west.img = mlx_xpm_file_to_image(data.mlx_ptr,
 			data.map_data.west_textrure, &d_t->west.x, &d_t->west.y);
 	check_the_textures(*d_t);
-	d_t->north.addr = mlx_get_data_addr(d_t->north.img, 
+	d_t->north.addr = mlx_get_data_addr(d_t->north.img,
 			&d_t->north.bits_per_pixel,
 			&d_t->north.line_size, &d_t->north.endian);
-	d_t->south.addr = mlx_get_data_addr(d_t->south.img, 
+	d_t->south.addr = mlx_get_data_addr(d_t->south.img,
 			&d_t->south.bits_per_pixel,
 			&d_t->south.line_size, &d_t->south.endian);
-	d_t->east.addr = mlx_get_data_addr(d_t->east.img, 
+	d_t->east.addr = mlx_get_data_addr(d_t->east.img,
 			&d_t->east.bits_per_pixel,
 			&d_t->east.line_size, &d_t->east.endian);
-	d_t->west.addr = mlx_get_data_addr(d_t->west.img, 
+	d_t->west.addr = mlx_get_data_addr(d_t->west.img,
 			&d_t->west.bits_per_pixel,
 			&d_t->west.line_size, &d_t->west.endian);
 }
