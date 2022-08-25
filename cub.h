@@ -51,8 +51,9 @@
 # define TURN_SPEED 0.1
 # define FOV 60 * (PI / 180)
 # define HALF_FOV FOV / 2
-
-# define SCALE 0.2
+# define SCALE 0.1
+# define WINDOW_WIDTH 1000
+# define WINDOW_HEIGHT 1000
 
 typedef struct n_u
 {

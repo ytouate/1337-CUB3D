@@ -45,18 +45,20 @@ void	init_window(t_mlx_data *data)
 {
 	data->mlx_ptr = mlx_init();
 	data->window = mlx_new_window(data->mlx_ptr,
-			data->window_width,
-			data->window_height,
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT,
 			"Cub3D");
+
 	data->map_img.img = mlx_new_image(data->mlx_ptr,
-			data->window_width * SCALE,
-			data->window_height * SCALE);
+			WINDOW_WIDTH * SCALE,
+			WINDOW_WIDTH * SCALE);
 	data->map_img.addr = mlx_get_data_addr(data->map_img.img,
 			&data->map_img.bits_per_pixel,
 			&data->map_img.line_size, &data->map_img.endian);
+
 	data->main_img.img = mlx_new_image(data->mlx_ptr,
-			data->window_width,
-			data->window_height);
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT);
 	data->main_img.addr = mlx_get_data_addr(data->main_img.img,
 			&data->main_img.bits_per_pixel,
 			&data->main_img.line_size,
@@ -150,11 +152,7 @@ void	setup(t_mlx_data *data)
 	get_player_pos(data);
 	data->window_height = data->map_data.map_lines * data->tile_size;
 	data->window_width = data->map_data.longest_line * data->tile_size;
-	// if (data->window_width > 2560)
-		// data->window_width = 2560;
-	// if (data->window_height > 1440)
-		// data->window_height = 1440;
-	data->rays = malloc(sizeof(t_rays) * data->window_width);
+	data->rays = malloc(sizeof(t_rays) * WINDOW_WIDTH);
 	data->player.turn_direction = 0;
 	data->player.walk_direction = 0;
 }
@@ -419,10 +417,10 @@ void	cast_all_rays(t_mlx_data *data)
 
 	strip_id = 0;
 	ray_angle = data->player.rotation_angle - (FOV / 2);
-	while (strip_id < data->window_width)
+	while (strip_id < WINDOW_WIDTH)
 	{
 		cast_ray(data, ray_angle, strip_id);
-		ray_angle += (FOV / data->window_width);
+		ray_angle += (FOV / WINDOW_WIDTH);
 		strip_id++;
 	}
 }
@@ -464,18 +462,18 @@ void	init_numbers(t_mlx_data *data, t_numb_u *number_util, int i)
 {
 	number_util->prep_distance = data->rays[i].distance
 		* cos(data->rays[i].ray_angle - data->player.rotation_angle);
-	number_util->distance_proj_plan = (data->window_width / 2) / tan(FOV / 2);
+	number_util->distance_proj_plan = (WINDOW_WIDTH / 2) / tan(FOV / 2);
 	number_util->projected_wall_height = (data->tile_size
 			/ number_util->prep_distance) * number_util->distance_proj_plan;
 	number_util->wall_strip_height = (int)number_util->projected_wall_height;
-	number_util->wall_top_pixel = (data->window_height / 2)
+	number_util->wall_top_pixel = (WINDOW_HEIGHT / 2)
 		- (number_util->wall_strip_height / 2);
 	if (number_util->wall_top_pixel < 0)
 		number_util->wall_top_pixel = 0;
-	number_util->wall_bottom_pixel = (data->window_height / 2) 
+	number_util->wall_bottom_pixel = (WINDOW_HEIGHT / 2) 
 		+ (number_util->wall_strip_height / 2);
-	if (number_util->wall_bottom_pixel > data->window_height)
-		number_util->wall_bottom_pixel = data->window_height;
+	if (number_util->wall_bottom_pixel > WINDOW_HEIGHT)
+		number_util->wall_bottom_pixel = WINDOW_HEIGHT;
 	if (data->rays[i].was_hit_vertical)
 		number_util->ofsetx = (int)data->rays[i].wall_hit_y % data->tile_size;
 	else
@@ -537,21 +535,26 @@ void	generate_3d_projection(t_mlx_data *data)
 
 	i = -1;
 	init_textures(&d_t, *data);
-	while (++i < data->window_width)
+	while (++i < WINDOW_WIDTH)
 	{
 		init_numbers(data, &number_util, i);
 		j = number_util.wall_top_pixel - 1;
 		while (++j < number_util.wall_bottom_pixel)
 		{
 			number_util.distance = j + (number_util.wall_strip_height / 2)
-				- (data->window_height / 2);
+				- (WINDOW_HEIGHT / 2);
 			number_util.dst = data->main_img.addr;
 			number_util.dst += (j * data->main_img.line_size
 					+ i * (data->main_img.bits_per_pixel / 8));
-			if (data->rays[i].was_hit_vertical)
-				hit_vertical(data, i, number_util, d_t);
-			else
-				hit_horizontal(data, i, number_util, d_t);
+			if (j < WINDOW_HEIGHT && i < WINDOW_WIDTH)
+			{
+				//my_mlx_pixel_put(&data->main_img, i, j, 0xFF00FF);
+				if (data->rays[i].was_hit_vertical)
+					hit_vertical(data, i, number_util, d_t);
+				else
+					hit_horizontal(data, i, number_util, d_t);
+			}
+			
 		}
 	}
 }
@@ -567,10 +570,10 @@ void	render_ceiling(t_mlx_data *data)
 	int	j;
 
 	i = 0;
-	while (i < data->window_height / 2)
+	while (i < WINDOW_HEIGHT / 2)
 	{
 		j = 0;
-		while (j < data->window_width)
+		while (j < WINDOW_WIDTH)
 		{
 			my_mlx_pixel_put(
 				&data->main_img, j, i,
@@ -590,11 +593,11 @@ void	render_floor(t_mlx_data *data)
 	int	i;
 	int	j;
 
-	i = data->window_height / 2;
-	while (i < data->window_height)
+	i = WINDOW_HEIGHT / 2;
+	while (i < WINDOW_HEIGHT)
 	{
 		j = 0;
-		while (j < data->window_width)
+		while (j < WINDOW_WIDTH)
 		{
 			my_mlx_pixel_put(
 				&data->main_img,
@@ -620,9 +623,9 @@ void	render_ceiling_and_floor(t_mlx_data *data)
 int ft_render(t_mlx_data *data)
 {
 	cast_all_rays(data);
-	render_map(data);
-	render_rays(data, MINI_MAP);
-	render_player(data);
+	// render_map(data);
+	// render_rays(data, MINI_MAP);
+	// render_player(data);
 	render_ceiling_and_floor(data);
 	generate_3d_projection(data);
 	mlx_put_image_to_window(
@@ -630,11 +633,11 @@ int ft_render(t_mlx_data *data)
 		data->window,
 		data->main_img.img,
 		0, 0);
-	mlx_put_image_to_window(
-		data->mlx_ptr,
-		data->window,
-		data->map_img.img,
-		0, 0);
+	// mlx_put_image_to_window(
+		// data->mlx_ptr,
+		// data->window,
+		// data->map_img.img,
+		// 0, 0);
 	return (0);
 }
 
@@ -688,8 +691,8 @@ void	update(t_mlx_data *data)
 	mlx_clear_window(data->mlx_ptr, data->window);
 	data->main_img.img = mlx_new_image(
 			data->mlx_ptr,
-			data->window_width,
-			data->window_height
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT
 			);
 	data->main_img.addr = mlx_get_data_addr(
 			data->main_img.img,
@@ -718,7 +721,6 @@ void	map_setup(t_mlx_data *data)
 
 int	handle_keys(t_mlx_data *data)
 {
-	// ft_render(data);
 	if (data->player.walk_direction == 1 || data->player.walk_direction == -1)
 		move_player(data);
 	if (data->player.turn_direction == 1 || data->player.turn_direction == -1)
