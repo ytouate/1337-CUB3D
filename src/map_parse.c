@@ -85,16 +85,21 @@ void	convert_to_int(char **temp, int *arr)
 			arr[0] = ft_atoi(temp[0]);
 			arr[1] = ft_atoi(temp[1]);
 			arr[2] = ft_atoi(temp[2]);
-			free_grid(temp);
 			while (++i < 3)
 				if (arr[i] > 255 || arr[i] < 0)
 					ft_error(UNEXPECTED_FLOW, "RGB OVERFLOW OR UNDERFLOW\n");
 		}
 		else
+		{
+			free_grid(temp);
 			ft_error(UNEXPECTED_FLOW, "INVALID RGB COLORS\n");
+		}
 	}
 	else
+	{
+		free_grid(temp);
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
+	}
 }
 // fills the rgb array and checks if the colors are valid;
 
@@ -116,6 +121,7 @@ void	fill_rgb_array(char *line, int *arr)
 	temp = ft_split(str, ',');
 	free(str);
 	convert_to_int(temp, arr);
+	free_grid(temp);
 }
 
 char	*get_path(int i, char *str)
