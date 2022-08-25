@@ -1,5 +1,4 @@
-fixing all the parse errors
-    - checking for valid identifiers
+- checking for valid identifiers
 norming the cast_ray function
 seperate the function in seperate files
 cleaning all the memory leaks
