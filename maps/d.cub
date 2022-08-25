@@ -1,5 +1,5 @@
     R     800 800
-    NO        ./textures/barrel.xpm      
+    NO        ./textures/greystone.xpm      
 SO ./textures/wood.xpm
 WE ./textures/hjrifi.xpm
 EA ./textures/redbrick.xpm
