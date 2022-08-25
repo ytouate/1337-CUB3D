@@ -96,4 +96,5 @@ void	check_all_the_map(t_map_data *map_data)
 		i++;
 	}
 	call_check_zeros(map_with_len, map_data->map_lines);
+	free(map_with_len);
 }

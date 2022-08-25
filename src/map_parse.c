@@ -46,8 +46,12 @@ bool	is_number(char *s)
 	while (i < len)
 	{
 		if (!ft_isdigit(s[i++]))
+		{
+			free(s);
 			return (false);
+		}
 	}
+	free(s);
 	return (true);
 }
 
@@ -81,6 +85,7 @@ void	convert_to_int(char **temp, int *arr)
 			arr[0] = ft_atoi(temp[0]);
 			arr[1] = ft_atoi(temp[1]);
 			arr[2] = ft_atoi(temp[2]);
+			free_grid(temp);
 			while (++i < 3)
 				if (arr[i] > 255 || arr[i] < 0)
 					ft_error(UNEXPECTED_FLOW, "RGB OVERFLOW OR UNDERFLOW\n");
@@ -92,23 +97,24 @@ void	convert_to_int(char **temp, int *arr)
 		ft_error(UNEXPECTED_FLOW, "INVALID RGB FORMAT\n");
 }
 // fills the rgb array and checks if the colors are valid;
+
 void	fill_rgb_array(char *line, int *arr)
 {
 	char	**temp;
 	int		i;
 	char	*str;
+	char	*t;
 
-	temp = malloc (sizeof(char *));
 	i = 0;
 	str = ft_strdup(line + 1);
 	while (str[i] == ' ')
 		i++;
-	temp[0] = str;
-	str = ft_strdup(temp[0] + i);
-	free(temp[0]);
-	free(temp);
+	t = str;
+	str = ft_strdup(str + i);
+	free(t);
 	count_commas(str);
 	temp = ft_split(str, ',');
+	free(str);
 	convert_to_int(temp, arr);
 }
 
@@ -160,19 +166,19 @@ void	first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 	if (!ft_strncmp("NO ", line + spaces, 3))
 	{
 		check[0] += 1;
-		check[7] += 1;
+		check[6] += 1;
 		data->map_data.north_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("SO ", line + spaces, 3))
 	{
 		check[1] += 1;
-		check[7] += 1;
+		check[6] += 1;
 		data->map_data.south_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("WE ", line + spaces, 3))
 	{
 		check[2] += 1;
-		check[7] += 1;
+		check[6] += 1;
 		data->map_data.west_textrure = fill_the_path(line + spaces);
 	}
 }
@@ -182,22 +188,22 @@ void	second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 	if (!ft_strncmp("EA ", line + spaces, 3))
 	{
 		check[3] += 1;
-		check[7] += 1;
+		check[6] += 1;
 		data->map_data.east_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("F ", line + spaces, 2))
 	{
 		check[4] += 1;
-		check[7] += 1;
+		check[6] += 1;
 		fill_rgb_array(line + spaces, data->map_data.floor_color);
 	}
 	else if (!ft_strncmp("C ", line + spaces, 2))
 	{
 		check[5] += 1;
-		check[7] += 1;
+		check[6] += 1;
 		fill_rgb_array(line + spaces, data->map_data.ceilling_color);
 	}
-	else if (check[7] == 0)
+	else if (check[6] == 0)
 		ft_error(UNEXPECTED_FLOW, "invalid elements\n");
 }
 
@@ -210,13 +216,9 @@ int	check_the_array(int *check, int i)
 	while (j < 6)
 	{
 		if (check[j] != 1)
-		{
-			free(check);
 			return (-1);
-		}
 		j++;
 	}
-	free(check);
 	return (i);
 }
 
@@ -225,10 +227,9 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 	int		i;
 	char	*line;
 	int		spaces;
-	int		*check;
+	int		check[7];
 
 	i = 0;
-	check = malloc(sizeof(int) * 7);
 	ft_memset(check, 0, sizeof(int) * 7);
 	while (grid[i])
 	{
@@ -238,12 +239,16 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 			spaces = count_spaces(line);
 			if (ft_isalpha(line[spaces]))
 			{
-				check[7] = 0;
+				check[6] = 0;
 				first_conditions(data, line, spaces, check);
 				second_conditions(data, line, spaces, check);
+				free(line);
 			}
 			else
+			{
+				free(line);
 				return (check_the_array(check, i));
+			}
 		}
 		i++;
 	}
@@ -278,23 +283,6 @@ void	fill_map(t_mlx_data *data)
 	free_grid(temp_grid);
 }
 
-// checks the rgb array if it passed 255 or went below 0;
-bool	got_overflowed(int *rgb)
-
-{
-	int	i;
-
-	i = 0;
-	while (i < 3)
-	{
-		if (rgb[i] > 255 || rgb[i] < 0)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-// skips the empty new lines at the top of the file
 // and counts the rest
 int		count_map_lines(char *map_name)
 {
