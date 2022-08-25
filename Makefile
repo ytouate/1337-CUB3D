@@ -17,10 +17,12 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 FILES = \
+	./src/parse_utils3.c 						\
+	./src/parse_utils2.c 						\
+	./src/parse_utils.c							\
 	./src/cub.c									\
 	./src/debug.c								\
 	./src/map_parse.c							\
-	./src/map_check.c							\
 	./src/drawing_utils.c						\
 	./src/ddaline.c								\
 	./src/map_validator.c						\

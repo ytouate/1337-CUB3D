@@ -166,8 +166,6 @@ typedef struct s_square
 	int		height;
 }t_square;
 
-
-
 typedef struct img_with_direction
 {
 	t_img	north;
@@ -207,14 +205,21 @@ void		check_map_texture(t_map_data map_data);
 void		call_check_zeros(t_fix_map *map, int len);
 void		check_the_zeros(t_fix_map *map, int i, int j, int len);
 void		fill_map(t_mlx_data *data);
-char		*fill_the_path(char *line);
+void		first_conditions(t_mlx_data *data,
+				char *line, int spaces, int *check);
+void		second_conditions(t_mlx_data *data,
+				char *line, int spaces, int *check);
 void		fill_rgb_array(char *line, int *arr);
 void		update(t_mlx_data *data);
 void		get_player_pos(t_mlx_data *data);
 void		check_all_the_map(t_map_data *map_data);
+void		fill_grid_with_map_lines(char **grid, t_mlx_data *data, int map_fd);
+void		count_commas(char *line);
+void		convert_to_int(char **temp, int *arr);
 
 int			check_file_extention(char *file);
 int			check_char(char c);
+int			check_the_array(int *check, int i);
 int			count_spaces(char *line);
 int			ft_error(int exit_code, char *fatal);
 int			count_map_lines(char *map_name);
@@ -223,6 +228,7 @@ int			fill_map_data(char **grid, t_mlx_data *data);
 int			ft_render(t_mlx_data *data);
 
 char		**convert_file_to_grid(t_mlx_data *data);
+char		*fill_the_path(char *line);
 
 bool		get_texture_path(char *l, t_mlx_data *data);
 bool		is_number(char *s);
