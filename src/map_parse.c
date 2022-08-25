@@ -160,16 +160,19 @@ void	first_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 	if (!ft_strncmp("NO ", line + spaces, 3))
 	{
 		check[0] += 1;
+		check[7] += 1;
 		data->map_data.north_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("SO ", line + spaces, 3))
 	{
 		check[1] += 1;
+		check[7] += 1;
 		data->map_data.south_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("WE ", line + spaces, 3))
 	{
 		check[2] += 1;
+		check[7] += 1;
 		data->map_data.west_textrure = fill_the_path(line + spaces);
 	}
 }
@@ -179,19 +182,22 @@ void	second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 	if (!ft_strncmp("EA ", line + spaces, 3))
 	{
 		check[3] += 1;
+		check[7] += 1;
 		data->map_data.east_texture = fill_the_path(line + spaces);
 	}
 	else if (!ft_strncmp("F ", line + spaces, 2))
 	{
 		check[4] += 1;
+		check[7] += 1;
 		fill_rgb_array(line + spaces, data->map_data.floor_color);
 	}
 	else if (!ft_strncmp("C ", line + spaces, 2))
 	{
 		check[5] += 1;
+		check[7] += 1;
 		fill_rgb_array(line + spaces, data->map_data.ceilling_color);
 	}
-	else
+	else if (check[7] == 0)
 		ft_error(UNEXPECTED_FLOW, "invalid elements\n");
 }
 
@@ -222,8 +228,8 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 	int		*check;
 
 	i = 0;
-	check = malloc(sizeof(int) * 6);
-	ft_memset(check, 0, sizeof(int) * 6);
+	check = malloc(sizeof(int) * 7);
+	ft_memset(check, 0, sizeof(int) * 7);
 	while (grid[i])
 	{
 		if (is_valid_line(grid[i]))
@@ -232,6 +238,7 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 			spaces = count_spaces(line);
 			if (ft_isalpha(line[spaces]))
 			{
+				check[7] = 0;
 				first_conditions(data, line, spaces, check);
 				second_conditions(data, line, spaces, check);
 			}
@@ -239,7 +246,6 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 				return (check_the_array(check, i));
 		}
 		i++;
-		printf("%s\n", grid[i]);
 	}
 	return (-1);
 }
