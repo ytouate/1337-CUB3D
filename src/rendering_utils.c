@@ -77,7 +77,7 @@ int	ft_render(t_mlx_data *data)
 {
 	cast_all_rays(data);
 	render_ceiling_and_floor(data);
-	generate_3d_projection(data);
+	render_3d(data);
 	mlx_put_image_to_window(
 		data->mlx_ptr,
 		data->window,

@@ -67,7 +67,7 @@ void	hit_horizontal(t_mlx_data *data, int i,
 	}
 }
 
-void	generate_3d_projection(t_mlx_data *data)
+void	render_3d(t_mlx_data *data)
 {
 	t_dir_img	d_t;
 	t_numb_u	number_util;
