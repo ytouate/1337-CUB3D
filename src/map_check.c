@@ -1,23 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   drawing_utils.c                                    :+:      :+:    :+:   */
+/*   map_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytouate <ytouate@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/01 12:02:03 by ytouate           #+#    #+#             */
-/*   Updated: 2022/08/11 17:45:58 by ytouate          ###   ########.fr       */
+/*   Created: 2022/07/30 10:09:24 by ytouate           #+#    #+#             */
+/*   Updated: 2022/07/30 11:08:14 by ytouate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
-void	my_mlx_pixel_put(t_img *data, int x, int y, int color)
+int	check_map_borders(t_map_data map_data)
 {
-	char	*dst;
+	int		i;
+	int		j;
+	char	*temp;
 
-	if (x > WINDOW_WIDTH ||  y > WINDOW_HEIGHT || x < 0 || y < 0)
-		return ;
-	dst = data->addr + (y * data->line_size + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	i = 0;
+	j = 0;
+	while (map_data.map[i])
+	{
+		j = 0;
+		temp = ft_strtrim(map_data.map[i], "\t ");
+		if (temp[j] != '1')
+			ft_error(1, "Map must be surrounded by walls\n");
+		while (map_data.map[i][j])
+		{
+			j++;
+		}
+		i++;
+	}
+	return (0);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../cub.h"
 
 /* 
 	**checks if there is a map file-name
@@ -191,6 +191,8 @@ void	second_conditions(t_mlx_data *data, char *line, int spaces, int *check)
 		check[5] += 1;
 		fill_rgb_array(line + spaces, data->map_data.ceilling_color);
 	}
+	else
+		ft_error(UNEXPECTED_FLOW, "invalid elements\n");
 }
 
 // fill the first sex lines;
@@ -237,6 +239,7 @@ int	fill_map_data(char **grid, t_mlx_data *data)
 				return (check_the_array(check, i));
 		}
 		i++;
+		printf("%s\n", grid[i]);
 	}
 	return (-1);
 }
