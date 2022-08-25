@@ -228,7 +228,6 @@ bool		is_number(char *s);
 bool		is_valid_line(char *line);
 
 float		get_player_dir(char c);
-
 t_map_data	parse_map(char *map_name);
 
 #endif
