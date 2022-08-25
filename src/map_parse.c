@@ -136,6 +136,12 @@ char	*get_path(int i, char *str)
 		s[j] = str[j];
 		j++;
 	}
+	while (str[j])
+	{
+		if (str[j] != ' ')
+			ft_error(UNEXPECTED_FLOW, "wrong path !!\n");
+		j++;
+	}
 	free(str);
 	s[j] = '\0';
 	return (s);
