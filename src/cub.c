@@ -617,6 +617,28 @@ int	handle_keys(t_mlx_data *data)
 	return (0);
 }
 
+int mouse_hook(int button, int x, int y, t_mlx_data *data)
+{
+	(void)y;
+	if (button == 1)
+	{
+		int mid = WINDOW_WIDTH / 2;
+		if (x > 0 && x < mid)
+		{
+			data->player.turn_direction = -1;
+			rotate_player(data);
+			data->player.turn_direction = 0;
+		}
+		else if ( x > mid && x < WINDOW_WIDTH)
+		{
+			data->player.turn_direction = +1;
+			rotate_player(data);
+			data->player.turn_direction = 0;
+		}
+	}
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx_data	data;
@@ -632,5 +654,6 @@ int	main(int ac, char **av)
 	mlx_hook(data.window, KEYPRESS, KEYPRESSMASK, process_input, &data);
 	mlx_hook(data.window, KEYRELEASE, KEYRELEASEMASK, reset, &data);
 	mlx_loop_hook(data.mlx_ptr, handle_keys, &data);
+	mlx_mouse_hook(data.window, mouse_hook, &data);
 	mlx_loop(data.mlx_ptr);
 }
