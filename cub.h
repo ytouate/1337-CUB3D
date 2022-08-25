@@ -207,6 +207,7 @@ void		check_map_texture(t_map_data map_data);
 void		call_check_zeros(t_fix_map *map, int len);
 void		check_the_zeros(t_fix_map *map, int i, int j, int len);
 void		fill_map(t_mlx_data *data);
+char		*fill_the_path(char *line);
 void		fill_rgb_array(char *line, int *arr);
 void		update(t_mlx_data *data);
 void		get_player_pos(t_mlx_data *data);
