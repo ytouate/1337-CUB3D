@@ -145,170 +145,211 @@ float	distance_between_points(float x1, float y1, float x2, float y2)
 	return (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
-void	cast_ray(t_mlx_data *data, float ray_angle, int stripId)
+
+void	init_horz_data(t_mlx_data *data, double *ray_angle, t_raycast *vars)
+{
+	*ray_angle = normalize_angle(*ray_angle);
+	vars->is_ray_facing_down = (*ray_angle > 0 && *ray_angle < PI);
+	vars->is_ray_facing_up = !vars->is_ray_facing_down;
+	vars->is_ray_facing_right = (*ray_angle < 0.5 * PI || *ray_angle > 1.5 * PI);
+	vars->is_ray_facing_left = !vars->is_ray_facing_right;
+	vars->found_horz_wall_hit = false;
+	vars->horz_wall_hit_x = 0;
+	vars->horz_wall_hit_y = 0;
+	vars->horz_wall_content = 0;
+	vars->yintercept = floor(data->player.y / data->tile_size) * data->tile_size;
+	if (vars->is_ray_facing_down)
+		vars->yintercept += data->tile_size;
+	vars->xintercept = data->player.x
+		+ (vars->yintercept - data->player.y) / tan(*ray_angle);
+	vars->ystep = data->tile_size;
+	if (vars->is_ray_facing_up)
+		vars->ystep *= -1;
+	vars->xstep = data->tile_size / tan(*ray_angle);
+	if (vars->is_ray_facing_left && vars->xstep > 0)
+		vars->xstep *= -1;
+	if (vars->is_ray_facing_right && vars->xstep < 0)
+		vars->xstep *= -1;
+	vars->next_horz_touch_x = vars->xintercept;
+	vars->next_horz_touch_y = vars->yintercept;
+}
+
+void get_horz_ray_data(t_mlx_data *data, t_raycast *vars)
+{
+	vars->horz_wall_hit_x = vars->next_horz_touch_x;
+	vars->horz_wall_hit_y = vars->next_horz_touch_y;
+	vars->temp_x = floor(vars->y_to_check / data->tile_size);
+	vars->temp_y = floor(vars->x_to_check / data->tile_size);
+	if (vars->temp_y >= data->map_data.map_lines || vars->temp_y < 0)
+		vars->flag = 1;
+	else if (vars->temp_x < 0
+		|| vars->temp_x
+		> (int)ft_strlen(data->map_data.map[vars->temp_y]))
+		vars->flag = 1;
+	if (vars->flag)
+	{
+		vars->horz_wall_content = '1';
+		vars->found_horz_wall_hit = true;
+	}
+	else
+	{
+		vars->horz_wall_content
+			= data->map_data.map[vars->temp_y][vars->temp_x];
+		vars->found_horz_wall_hit = true;
+	}	
+}
+void horz_intercetion(t_mlx_data *data, t_raycast *vars)
+{
+	while (vars->next_horz_touch_x >= 0
+		&& vars->next_horz_touch_x <= data->window_width
+		&& vars->next_horz_touch_y >= 0
+		&& vars->next_horz_touch_y <= data->window_height)
+	{
+		vars->x_to_check = vars->next_horz_touch_x;
+		vars->y_to_check = vars->next_horz_touch_y;
+		if (vars->is_ray_facing_up)
+			vars->y_to_check += -1;
+		vars->flag = 0;
+		if (map_has_wall_at(data, vars->x_to_check, vars->y_to_check))
+		{
+			get_horz_ray_data(data, vars);
+			break ;
+		}
+		else
+		{
+			vars->next_horz_touch_x += vars->xstep;
+			vars->next_horz_touch_y += vars->ystep;
+		}
+	}
+}
+
+void init_ver_data(t_mlx_data *data, t_raycast *vars, double *ray_angle)
+{
+	vars->found_ver_wall_hit = false;
+	vars->ver_wall_hit_x = 0;
+	vars->ver_wall_hit_y = 0;
+	vars->ver_wall_content = 0;
+	vars->xintercept = floor(data->player.x / data->tile_size) * data->tile_size;
+	if (vars->is_ray_facing_right)
+		vars->xintercept += data->tile_size;
+	vars->yintercept = data->player.y
+		+ (vars->xintercept - data->player.x) * tan(*ray_angle);
+	vars->xstep = data->tile_size;
+	if (vars->is_ray_facing_left)
+		vars->xstep *= -1;
+	vars->ystep = data->tile_size * tan(*ray_angle);
+	if (vars->is_ray_facing_up && vars->ystep > 0)
+		vars->ystep *= -1;
+	if (vars->is_ray_facing_down && vars->ystep < 0)
+		vars->ystep *= -1;
+	vars->next_ver_touch_x = vars->xintercept;
+	vars->next_ver_touch_y = vars->yintercept;
+}
+
+void	get_ver_ray_data(t_mlx_data *data, t_raycast *vars)
+{
+	vars->flag = 0;
+	vars->ver_wall_hit_x = vars->next_ver_touch_x;
+	vars->ver_wall_hit_y = vars->next_ver_touch_y;
+	vars->temp_x = floor(vars->y_to_check / data->tile_size);
+	vars->temp_y = floor(vars->x_to_check / data->tile_size);
+	if (vars->temp_y >= data->map_data.map_lines || vars->temp_y < 0)
+		vars->flag = 1;
+	else if (vars->temp_x < 0
+		|| vars->temp_x
+		> (int)ft_strlen(data->map_data.map[vars->temp_y]))
+		vars->flag = 1;
+	if (vars->flag)
+	{
+		vars->ver_wall_content = '1';
+		vars->found_ver_wall_hit = true;
+	}
+	else
+	{
+		vars->ver_wall_content
+			= data->map_data.map[vars->temp_y][vars->temp_x];
+		vars->found_ver_wall_hit = true;
+	}
+}
+
+void	ver_intersection(t_mlx_data *data, t_raycast *vars)
+{
+	while (vars->next_ver_touch_x >= 0
+		&& vars->next_ver_touch_x <= data->window_width
+		&& vars->next_ver_touch_y >= 0
+		&& vars->next_ver_touch_y <= data->window_height)
+	{
+		vars->x_to_check = vars->next_ver_touch_x;
+		if (vars->is_ray_facing_left)
+			vars->x_to_check += -1;
+		vars->y_to_check = vars->next_ver_touch_y;
+		if (map_has_wall_at(data, vars->x_to_check, vars->y_to_check))
+		{
+			get_ver_ray_data(data, vars);
+			break ;
+		}
+		else
+		{
+			vars->next_ver_touch_x += vars->xstep;
+			vars->next_ver_touch_y += vars->ystep;
+		}
+	}
+}
+
+void	get_closest_wall_hit(t_mlx_data *data, t_raycast *vars)
+{
+	if (vars->found_horz_wall_hit)
+		vars->horz_hit_distance = distance_between_points(data->player.x,
+				data->player.y,
+				vars->horz_wall_hit_x,
+				vars->horz_wall_hit_y);
+	else
+		vars->horz_hit_distance = FLT_MAX;
+	if (vars->found_ver_wall_hit)
+		vars->ver_hit_distance = distance_between_points(data->player.x,
+				data->player.y,
+				vars->ver_wall_hit_x,
+				vars->ver_wall_hit_y);
+	else
+		vars->ver_hit_distance = FLT_MAX;
+}
+
+void fill_ray_data(t_mlx_data *data, t_raycast *vars, int column, double ray_angle)
+{
+	if (vars->ver_hit_distance < vars->horz_hit_distance)
+	{
+		data->rays[column].distance = 	vars->ver_hit_distance;
+		data->rays[column].wall_hit_x = vars->ver_wall_hit_x;
+		data->rays[column].wall_hit_y = vars->ver_wall_hit_y;
+		data->rays[column].wall_hit_content = vars->ver_wall_content;
+		data->rays[column].was_hit_vertical = true;
+	}
+	else
+	{
+		data->rays[column].distance = 	vars->horz_hit_distance;
+		data->rays[column].wall_hit_x = vars->horz_wall_hit_x;
+		data->rays[column].wall_hit_y = vars->horz_wall_hit_y;
+		data->rays[column].wall_hit_content = vars->horz_wall_content;
+		data->rays[column].was_hit_vertical = false;
+	}
+	data->rays[column].ray_angle = ray_angle;
+	data->rays[column].is_ray_facing_down = vars->is_ray_facing_down;
+	data->rays[column].is_ray_facing_up = 	vars->is_ray_facing_up;
+	data->rays[column].is_ray_facing_left = vars->is_ray_facing_left;
+	data->rays[column].is_ray_facing_right = vars->is_ray_facing_right;
+}
+
+void	cast_ray(t_mlx_data *data, double ray_angle, int column)
 {
 	t_raycast	vars;
 
-	ray_angle = normalize_angle(ray_angle);
-	vars.is_ray_facing_down = (ray_angle > 0 && ray_angle < PI);
-	vars.is_ray_facing_up = !vars.is_ray_facing_down;
-	vars.is_ray_facing_right = (ray_angle < 0.5 * PI || ray_angle > 1.5 * PI);
-	vars.is_ray_facing_left = !vars.is_ray_facing_right;
-	vars.found_horz_wall_hit = false;
-	vars.horz_wall_hit_x = 0;
-	vars.horz_wall_hit_y = 0;
-	vars.horz_wall_content = 0;
-	vars.yintercept = floor(data->player.y / data->tile_size) * data->tile_size;
-	if (vars.is_ray_facing_down)
-		vars.yintercept += data->tile_size;
-	vars.xintercept = data->player.x
-		+ (vars.yintercept - data->player.y) / tan(ray_angle);
-	vars.ystep = data->tile_size;
-	if (vars.is_ray_facing_up)
-		vars.ystep *= -1;
-	vars.xstep = data->tile_size / tan(ray_angle);
-	if (vars.is_ray_facing_left && vars.xstep > 0)
-		vars.xstep *= -1;
-	if (vars.is_ray_facing_right && vars.xstep < 0)
-		vars.xstep *= -1;
-	vars.next_horz_touch_x = vars.xintercept;
-	vars.next_horz_touch_y = vars.yintercept;
-	while (vars.next_horz_touch_x >= 0
-		&& vars.next_horz_touch_x <= data->window_width
-		&& vars.next_horz_touch_y >= 0
-		&& vars.next_horz_touch_y <= data->window_height)
-	{
-		vars.x_to_check = vars.next_horz_touch_x;
-		vars.y_to_check = vars.next_horz_touch_y;
-		if (vars.is_ray_facing_up)
-			vars.y_to_check += -1;
-		vars.flag = 0;
-		if (map_has_wall_at(data, vars.x_to_check, vars.y_to_check))
-		{
-			vars.horz_wall_hit_x = vars.next_horz_touch_x;
-			vars.horz_wall_hit_y = vars.next_horz_touch_y;
-			vars.temp_x = floor(vars.y_to_check / data->tile_size);
-			vars.temp_y = floor(vars.x_to_check / data->tile_size);
-			if (vars.temp_y >= data->map_data.map_lines || vars.temp_y < 0)
-				vars.flag = 1;
-			else if (vars.temp_x < 0
-				|| vars.temp_x
-				> (int)ft_strlen(data->map_data.map[vars.temp_y]))
-				vars.flag = 1;
-			if (vars.flag)
-			{
-				vars.horz_wall_content = '1';
-				vars.found_horz_wall_hit = true;
-			}
-			else
-			{
-				vars.horz_wall_content
-					= data->map_data.map[vars.temp_y][vars.temp_x];
-				vars.found_horz_wall_hit = true;
-			}
-			break ;
-		}
-		else
-		{
-			vars.next_horz_touch_x += vars.xstep;
-			vars.next_horz_touch_y += vars.ystep;
-		}
-	}
-	vars.found_ver_wall_hit = false;
-	vars.ver_wall_hit_x = 0;
-	vars.ver_wall_hit_y = 0;
-	vars.ver_wall_content = 0;
-	vars.xintercept = floor(data->player.x / data->tile_size) * data->tile_size;
-	if (vars.is_ray_facing_right)
-		vars.xintercept += data->tile_size;
-	vars.yintercept = data->player.y
-		+ (vars.xintercept - data->player.x) * tan(ray_angle);
-	vars.xstep = data->tile_size;
-	if (vars.is_ray_facing_left)
-		vars.xstep *= -1;
-	vars.ystep = data->tile_size * tan(ray_angle);
-	if (vars.is_ray_facing_up && vars.ystep > 0)
-		vars.ystep *= -1;
-	if (vars.is_ray_facing_down && vars.ystep < 0)
-		vars.ystep *= -1;
-	vars.next_ver_touch_x = vars.xintercept;
-	vars.next_ver_touch_y = vars.yintercept;
-	while (vars.next_ver_touch_x >= 0
-		&& vars.next_ver_touch_x <= data->window_width
-		&& vars.next_ver_touch_y >= 0
-		&& vars.next_ver_touch_y <= data->window_height)
-	{
-		vars.x_to_check = vars.next_ver_touch_x;
-		if (vars.is_ray_facing_left)
-			vars.x_to_check += -1;
-		vars.y_to_check = vars.next_ver_touch_y;
-		if (map_has_wall_at(data, vars.x_to_check, vars.y_to_check))
-		{
-			vars.flag = 0;
-			vars.ver_wall_hit_x = vars.next_ver_touch_x;
-			vars.ver_wall_hit_y = vars.next_ver_touch_y;
-			vars.temp_x = floor(vars.y_to_check / data->tile_size);
-			vars.temp_y = floor(vars.x_to_check / data->tile_size);
-			if (vars.temp_y >= data->map_data.map_lines || vars.temp_y < 0)
-				vars.flag = 1;
-			else if (vars.temp_x < 0
-				|| vars.temp_x
-				> (int)ft_strlen(data->map_data.map[vars.temp_y]))
-				vars.flag = 1;
-			if (vars.flag)
-			{
-				vars.ver_wall_content = '1';
-				vars.found_ver_wall_hit = true;
-			}
-			else
-			{
-				vars.ver_wall_content
-					= data->map_data.map[vars.temp_y][vars.temp_x];
-				vars.found_ver_wall_hit = true;
-			}
-			break ;
-		}
-		else
-		{
-			vars.next_ver_touch_x += vars.xstep;
-			vars.next_ver_touch_y += vars.ystep;
-		}
-	}
-	if (vars.found_horz_wall_hit)
-		vars.horz_hit_distance = distance_between_points(data->player.x,
-				data->player.y,
-				vars.horz_wall_hit_x,
-				vars.horz_wall_hit_y);
-	else
-		vars.horz_hit_distance = FLT_MAX;
-	if (vars.found_ver_wall_hit)
-		vars.ver_hit_distance = distance_between_points(data->player.x,
-				data->player.y,
-				vars.ver_wall_hit_x,
-				vars.ver_wall_hit_y);
-	else
-		vars.ver_hit_distance = FLT_MAX;
-	if (vars.ver_hit_distance < vars.horz_hit_distance)
-	{
-		data->rays[stripId].distance = vars.ver_hit_distance;
-		data->rays[stripId].wall_hit_x = vars.ver_wall_hit_x;
-		data->rays[stripId].wall_hit_y = vars.ver_wall_hit_y;
-		data->rays[stripId].wall_hit_content = vars.ver_wall_content;
-		data->rays[stripId].was_hit_vertical = true;
-	}
-	else
-	{
-		data->rays[stripId].distance = vars.horz_hit_distance;
-		data->rays[stripId].wall_hit_x = vars.horz_wall_hit_x;
-		data->rays[stripId].wall_hit_y = vars.horz_wall_hit_y;
-		data->rays[stripId].wall_hit_content = vars.horz_wall_content;
-		data->rays[stripId].was_hit_vertical = false;
-	}
-	data->rays[stripId].ray_angle = ray_angle;
-	data->rays[stripId].is_ray_facing_down = vars.is_ray_facing_down;
-	data->rays[stripId].is_ray_facing_up = vars.is_ray_facing_up;
-	data->rays[stripId].is_ray_facing_left = vars.is_ray_facing_left;
-	data->rays[stripId].is_ray_facing_right = vars.is_ray_facing_right;
+	init_horz_data(data, &ray_angle, &vars);
+	horz_intercetion(data, &vars);
+	init_ver_data(data, &vars, &ray_angle);
+	ver_intersection(data, &vars);
+	get_closest_wall_hit(data, &vars);
+	fill_ray_data(data, &vars, column, ray_angle);
+
 }
 
 void	cast_all_rays(t_mlx_data *data)
