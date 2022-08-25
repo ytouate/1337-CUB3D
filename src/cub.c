@@ -120,19 +120,6 @@ void	setup(t_mlx_data *data)
 	data->player.walk_direction = 0;
 }
 
-void	render_player(t_mlx_data *data)
-{
-	ddaline (
-		SCALE * data->player.x,
-		SCALE * data->player.y,
-		SCALE * (data->player.x + cos(data->player.rotation_angle) * 40),
-		SCALE * (data->player.y + sin(data->player.rotation_angle) * 40),
-		data,
-		MINI_MAP,
-		0xFF0000
-		);
-}
-
 float	normalize_angle(float angle)
 {
 	angle = remainder(angle, TWO_PI);
