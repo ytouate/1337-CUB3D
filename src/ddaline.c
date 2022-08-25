@@ -23,7 +23,6 @@ void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, i
 	float	yinc;
 	int h;
 
-	
 	dx = x1 - x;
 	dy = y1 - y;
 	h = 0;
@@ -47,4 +46,3 @@ void	ddaline(float x, float y, float x1, float y1, t_mlx_data *data, int flag, i
 		}
 	}
 }
-

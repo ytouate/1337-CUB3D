@@ -662,25 +662,8 @@ int	handle_keys(t_mlx_data *data)
 	return (0);
 }
 
-int mouse_hook(int button, int x, int y, t_mlx_data *data)
+void	move_player_with_mouse(int button, t_mlx_data *data)
 {
-	(void)y;
-	if (button == 1)
-	{
-		int mid = WINDOW_WIDTH / 2;
-		if (x > 0 && x < mid)
-		{
-			data->player.turn_direction = -1;
-			rotate_player(data);
-			data->player.turn_direction = 0;
-		}
-		else if ( x > mid && x < WINDOW_WIDTH)
-		{
-			data->player.turn_direction = +1;
-			rotate_player(data);
-			data->player.turn_direction = 0;
-		}
-	}
 	else if (button == 4)
 	{
 		data->player.walk_direction = -1;
@@ -693,6 +676,30 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data)
 		move_player(data);
 		data->player.walk_direction = 0;
 	}
+}
+
+int	mouse_hook(int button, int x, int y, t_mlx_data *data)
+{
+	int	mid;
+
+	(void)y;
+	if (button == 1)
+	{
+		mid = WINDOW_WIDTH / 2;
+		if (x > 0 && x < mid)
+		{
+			data->player.turn_direction = -1;
+			rotate_player(data);
+			data->player.turn_direction = 0;
+		}
+		else if (x > mid && x < WINDOW_WIDTH)
+		{
+			data->player.turn_direction = +1;
+			rotate_player(data);
+			data->player.turn_direction = 0;
+		}
+	}
+	move_player_with_mouse(button, data);
 	return (0);
 }
 
