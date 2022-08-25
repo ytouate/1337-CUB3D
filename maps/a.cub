@@ -1,8 +1,7 @@
 NO ./textures/redbrick.xpm
-NO ./textures/redbrick.xpm 
 SO ./textures/colorstone.xpm
 WE ./textures/north.xpm 
-EA ./textures/wood.xpm
+EA ./textures/wood.xpm        
 F 110,100,0
 C 115,30,0
 

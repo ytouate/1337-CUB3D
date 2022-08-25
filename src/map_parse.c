@@ -136,6 +136,7 @@ char	*get_path(int i, char *str)
 		s[j] = str[j];
 		j++;
 	}
+	s[j] = '\0';
 	while (str[j])
 	{
 		if (str[j] != ' ')
@@ -143,7 +144,6 @@ char	*get_path(int i, char *str)
 		j++;
 	}
 	free(str);
-	s[j] = '\0';
 	return (s);
 }
 
