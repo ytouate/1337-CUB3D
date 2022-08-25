@@ -14,7 +14,6 @@
 
 int	ft_error(int exit_code, char *fatal)
 {
-	system("leaks cub3D");
 	ft_putstr_fd("Error\n", STDERR_FILENO);
 	ft_putstr_fd(fatal, STDERR_FILENO);
 	exit(exit_code);

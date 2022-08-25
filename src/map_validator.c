@@ -36,7 +36,7 @@ void	check_the_zeros(t_fix_map *map, int i, int j, int len)
 {
 	if (i == 0 || j == 0 || i == len - 1 || j == map[i].len - 1)
 		ft_error(6, "INVALID MAP\n");
-	if (j > map[i - 1].len || j > map[i + 1].len)
+	if (j >= map[i - 1].len || j >= map[i + 1].len)
 		ft_error(7, "INVALID MAP\n");
 	if (map[i].line_of_map[j + 1] == ' ' || map[i].line_of_map[j - 1] == ' ' )
 		ft_error(8, "INVALID MAP\n");
