@@ -56,9 +56,9 @@ void	get_player_pos(t_mlx_data *data)
 			{
 				data->player.x = j * data->tile_size + 1;
 				data->player.y = i * data->tile_size + 1;
-				data->map_data.map[i][j] = '0';
 				data->player.rotation_angle
 					= get_player_dir(data->map_data.map[i][j]);
+				data->map_data.map[i][j] = '0';
 				return ;
 			}
 			j++;
