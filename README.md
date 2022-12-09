@@ -2,7 +2,7 @@
 
 #### _ a semi-3D game built with C _
 
-#### By _**Me and My School Mate Ilyass Lefhaili **_
+#### Me and My School Mate Ilyass Lefhaili
 <a href="https://github.com/ytouate/Cub3D/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ytouate/Cub3D" />
 </a>
