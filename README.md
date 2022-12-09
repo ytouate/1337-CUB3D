@@ -1,8 +1,11 @@
 # Cub3D
 
+<img width="998" alt="Screen Shot 2022-12-09 at 7 44 59 PM" src="https://user-images.githubusercontent.com/95024105/206771750-ef2f6c7d-697d-4b87-82c7-ff7b071e570f.png">
+
 #### _ a semi-3D game built with C _
 
-#### Me and My School Mate Ilyass Lefhaili
+#### Me and My School Mate I![Uploading Screen Shot 2022-12-09 at 7.44.59 PM.png…]()
+lyass Lefhaili
 <a href="https://github.com/ytouate/Cub3D/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ytouate/Cub3D" />
 </a>
