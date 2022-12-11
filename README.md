@@ -5,7 +5,6 @@
 #### a semi-3D game built with C
 
 #### Contributers
-lyass Lefhaili
 <a href="https://github.com/ytouate/Cub3D/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ytouate/Cub3D" />
 </a>
